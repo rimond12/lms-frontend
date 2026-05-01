@@ -1,0 +1,120 @@
+﻿
+> lms-project-client@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env
+
+node.exe :  ΓÜá The 
+"middleware" file 
+convention is deprecated. 
+Please use "proxy" 
+instead. Learn more: https:
+//nextjs.org/docs/messages/
+middleware-to-proxy
+At C:\Program 
+Files\nodejs\npm.ps1:29 
+char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo         
+     : NotSpecified    : ( 
+ΓÜá The "middl.    
+..leware-to-proxy:S    
+tring) [], RemoteEx    
+ception
+    + FullyQualifiedErr    
+orId : NativeComman    
+dError
+ 
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 16.0s
+   Running TypeScript ...
+Failed to compile.
+
+.next/dev/types/validator.t
+s:949:31
+Type error: Type 'typeof im
+port("D:/ALL-CLIENTS-CODES/
+CADDCORE-LEARNING-PORTAL/lm
+s/LMS-CLIENT-CODE/src/app/[
+locale]/layout")' does not 
+satisfy the constraint 'Lay
+outConfig<"/[locale]">'.
+  Types of property 
+'default' are incompatible.
+    Type '({ children, 
+auth, params, }: { 
+children: ReactNode; auth: 
+ReactNode; params: { 
+locale: string; }; }) => 
+Promise<Element>' is not 
+assignable to type 'Compone
+ntType<LayoutProps<"/[local
+e]">> | ((props: 
+LayoutProps<"/[locale]">) 
+=> void | Promise<void> | 
+ReactNode | Promise<...>)'.
+      Type '({ children, 
+auth, params, }: { 
+children: ReactNode; auth: 
+ReactNode; params: { 
+locale: string; }; }) => 
+Promise<Element>' is not 
+assignable to type 'Functio
+nComponent<LayoutProps<"/[l
+ocale]">>'.
+        Types of 
+parameters '__0' and 
+'props' are incompatible.
+          Type 
+'LayoutProps<"/[locale]">' 
+is not assignable to type 
+'{ children: ReactNode; 
+auth: ReactNode; params: { 
+locale: string; }; }'.
+            Types of 
+property 'params' are 
+incompatible.
+              Property 
+'locale' is missing in 
+type 'Promise<{ locale: 
+string; }>' but required 
+in type '{ locale: string; 
+}'.
+
+[0m [90m 947 |[39m   
+type __IsExpected[33m<[39
+m[33mSpecific[39m 
+[36mextends[39m [33mLayo
+utConfig[39m[33m<[39m[3
+2m"/[locale]"[39m[33m>>[
+39m [33m=[39m 
+[33mSpecific[39m
+ [90m 948 |[39m   
+[36mconst[39m handler 
+[33m=[39m {} 
+[36mas[39m 
+[36mtypeof[39m [36mimpor
+t[39m([32m"../../../src/a
+pp/[locale]/layout.js"[39m
+)
+[31m[1m>[22m[39m[90m 
+949 |[39m   type __Check 
+[33m=[39m __IsExpected[3
+3m<[39m[36mtypeof[39m 
+handler[33m>[39m
+ [90m     |[39m          
+                     
+[31m[1m^[22m[39m
+ [90m 950 |[39m   
+[90m// @ts-ignore[39m
+ [90m 951 |[39m   type 
+__Unused [33m=[39m 
+__Check
+ [90m 952 |[39m }[0m
+Next.js build worker 
+exited with code: 1 and 
+signal: null

@@ -1,0 +1,8 @@
+﻿
+> lms-project-client@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...

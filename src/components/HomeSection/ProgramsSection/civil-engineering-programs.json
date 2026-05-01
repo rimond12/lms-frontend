@@ -1,0 +1,509 @@
+[
+  {
+    "id": "prog_001",
+    "title": "Advanced Structural Analysis & Design",
+    "slug": "advanced-structural-analysis-design",
+    "type": "course",
+    "description": "Master advanced techniques in structural analysis and design using modern software tools. Learn to analyze complex structures including high-rise buildings, bridges, and industrial facilities.",
+    "shortDescription": "Comprehensive course on structural analysis and design methodologies",
+    "bannerImage": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=800&h=600&fit=crop",
+    "level": "advanced",
+    "duration": "12 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 50,
+    "enrolledCount": 32,
+    "tags": ["Structural Analysis", "ETABS", "SAP2000", "Design Codes"],
+    "experts": [
+      {
+        "name": "Dr. Mohammad Rahman",
+        "designation": "Professor of Structural Engineering",
+        "bio": "PhD in Structural Engineering with 15+ years of experience"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Foundation Design Principles",
+        "description": "Deep dive into foundation design for various soil conditions",
+        "topics": [
+          { "title": "Soil-Structure Interaction", "duration": 4 },
+          { "title": "Pile Foundation Design", "duration": 6 },
+          { "title": "Raft Foundation Analysis", "duration": 4 }
+        ]
+      },
+      {
+        "moduleTitle": "High-Rise Building Design",
+        "description": "Design considerations for tall buildings",
+        "topics": [
+          { "title": "Wind Load Analysis", "duration": 5 },
+          { "title": "Seismic Design", "duration": 7 },
+          { "title": "Core and Shear Wall Design", "duration": 5 }
+        ]
+      }
+    ],
+    "quizzes": [
+      {
+        "title": "Structural Analysis Fundamentals",
+        "totalQuestions": 50,
+        "passingScore": 70,
+        "duration": 60
+      }
+    ]
+  },
+  {
+    "id": "prog_002",
+    "title": "Bridge Engineering & Design",
+    "slug": "bridge-engineering-design",
+    "type": "course",
+    "description": "Comprehensive training on bridge design, construction, and maintenance. Cover all types of bridges from simple beam bridges to complex cable-stayed structures.",
+    "shortDescription": "Complete guide to bridge engineering and construction",
+    "bannerImage": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
+    "level": "intermediate",
+    "duration": "10 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 40,
+    "enrolledCount": 28,
+    "tags": ["Bridge Design", "Construction", "Maintenance", "Load Analysis"],
+    "experts": [
+      {
+        "name": "Eng. Fatima Ahmed",
+        "designation": "Senior Bridge Engineer",
+        "bio": "20+ years in bridge design and construction projects"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Bridge Types & Classification",
+        "description": "Understanding different bridge types and their applications",
+        "topics": [
+          { "title": "Beam Bridges", "duration": 3 },
+          { "title": "Arch Bridges", "duration": 4 },
+          { "title": "Cable-Stayed Bridges", "duration": 5 }
+        ]
+      },
+      {
+        "moduleTitle": "Bridge Loading & Analysis",
+        "description": "Load analysis and structural behavior",
+        "topics": [
+          { "title": "Dead & Live Loads", "duration": 4 },
+          { "title": "Wind & Seismic Loads", "duration": 4 },
+          { "title": "Dynamic Load Analysis", "duration": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_003",
+    "title": "Earthquake Resistant Design",
+    "slug": "earthquake-resistant-design",
+    "type": "workshop",
+    "description": "Learn to design structures that can withstand seismic activity. Essential training for engineers working in earthquake-prone regions like Bangladesh.",
+    "shortDescription": "Master seismic design principles and practices",
+    "bannerImage": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+    "level": "intermediate",
+    "duration": "6 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 60,
+    "enrolledCount": 45,
+    "tags": ["Seismic Design", "Earthquake Engineering", "BNBC", "Retrofitting"],
+    "experts": [
+      {
+        "name": "Dr. Syed Islam",
+        "designation": "Seismic Engineering Specialist",
+        "bio": "Expert in earthquake engineering with international experience"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Seismic Principles",
+        "description": "Understanding earthquake forces and ground motion",
+        "topics": [
+          { "title": "Seismic Waves & Ground Motion", "duration": 3 },
+          { "title": "Response Spectra", "duration": 4 },
+          { "title": "Seismic Zoning", "duration": 2 }
+        ]
+      },
+      {
+        "moduleTitle": "Design Strategies",
+        "description": "Practical design approaches for seismic resistance",
+        "topics": [
+          { "title": "Base Isolation", "duration": 3 },
+          { "title": "Ductile Design", "duration": 4 },
+          { "title": "Building Codes Application", "duration": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_004",
+    "title": "Reinforced Concrete Design",
+    "slug": "reinforced-concrete-design",
+    "type": "course",
+    "description": "Complete guide to reinforced concrete design following ACI and BNBC codes. From basic concepts to advanced design of complex structures.",
+    "shortDescription": "Master reinforced concrete design principles",
+    "bannerImage": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
+    "level": "beginner",
+    "duration": "8 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 55,
+    "enrolledCount": 38,
+    "tags": ["Concrete Design", "ACI Code", "BNBC", "Structural Elements"],
+    "experts": [
+      {
+        "name": "Eng. Abdul Karim",
+        "designation": "Concrete Design Specialist",
+        "bio": "15+ years in concrete structure design and construction"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Concrete Properties & Materials",
+        "description": "Understanding concrete and reinforcement materials",
+        "topics": [
+          { "title": "Concrete Mix Design", "duration": 3 },
+          { "title": "Reinforcement Types", "duration": 2 },
+          { "title": "Material Testing", "duration": 3 }
+        ]
+      },
+      {
+        "moduleTitle": "Structural Elements Design",
+        "description": "Design of beams, columns, slabs, and foundations",
+        "topics": [
+          { "title": "Beam Design", "duration": 4 },
+          { "title": "Column Design", "duration": 4 },
+          { "title": "Slab Design", "duration": 4 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_005",
+    "title": "Steel Structure Design & Construction",
+    "slug": "steel-structure-design-construction",
+    "type": "course",
+    "description": "Comprehensive training on steel structure design, fabrication, and construction. Learn modern steel construction techniques and AISC standards.",
+    "shortDescription": "Complete steel structure design and construction course",
+    "bannerImage": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+    "level": "intermediate",
+    "duration": "10 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 45,
+    "enrolledCount": 31,
+    "tags": ["Steel Design", "AISC Standards", "Fabrication", "Construction"],
+    "experts": [
+      {
+        "name": "Eng. Nasir Ahmed",
+        "designation": "Steel Structure Engineer",
+        "bio": "Specialist in steel structure design and project management"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Steel Properties & Standards",
+        "description": "Understanding steel materials and design standards",
+        "topics": [
+          { "title": "Steel Grades & Properties", "duration": 3 },
+          { "title": "AISC Steel Construction Manual", "duration": 4 },
+          { "title": "Connection Design", "duration": 4 }
+        ]
+      },
+      {
+        "moduleTitle": "Structural Steel Design",
+        "description": "Design of steel beams, columns, and connections",
+        "topics": [
+          { "title": "Tension Members", "duration": 3 },
+          { "title": "Compression Members", "duration": 4 },
+          { "title": "Beam-Column Design", "duration": 4 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_006",
+    "title": "Structural Retrofitting & Rehabilitation",
+    "slug": "structural-retrofitting-rehabilitation",
+    "type": "workshop",
+    "description": "Learn techniques for strengthening and rehabilitating existing structures. Essential skills for maintaining aging infrastructure in Bangladesh.",
+    "shortDescription": "Master structural retrofitting and rehabilitation techniques",
+    "bannerImage": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop",
+    "level": "advanced",
+    "duration": "5 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 35,
+    "enrolledCount": 22,
+    "tags": ["Retrofitting", "Rehabilitation", "Strengthening", "Assessment"],
+    "experts": [
+      {
+        "name": "Dr. Rahim Uddin",
+        "designation": "Structural Rehabilitation Expert",
+        "bio": "PhD in Structural Engineering with focus on rehabilitation"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Condition Assessment",
+        "description": "Evaluating existing structure conditions",
+        "topics": [
+          { "title": "Visual Inspection", "duration": 2 },
+          { "title": "Non-Destructive Testing", "duration": 3 },
+          { "title": "Structural Analysis", "duration": 3 }
+        ]
+      },
+      {
+        "moduleTitle": "Retrofitting Techniques",
+        "description": "Modern methods for structural strengthening",
+        "topics": [
+          { "title": "FRP Strengthening", "duration": 3 },
+          { "title": "Steel Jacketing", "duration": 2 },
+          { "title": "Base Isolation", "duration": 2 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_007",
+    "title": "Construction Project Management",
+    "slug": "construction-project-management",
+    "type": "course",
+    "description": "Learn project management skills specific to construction industry. Cover planning, execution, monitoring, and delivery of construction projects.",
+    "shortDescription": "Essential project management skills for construction professionals",
+    "bannerImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    "level": "intermediate",
+    "duration": "8 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 50,
+    "enrolledCount": 34,
+    "tags": ["Project Management", "Construction", "Planning", "Execution"],
+    "experts": [
+      {
+        "name": "Eng. Sumona Rahman",
+        "designation": "Construction Project Manager",
+        "bio": "PMP certified with 12+ years in construction management"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Project Planning & Scheduling",
+        "description": "Planning and scheduling construction projects",
+        "topics": [
+          { "title": "Work Breakdown Structure", "duration": 3 },
+          { "title": "Critical Path Method", "duration": 4 },
+          { "title": "Resource Allocation", "duration": 3 }
+        ]
+      },
+      {
+        "moduleTitle": "Project Execution & Control",
+        "description": "Managing project execution and quality control",
+        "topics": [
+          { "title": "Quality Management", "duration": 3 },
+          { "title": "Risk Management", "duration": 3 },
+          { "title": "Cost Control", "duration": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_008",
+    "title": "Sustainable Structural Design",
+    "slug": "sustainable-structural-design",
+    "type": "seminar",
+    "description": "Explore sustainable design principles and green building concepts. Learn to design environmentally friendly and energy-efficient structures.",
+    "shortDescription": "Sustainable and green building design principles",
+    "bannerImage": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&h=600&fit=crop",
+    "level": "intermediate",
+    "duration": "4 weeks",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 70,
+    "enrolledCount": 52,
+    "tags": ["Sustainable Design", "Green Building", "Environmental", "Energy Efficiency"],
+    "experts": [
+      {
+        "name": "Dr. Nusrat Jahan",
+        "designation": "Sustainable Design Consultant",
+        "bio": "Expert in sustainable building design and LEED certification"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Sustainable Design Principles",
+        "description": "Core concepts of sustainable structural design",
+        "topics": [
+          { "title": "Life Cycle Assessment", "duration": 2 },
+          { "title": "Material Selection", "duration": 3 },
+          { "title": "Energy Efficiency", "duration": 2 }
+        ]
+      },
+      {
+        "moduleTitle": "Green Building Standards",
+        "description": "International green building certifications",
+        "topics": [
+          { "title": "LEED Certification", "duration": 2 },
+          { "title": "BREEAM Standards", "duration": 2 },
+          { "title": "Local Green Codes", "duration": 2 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_009",
+    "title": "BIM in Structural Engineering",
+    "slug": "bim-structural-engineering",
+    "type": "seminar",
+    "description": "Introduction to Building Information Modeling for structural engineers. Learn how BIM revolutionizes design, collaboration, and construction.",
+    "shortDescription": "Master BIM tools and workflows for structural engineering",
+    "bannerImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    "level": "intermediate",
+    "duration": "2 days",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 100,
+    "enrolledCount": 75,
+    "tags": ["BIM", "Digital Tools", "Collaboration", "Revit"],
+    "experts": [
+      {
+        "name": "Eng. Tahmina Akter",
+        "designation": "BIM Specialist",
+        "bio": "Certified BIM professional with experience in large-scale projects"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "BIM Fundamentals",
+        "description": "Understanding BIM concepts and benefits",
+        "topics": [
+          { "title": "What is BIM?", "duration": 2 },
+          { "title": "BIM Workflow", "duration": 3 },
+          { "title": "Software Tools", "duration": 2 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_010",
+    "title": "Annual BASE Structural Engineering Conference",
+    "slug": "annual-base-conference",
+    "type": "event",
+    "description": "Join the premier annual conference for structural engineers in Bangladesh. Network with industry leaders and learn about latest trends.",
+    "shortDescription": "Annual conference for structural engineering professionals",
+    "bannerImage": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
+    "level": "all",
+    "duration": "3 days",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 500,
+    "enrolledCount": 320,
+    "tags": ["Conference", "Networking", "Industry Trends", "Professional Development"],
+    "experts": [
+      {
+        "name": "Dr. Ahmed Hossain",
+        "designation": "Conference Chair",
+        "bio": "President of BASE with extensive industry experience"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "Keynote Sessions",
+        "description": "Featured presentations by industry experts",
+        "topics": [
+          { "title": "Future of Structural Engineering", "duration": 1 },
+          { "title": "Innovation in Construction", "duration": 1 },
+          { "title": "Sustainability in Design", "duration": 1 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prog_011",
+    "title": "Digital Tools for Structural Engineers",
+    "slug": "digital-tools-structural-engineers",
+    "type": "workshop",
+    "description": "Hands-on workshop on essential digital tools for modern structural engineering practice. Learn AutoCAD, Revit, and analysis software.",
+    "shortDescription": "Essential digital tools workshop for structural engineers",
+    "bannerImage": "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=600&fit=crop",
+    "level": "beginner",
+    "duration": "1 week",
+    "price": 0,
+    "discountedPrice": 0,
+    "currency": "BDT",
+    "accessType": "free",
+    "isActive": true,
+    "isPublished": true,
+    "capacity": 30,
+    "enrolledCount": 25,
+    "tags": ["Digital Tools", "AutoCAD", "Revit", "Software Training"],
+    "experts": [
+      {
+        "name": "Eng. Imran Khan",
+        "designation": "CAD/BIM Trainer",
+        "bio": "Experienced trainer in engineering software tools"
+      }
+    ],
+    "curriculum": [
+      {
+        "moduleTitle": "AutoCAD Basics",
+        "description": "Fundamental AutoCAD skills for engineers",
+        "topics": [
+          { "title": "Drawing Tools", "duration": 2 },
+          { "title": "Annotations", "duration": 1 },
+          { "title": "Layouts", "duration": 1 }
+        ]
+      },
+      {
+        "moduleTitle": "Introduction to Revit",
+        "description": "Getting started with BIM modeling",
+        "topics": [
+          { "title": "3D Modeling", "duration": 2 },
+          { "title": "Family Creation", "duration": 2 },
+          { "title": "Documentation", "duration": 1 }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,103 @@
+﻿
+> lms-project-client@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env
+
+node.exe :  ΓÜá The 
+"middleware" file 
+convention is deprecated. 
+Please use "proxy" 
+instead. Learn more: https:
+//nextjs.org/docs/messages/
+middleware-to-proxy
+At C:\Program 
+Files\nodejs\npm.ps1:29 
+char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo         
+     : NotSpecified    : ( 
+ΓÜá The "middl.    
+..leware-to-proxy:S    
+tring) [], RemoteEx    
+ception
+    + FullyQualifiedErr    
+orId : NativeComman    
+dError
+ 
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build 
+failed with 1 errors:
+./src/app/[locale]/layout.t
+sx:3:1
+Module not found: Can't 
+resolve '../../globals.css'
+[0m [90m 1 |[39m 
+[36mimport[39m type { 
+[33mMetadata[39m } 
+[36mfrom[39m 
+[32m"next"[39m[33m;[39m
+ [90m 2 |[39m 
+[36mimport[39m { 
+[33mPoppins[39m } 
+[36mfrom[39m [32m"next/f
+ont/google"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 
+3 |[39m [36mimport[39m 
+[32m"../../globals.css"[39
+m[33m;[39m
+ [90m   |[39m [31m[1m^
+[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m
+ [90m 4 |[39m 
+[36mimport[39m { 
+[33mProviders[39m } 
+[36mfrom[39m [32m"@/lib/
+Providers"[39m[33m;[39m
+ [90m 5 |[39m 
+[36mimport[39m { [33mNex
+tIntlClientProvider[39m } 
+[36mfrom[39m [32m"next-i
+ntl"[39m[33m;[39m
+ [90m 6 |[39m 
+[36mimport[39m { 
+getMessages } 
+[36mfrom[39m [32m"next-i
+ntl/server"[39m[33m;[39m
+[0m
+
+
+
+https://nextjs.org/docs/mes
+sages/module-not-found
+
+
+    at <unknown> (./src/app
+/[locale]/layout.tsx:3:1)
+    at <unknown> (https://n
+extjs.org/docs/messages/mod
+ule-not-found)

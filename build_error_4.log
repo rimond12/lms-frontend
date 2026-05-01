@@ -1,0 +1,109 @@
+﻿
+> lms-project-client@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env
+
+node.exe :  ΓÜá The 
+"middleware" file 
+convention is 
+deprecated. Please 
+use "proxy" instead. 
+Learn more: https://ne
+xtjs.org/docs/messages
+/middleware-to-proxy
+At C:\Program Files\no
+dejs\npm.ps1:29 char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ( ΓÜá The "   
+ middl...leware-to    
+-proxy:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 19.6s
+   Running TypeScript ...
+Failed to compile.
+
+./src/app/[locale]/(Co
+mmonLayout)/(dashboard
+)/dashboard/manage-cou
+rses/create/page.tsx:4
+97:61
+Type error: Argument 
+of type 
+'Curriculum[]' is not 
+assignable to 
+parameter of type 'Cur
+riculumFormData[]'.
+  Type 'Curriculum' 
+is not assignable to 
+type 
+'CurriculumFormData'.
+    Types of property 
+'topics' are 
+incompatible.
+      Type 'Topic[]' 
+is not assignable to 
+type '{ title: 
+string; description: 
+string; duration: 
+number; }[]'.
+        Type 'Topic' 
+is not assignable to 
+type '{ title: 
+string; description: 
+string; duration: 
+number; }'.
+          Types of 
+property 'duration' 
+are incompatible.
+            Type 
+'number | undefined' 
+is not assignable to 
+type 'number'.
+              Type 
+'undefined' is not 
+assignable to type 
+'number'.
+
+[0m [90m 495 |[39m
+ [90m 496 |[39m     
+  [90m// Transform 
+curriculum data[39m
+[31m[1m>[22m[39m[
+90m 497 |[39m       
+[36mconst[39m 
+transformedCurriculum 
+[33m=[39m transformC
+urriculumData(curricul
+um)[33m;[39m
+ [90m     |[39m     
+                      
+                      
+            
+[31m[1m^[22m[39m
+ [90m 498 |[39m     
+  console[33m.[39mlo
+g([32m"≡ƒöä 
+Transformed curriculum
+:"[39m[33m,[39m tra
+nsformedCurriculum)[3
+3m;[39m
+ [90m 499 |[39m
+ [90m 500 |[39m     
+  [90m// Save each 
+curriculum 
+module[39m[0m
+Next.js build worker 
+exited with code: 1 
+and signal: null

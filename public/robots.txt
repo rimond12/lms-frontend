@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://basebd.org/sitemap.xml

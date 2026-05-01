@@ -1,0 +1,505 @@
+{
+  "common": {
+    "search": "Search",
+    "viewAll": "View All",
+    "readMore": "Read More",
+    "loading": "Loading...",
+    "error": "Something went wrong"
+  },
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "events": "Events",
+    "about": "About Us",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "expertPanel": "Expert Panel",
+    "resources": "Resources",
+    "blog": "Blog",
+    "lms": {
+      "title": "LMS",
+      "courses": "All Courses",
+      "myCourses": "My Learning",
+      "browse": "Browse",
+      "instructors": "Instructors"
+    }
+  },
+  "hero": {
+    "headline": "Elevate Your Skills to a Professional Level",
+    "sub": "Be skilled, move forward — Join today...",
+    "items": {
+      "honest": { "name": "HONEST", "sub": "Communication" },
+      "verified": { "name": "VERIFIED", "sub": "Employers" },
+      "organized": { "name": "ORGANIZED", "sub": "Process" },
+      "training": { "name": "TRAINING", "sub": "Support" },
+      "language": { "name": "LANGUAGE", "sub": "Training" },
+      "preparation": { "name": "PREPARATION", "sub": "Focus" }
+    }
+  },
+  "stats": {
+    "graduates": "Graduated Students",
+    "instructors": "Certified Instructors",
+    "courses": "Departmental Courses",
+    "practical": "Practical Learning"
+  },
+  "services": {
+    "badge": "Our Services",
+    "heading1": "Complete Recruitment Solutions",
+    "heading2": "to Build Your Career Abroad",
+    "items": [
+      {
+        "title": "Overseas Job Placement",
+        "description": "We connect you with top companies worldwide and match opportunities to your skills and experience."
+      },
+      {
+        "title": "Professional CV Writing",
+        "description": "We craft internationally standard CVs and profiles that make employers notice and shortlist you quickly."
+      },
+      {
+        "title": "Interview Preparation",
+        "description": "We fully prepare you for employer interactions and interviews so you walk in with confidence."
+      },
+      {
+        "title": "Documentation & Guidance",
+        "description": "We provide accurate advice and assistance for visas and all other required documents."
+      },
+      {
+        "title": "Ongoing Support",
+        "description": "From the moment you get the job until you arrive abroad, we are with you every step of the way."
+      },
+      {
+        "title": "Employer Coordination",
+        "description": "We ensure smooth and transparent communication between employers and candidates at all times."
+      }
+    ]
+  },
+  "popularCourses": {
+    "headingPrefix": "Our",
+    "headingHighlight": "Popular Courses",
+    "errorMessage": "Failed to load courses. Please try again later.",
+    "emptyMessage": "No courses available right now.",
+    "liveBadge": "LIVE",
+    "currencySymbol": "৳",
+    "tagsLabel": "Tools You'll Learn",
+    "detailsLink": "View Details",
+    "freeBadge": "Free",
+    "seeAllButton": "See All Courses"
+  },
+  "ourServices": {
+    "headingPrefix": "Our",
+    "headingHighlight": "Services",
+    "items": [
+      {
+        "title": "24/7 Support",
+        "desc": "Round-the-clock support and assistance so your questions are answered quickly at any time."
+      },
+      {
+        "title": "Online Digital Library",
+        "desc": "A digital library with course materials, resources, e-books, and more."
+      },
+      {
+        "title": "Job Placement",
+        "desc": "Job opportunities or internship recommendations upon completing your training."
+      },
+      {
+        "title": "All Classroom Resources",
+        "desc": "Video lectures, slides, notes, and online support — all in one place!"
+      },
+      {
+        "title": "On-Job Training",
+        "desc": "Apply for on-job training after completing 70% of your main course."
+      },
+      {
+        "title": "Certificate (National & International)",
+        "desc": "National and international certificates to recognize and validate your achievements."
+      }
+    ]
+  },
+  "trainingSection": {
+    "badge": "Training Program",
+    "heading1": "Build Your Skills,",
+    "heading2": "Shape a Bright Future",
+    "subheading": "At our own training center, every candidate is made competent through modern methods.",
+    "points": [
+      {
+        "title": "Work Skills",
+        "description": "Hands-on practical training aligned with international workplace standards."
+      },
+      {
+        "title": "Language Learning",
+        "description": "Essential daily language skills to overcome communication barriers abroad."
+      },
+      {
+        "title": "Cultural Awareness",
+        "description": "Full preparation and knowledge about the culture and rules of the destination country."
+      }
+    ],
+    "mainCard": {
+      "title": "Certified Training Center",
+      "description": "Your skills are ensured through modern facilities and industry expert trainers.",
+      "button": "Enrollment Open"
+    },
+    "cards": [
+      {
+        "title": "Flexible Schedule",
+        "description": "Full-time and part-time batches available day or night at your convenience."
+      },
+      {
+        "title": "Expert Trainers",
+        "description": "Internationally experienced trainers with deep industry expertise."
+      }
+    ]
+  },
+  "ourJourney": {
+    "title": "Our Journey",
+    "subtitle": "Our Clients & Partners",
+    "logos": {
+      "educationBoard": "Bangladesh Education Board",
+      "nsda": "NSDA",
+      "saic": "SAIC",
+      "banglamark": "Banglamark",
+      "sincos": "Sincos",
+      "certifyBangladesh": "Certify Bangladesh",
+      "bec": "BEC",
+      "creative": "Creative",
+      "autodesk": "Autodesk",
+      "basis": "BASIS",
+      "archstone": "Archstone",
+      "sbConsultant": "SB Consultant",
+      "onestop": "Onestop",
+      "dds": "DDS",
+      "complianceBd": "Compliance BD"
+    }
+  },
+  "joinInstructor": {
+    "title": "Start Your Teaching Journey",
+    "brand": "IMMIGRANT JOBS WORLD",
+    "subtitle": "Share your knowledge and help build the future engineers",
+
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Enter your name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "phone": "Phone",
+      "phonePlaceholder": "Enter your number",
+      "expertise": "Expertise Area",
+      "expertisePlaceholder": "e.g: AutoCAD, Revit, SolidWorks",
+
+      "experience": "Teaching Experience",
+      "experiencePlaceholder": "Select experience",
+      "exp1": "1-2 Years",
+      "exp2": "3-5 Years",
+      "exp3": "More than 5 Years",
+
+      "whyJoin": "Why do you want to join IMMIGRANT JOBS WORLD?",
+      "whyPlaceholder": "Write briefly...",
+
+      "cv": "Upload Your CV",
+      "submit": "Apply Now"
+    },
+
+    "info": {
+      "title": "Welcome to IMMIGRANT JOBS WORLD!",
+      "desc": "Ready to spread knowledge and skills? Here you will not only teach—you will also learn, research, and help shape the future of hundreds of students. Our goal is not just training, but building a skill-based workforce."
+    },
+
+    "banner": {
+      "title": "WHAT WE'RE\nLOOKING FOR"
+    },
+
+    "lookingFor": {
+      "item1": "Passion for Teaching",
+      "item2": "Teach, Inspire & Empower",
+      "item3": "Passionate, Skilled & Supportive"
+    }
+  },
+  "applySection": {
+    "badge": "Apply Directly",
+    "heading": "Start a New Life",
+    "headingHighlight": "Abroad.",
+    "subheading": "Fill out the secure form. Our recruitment experts will match your profile with verified international employers.",
+    "features": {
+      "globalNetwork": {
+        "title": "Global Network",
+        "desc": "Connected with 6+ countries and 100+ employers."
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "desc": "Your documents are encrypted and completely safe."
+      },
+      "fastResponse": {
+        "title": "Fast Response",
+        "desc": "Get feedback within 24 working hours."
+      }
+    },
+    "form": {
+      "fullname": "Full Name",
+      "fullnamePlaceholder": "Enter your full name",
+      "phone": "Mobile Number",
+      "phonePlaceholder": "+8801XXXXXXXXX",
+      "dob": "Date of Birth",
+      "address": "Current Address",
+      "addressPlaceholder": "Village, Upazila, District — map will auto-detect 📍",
+      "country": "Destination Country",
+      "countryDefault": "Select a country",
+      "jobType": "Preferred Profession",
+      "jobTypePlaceholder": "e.g. Driver, Technician",
+      "education": "Educational Qualification",
+      "educationPlaceholder": "SSC, HSC, Diploma",
+      "experience": "Work Experience",
+      "experiencePlaceholder": "e.g. 2 years in Qatar",
+      "documentsLabel": "Required Documents",
+      "documentsOptional": "(Optional)",
+      "passport": "Passport",
+      "photo": "Photo",
+      "nid": "NID",
+      "cv": "CV / Resume",
+      "privacyNotice1": "By submitting, you agree to our",
+      "privacyNoticeBold": "Privacy Policy",
+      "privacyNotice2": "We ensure your personal information is secure and will only be used for recruitment purposes.",
+      "submit": "Submit Application",
+      "submitting": "Processing..."
+    },
+    "map": {
+      "searching": "🔍 Searching for location...",
+      "searchingReverse": "🔍 Looking up address...",
+      "notFound": "⚠️ Location not found. Please provide a more specific address.",
+      "reverseNotFound": "⚠️ Address not found.",
+      "error": "⚠️ Could not find location.",
+      "clickToUpdate": "📍 Click on the map to update location",
+      "clickToUpdateFullscreen": "📍 Click anywhere on the map to update the address",
+      "fullscreen": "Fullscreen",
+      "closeFullscreen": "Close Fullscreen"
+    },
+    "success": {
+      "title": "Application Received!",
+      "messageBold": "Immigrant Jobs World",
+      "message1": "Thank you for choosing",
+      "message2": "Our experts will review your profile and contact you within 24 hours.",
+      "back": "Go Back",
+      "applyAnother": "Submit Another Application"
+    },
+    "toast": {
+      "required": "Please fill in all required fields",
+      "error": "Something went wrong. Please try again."
+    }
+  },
+  "successStories": {
+    "heading": "Our Students'",
+    "headingHighlight": "Success Stories",
+    "subheading": "Real projects, remarkable achievements — inspiring journeys",
+    "filterLabel": "Filter by Category",
+    "empty": "No success stories found in this category.",
+    "viewAll": "View All Success Stories",
+    "viewCourses": "View Courses"
+  },
+  "immigrantSuccess": {
+    "testimonial": {
+      "quote": "After applying through Immigrant Jobs World, I got a job at a verified company in Saudi Arabia within just 3 weeks. Their language training and visa processing support was truly invaluable for me. Now I can support my family well — this platform has changed my life!",
+      "name": "- Md. Rakibul Islam, Senior Technician",
+      "company": "Al-Faisal Engineering Co. | 2024 Successful Candidate"
+    },
+    "share": {
+      "heading": "Share Your Success Story Abroad",
+      "subheading": "Inspire other job seekers by sharing your experience and success story",
+      "submitBtn": "Submit Your Success Story",
+      "nominateBtn": "Nominate a Candidate",
+      "processBtn": "View Application Process"
+    }
+  },
+  "home": {
+    "featuredPrograms": "Featured Programs",
+    "exploreCourses": "Explore Our Courses",
+    "viewAllCourses": "View all courses",
+    "whyChooseUs": "Why Choose Us",
+    "redefiningLearning": "Redefining Your Learning Experience",
+    "stats": {
+      "activeStudents": "Active Students",
+      "totalCourses": "Total Courses",
+      "instructors": "Instructors",
+      "satisfaction": "Satisfaction",
+      "jobPlacement": "Job Placement",
+      "support": "Support"
+    }
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "support": "Support Center",
+    "newsletter": "Subscribe to Newsletter",
+    "allRights": "All rights reserved",
+    "subscribe": "Subscribe",
+    "enterEmail": "Enter your email",
+    "contact": "Contact",
+    "address": "Address",
+    "addressContent": "149/A, Airport Road, Baitush Sharaf Mosque Complex, Manipuri Para, Tejgaon, Dhaka-1215",
+    "mobile": "Mobile",
+    "email": "Email",
+    "others": "Others",
+    "seminarTime": "Seminar Schedule",
+    "successStory": "Success Stories",
+    "aboutUs": "About Us",
+    "verificationCenter": "Verification Center",
+    "community": "Engineering Community Group",
+    "fbPage": "Facebook Page",
+    "privacyPolicy": "Privacy Policy",
+    "refundPolicy": "Refund Policy",
+    "supportTime": "9 AM - 7 PM"
+  },
+  "courses": {
+    "title": "All Courses",
+    "searchPlaceholder": "What do you want to learn today?",
+    "searchButton": "Search",
+    "popular": "Popular",
+    "filter": {
+      "allTypes": "All Types",
+      "allLevels": "All Levels",
+      "clearFilters": "Clear Filters"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "noCourses": "No courses found",
+    "tryAdjusting": "We couldn't find any courses matching your criteria. Try adjusting your filters."
+  },
+  "blog": {
+    "title": "Latest Articles",
+    "subtitle": "📰 Our Blog",
+    "readArticle": "Read Article",
+    "minRead": "min read",
+    "by": "By"
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back!",
+    "signInDesc": "Sign in to continue your learning journey",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot Password?",
+    "signInButton": "Sign In",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register Now",
+    "joinSeminer": "Join Seminar"
+  },
+  "immigrantJobs": {
+    "badge": "Immigrant Jobs World",
+    "heading": "Access 10,000+ Aviation Jobs Worldwide",
+    "subheading": "Match with roles that fit your skills and ambitions. We connect immigrant talent with verified global employers across every major industry sector.",
+    "stats": [
+      { "value": "10,000+", "label": "Active Job Listings" },
+      { "value": "50+",     "label": "Countries Covered" },
+      { "value": "200+",    "label": "Verified Employers" },
+      { "value": "98%",     "label": "Placement Success" }
+    ],
+    "whyChooseTitle": "Why Job Seekers Choose Us",
+    "features": [
+      {
+        "title": "Worldwide Opportunities",
+        "description": "Discover aviation and skilled jobs across 50+ countries, matched to your background and ambitions."
+      },
+      {
+        "title": "Smart Job Search",
+        "description": "Filter by category, job type, and location to instantly find roles that align with your expertise."
+      },
+      {
+        "title": "Save & Track Jobs",
+        "description": "Bookmark your favorite listings and revisit them anytime to apply when you are ready."
+      },
+      {
+        "title": "Verified Employers",
+        "description": "Every company on our platform is vetted for authenticity, so you apply with complete confidence."
+      }
+    ],
+    "featuredTitle": "Featured Job Openings",
+    "roles": [
+      { "title": "Aviation Technician",       "location": "Dubai, UAE",         "type": "Full-time" },
+      { "title": "Flight Operations Officer", "location": "London, UK",         "type": "Full-time" },
+      { "title": "Ground Staff Coordinator",  "location": "Singapore",          "type": "Part-time" },
+      { "title": "Cabin Crew Trainee",        "location": "Doha, Qatar",        "type": "Internship" },
+      { "title": "Air Traffic Controller",    "location": "Toronto, Canada",    "type": "Full-time" },
+      { "title": "Logistics Specialist",      "location": "Frankfurt, Germany", "type": "Full-time" }
+    ],
+    "moreListings": "+ thousands more listings waiting for you",
+    "employmentTitle": "Explore by Employment Type",
+    "jobTypes": [
+      {
+        "type": "Full-time",
+        "count": "6,000+",
+        "description": "Permanent positions with full benefits and career growth."
+      },
+      {
+        "type": "Part-time",
+        "count": "2,500+",
+        "description": "Flexible roles designed to fit your schedule and lifestyle."
+      },
+      {
+        "type": "Internship",
+        "count": "1,500+",
+        "description": "Kickstart your international career with hands-on experience."
+      }
+    ],
+    "ctaBadge": "Your Global Career Starts Here",
+    "ctaHeading": "Ready to Find Your Dream Job Abroad?",
+    "ctaSubheading": "Browse thousands of verified international job listings, filter by your preferred role, location, and employment type — all in one place.",
+    "ctaButton": "Browse All Jobs"
+  },
+  "whyChooseUs": {
+    "badge": "Why Choose Us",
+    "title": "Get the Best",
+    "titleHighlight": "Autodesk ATC®",
+    "titleEnd": "Training in Bangladesh",
+    "subtitle": "Discover the competitive advantages that make us Bangladesh's premier choice for Autodesk certification training",
+    "features": {
+      "curriculum": {
+        "title": "Official Autodesk-Approved Curriculum",
+        "description": "Our courses are developed using Autodesk's official training materials, ensuring you learn the most current and industry-relevant skills.",
+        "feature1": "Direct from Autodesk training partners",
+        "feature2": "Updated with latest software versions",
+        "feature3": "Comprehensive certification prep"
+      },
+      "instructors": {
+        "title": "Expert Autodesk Certified Instructors",
+        "description": "Learn from industry veterans with 10+ years of practical experience who are Autodesk-certified trainers.",
+        "feature1": "Minimum 10 years industry experience",
+        "feature2": "Autodesk Certified Professionals",
+        "feature3": "Mentorship beyond classroom"
+      },
+      "learning": {
+        "title": "Project-Based Learning Approach",
+        "description": "We don't just teach software - we train professionals. Our hands-on projects simulate real engineering challenges.",
+        "feature1": "Portfolio-worthy projects",
+        "feature2": "BIM coordination exercises",
+        "feature3": "Industry-standard workflows"
+      }
+    },
+    "services": {
+      "title": "Our Services",
+      "support": {
+        "title": "24/7 Support",
+        "description": "Round-the-clock support and assistance to quickly resolve any questions you may have."
+      },
+      "library": {
+        "title": "Online Digital Library",
+        "description": "Digital library where you'll find course materials, resources, eBooks, and more."
+      },
+      "placement": {
+        "title": "Job Placement",
+        "description": "Job opportunities or internship recommendations after completing your training."
+      },
+      "resources": {
+        "title": "All Classroom Resources",
+        "description": "Video lectures, slides, notes, and online support—all in one place."
+      },
+      "training": {
+        "title": "On-Job Training",
+        "description": "Apply for on-job training after completing 70% of the main course."
+      },
+      "certificate": {
+        "title": "Certificate ",
+        "description": "National and international certificates to recognize your achievements."
+      }
+    }
+  }
+}

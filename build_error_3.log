@@ -1,0 +1,114 @@
+﻿
+> lms-project-client@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env
+
+node.exe :  ΓÜá The 
+"middleware" file 
+convention is 
+deprecated. Please 
+use "proxy" instead. 
+Learn more: https://ne
+xtjs.org/docs/messages
+/middleware-to-proxy
+At C:\Program Files\no
+dejs\npm.ps1:29 char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ( ΓÜá The "   
+ middl...leware-to    
+-proxy:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 13.0s
+   Running TypeScript ...
+Failed to compile.
+
+./src/app/[locale]/(Co
+mmonLayout)/(dashboard
+)/dashboard/manage-cou
+rses/[id]/edit/page.ts
+x:1625:21
+Type error: Type 'Disp
+atch<SetStateAction<Cu
+rriculum[]>>' is not 
+assignable to type 
+'(data: Curriculum[]) 
+=> void'.
+  Types of parameters 
+'value' and 'data' 
+are incompatible.
+    Type 
+'Curriculum[]' is not 
+assignable to type 'Se
+tStateAction<Curriculu
+m[]>'.
+      Type 
+'Curriculum[]' is not 
+assignable to type 
+'Curriculum[]'. Two 
+different types with 
+this name exist, but 
+they are unrelated.
+        Type 
+'Curriculum' is not 
+assignable to type 
+'Curriculum'. Two 
+different types with 
+this name exist, but 
+they are unrelated.
+          Types of 
+property 'topics' are 
+incompatible.
+            Type 
+'Topic[]' is not 
+assignable to type 
+'Topic[]'. Two 
+different types with 
+this name exist, but 
+they are unrelated.
+              
+Property 'duration' 
+is missing in type 
+'Topic' but required 
+in type 'Topic'.
+
+[0m [90m 1623 
+|[39m                
+     key[33m=[39m[3
+2m"step2"[39m
+ [90m 1624 |[39m    
+                 data
+[33m=[39m{curriculum}
+[31m[1m>[22m[39m[
+90m 1625 |[39m       
+              onUpdate
+[33m=[39m{setCurricu
+lum}
+ [90m      |[39m    
+                 
+[31m[1m^[22m[39m
+ [90m 1626 |[39m    
+               
+[33m/[39m[33m>[39m
+ [90m 1627 |[39m    
+             )}
+ [90m 1628 |[39m    
+             
+{currentStep 
+[33m===[39m 
+[35m3[39m 
+[33m&&[39m ([0m
+Next.js build worker 
+exited with code: 1 
+and signal: null
