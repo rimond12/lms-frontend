@@ -414,12 +414,12 @@
     ],
     "featuredTitle": "Featured Job Openings",
     "roles": [
-      { "title": "Aviation Technician",       "location": "Dubai, UAE",         "type": "Full-time" },
-      { "title": "Flight Operations Officer", "location": "London, UK",         "type": "Full-time" },
-      { "title": "Ground Staff Coordinator",  "location": "Singapore",          "type": "Part-time" },
-      { "title": "Cabin Crew Trainee",        "location": "Doha, Qatar",        "type": "Internship" },
-      { "title": "Air Traffic Controller",    "location": "Toronto, Canada",    "type": "Full-time" },
-      { "title": "Logistics Specialist",      "location": "Frankfurt, Germany", "type": "Full-time" }
+      { "title": "CAD Design Engineer",          "company": "Emaar Engineering LLC",  "location": "Dubai, UAE",            "type": "Full-time",  "salary": "$3,500 – $5,000 / mo",    "badge": "Hot" },
+      { "title": "BIM Coordinator",              "company": "Arup Group",             "location": "London, UK",            "type": "Full-time",  "salary": "£4,000 – £5,500 / mo",    "badge": "New" },
+      { "title": "Aircraft Maintenance Tech",    "company": "Qatar Airways MRO",      "location": "Doha, Qatar",           "type": "Full-time",  "salary": "$4,000 – $6,000 / mo",    "badge": "" },
+      { "title": "Structural Design Engineer",   "company": "SNC-Lavalin Inc.",       "location": "Toronto, Canada",       "type": "Full-time",  "salary": "CAD 5,000 – 7,000 / mo",  "badge": "New" },
+      { "title": "MEP Engineer",                 "company": "Meinhardt Group",        "location": "Singapore",             "type": "Full-time",  "salary": "SGD 4,500 – 6,000 / mo",  "badge": "" },
+      { "title": "3D Visualization Artist",      "company": "NACO Aviation",          "location": "Amsterdam, Netherlands", "type": "Part-time", "salary": "€2,500 – €3,500 / mo",    "badge": "Flexible" }
     ],
     "moreListings": "+ thousands more listings waiting for you",
     "employmentTitle": "Explore by Employment Type",

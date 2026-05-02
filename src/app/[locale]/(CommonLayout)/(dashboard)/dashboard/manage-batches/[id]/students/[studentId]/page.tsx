@@ -191,7 +191,7 @@ export default function StudentDetailPage() {
         : "Course";
     const password = getUserPassword();
 
-    const message = `🎓 *CADDCORE Learning Portal - Account Information*
+    const message = `🎓 *IMMIGRANT JOBS WORLD Learning Portal - Account Information*
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -216,7 +216,7 @@ export default function StudentDetailPage() {
 
 🔗 *Login URL:* ${window.location.origin}/login
 
-Thank you for enrolling with CADDCORE! 🚀`;
+Thank you for enrolling with IMMIGRANT JOBS WORLD! 🚀`;
 
     // Format phone for WhatsApp (add 88 for Bangladesh if not present)
     let whatsappPhone = phone;

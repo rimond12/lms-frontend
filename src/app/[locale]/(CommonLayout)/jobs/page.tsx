@@ -1,8 +1,7 @@
-"use client";
+﻿"use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Loader2, Search, MapPin, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -124,23 +123,13 @@ function JobCard({ job, savedJobIds }: { job: any; savedJobIds: string[] }) {
 
 // ─── Main Page ────────────────────────────────────────────────────
 export default function JobsPage() {
-  const router = useRouter();
-  const { user, isLoading: userLoading } = useUser();
+  const { user } = useUser();
 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
 
-  // 1. Auth Guard: রিডাইরেক্ট লজিক
-  useEffect(() => {
-    if (!userLoading && !user) {
-      toast.error("You must be logged in to view jobs");
-      router.push("/login"); // আপনার প্রোজেক্টের লগইন পাথ অনুযায়ী দিন
-    }
-  }, [user, userLoading, router]);
-
-  // 2. Data Fetching
   const { data: categories = [] } = useGetJobCategoriesQuery();
   const {
     data: allJobs = [],
@@ -181,18 +170,6 @@ export default function JobsPage() {
     setCurrentPage(p);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  // ৪. যদি ইউজার চেক শেষ না হয় বা ইউজার না থাকে, তবে লোডার দেখাবে
-  if (userLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="animate-spin text-blue-700" size={40} />
-          <p className="text-sm font-medium text-gray-500">Authenticating...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 font-sans transition-colors">

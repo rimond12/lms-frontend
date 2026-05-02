@@ -3,8 +3,8 @@ import Navbar from "@/components/shared/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CADDCORE",
-  description: "CADDCORE - Online CAD Training Center",
+  title: "IMMIGRANT JOBS WORLD",
+  description: "IMMIGRANT JOBS WORLD - Online CAD Training Center",
 };
 
 export default function CommonLayout({

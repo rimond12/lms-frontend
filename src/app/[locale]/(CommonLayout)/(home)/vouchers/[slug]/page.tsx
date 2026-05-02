@@ -61,7 +61,7 @@ export default function VoucherDetailsPage() {
     }
     return `Hello, I am interested in purchasing the ${
       voucher?.name || "voucher"
-    } from CADDCORE.`;
+    } from IMMIGRANT JOBS WORLD.`;
   };
 
   const handleWhatsAppOrder = () => {
@@ -258,7 +258,7 @@ export default function VoucherDetailsPage() {
               {/* Additional Info */}
               <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                 <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">
-                  Why Choose CADDCORE?
+                  Why Choose IMMIGRANT JOBS WORLD?
                 </h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">

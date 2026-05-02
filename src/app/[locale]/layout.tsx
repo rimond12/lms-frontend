@@ -15,7 +15,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "CADDCORELMS ",
+  title: "IMMIGRANT JOBS WORLD",
   description: "Welcome to the LMS  website.",
 };
 

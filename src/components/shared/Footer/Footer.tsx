@@ -111,7 +111,7 @@ export const Footer = () => {
                     href="mailto:caddcorebd@gmail.com"
                     className="text-sm text-gray-300 hover:text-red-400 transition-colors"
                   >
-                    caddcorebd@gmail.com
+                    immigrantjobsworld@gmail.com
                   </a>
                 </div>
               </div>

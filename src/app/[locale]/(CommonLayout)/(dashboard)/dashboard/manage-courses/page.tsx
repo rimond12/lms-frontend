@@ -354,7 +354,7 @@ export default function ManageProgramsPage() {
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-100">
                             <AppImage
-                              photoUrl={program.bannerImage || "CADDCORE"}
+                              photoUrl={program.bannerImage || "IMMIGRANT JOBS WORLD"}
                               alt={program.title}
                               width={48}
                               height={48}

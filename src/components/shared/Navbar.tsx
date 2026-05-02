@@ -225,7 +225,7 @@ const TopBar = () => {
               href="mailto:info@caddcore.com"
               className="text-gray-300 group-hover:text-white transition-colors"
             >
-              caddcorebd@gmail.com
+              immigrantjobsworld@gmail.com
             </a>
           </div>
         </div>
@@ -410,7 +410,7 @@ const Navbar: React.FC = () => {
         {
           name: t("about"),
           href: "/about-us",
-          description: "Learn about CADDCORE",
+          description: "Learn about IMMIGRANT JOBS WORLD",
           icon: <Users size={16} />,
         },
         {

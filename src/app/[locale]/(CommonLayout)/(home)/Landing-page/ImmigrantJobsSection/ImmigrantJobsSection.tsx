@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useGetAllJobsQuery } from "@/app/redux/api/jobsApi/jobsApi";
 import {
   Briefcase,
   Globe,
@@ -17,6 +18,9 @@ import {
   Sparkles,
   Building2,
   Award,
+  DollarSign,
+  Flame,
+  BadgeCheck,
 } from "lucide-react";
 
 const FEATURE_ICONS = [Globe, Search, Bookmark, Building2];
@@ -27,15 +31,30 @@ const JOB_TYPE_COLORS = [
   { bg: "#EEF2FF", border: "#C7D2FE", color: "#2B59C3" },
   { bg: "#EFF6FF", border: "#BFDBFE", color: "#1a4da1" },
 ];
-const ROLE_COLORS = ["#1a4da1", "#2B59C3", "#1a4da1", "#2B59C3", "#1a4da1", "#2B59C3"];
+const ROLE_COLORS = ["#0d9488", "#7c3aed", "#ea580c", "#0891b2", "#059669", "#db2777"];
+const ROLE_GRADIENTS = ["#14b8a6", "#9333ea", "#f97316", "#06b6d4", "#10b981", "#ec4899"];
+const BADGE_STYLES: Record<string, { bg: string; color: string }> = {
+  Hot:      { bg: "#fef2f2", color: "#dc2626" },
+  New:      { bg: "#f0fdf4", color: "#16a34a" },
+  Flexible: { bg: "#f5f3ff", color: "#7c3aed" },
+};
+
+function deriveBadge(type: string, index: number): string {
+  if (type === "Part time") return "Flexible";
+  if (index === 0) return "Hot";
+  if (index === 1 || index === 3) return "New";
+  return "";
+}
 
 export default function ImmigrantJobsSection() {
   const t = useTranslations("immigrantJobs");
 
   const stats    = t.raw("stats")    as { value: string; label: string }[];
   const features = t.raw("features") as { title: string; description: string }[];
-  const roles    = t.raw("roles")    as { title: string; location: string; type: string }[];
   const jobTypes = t.raw("jobTypes") as { type: string; count: string; description: string }[];
+
+  const { data: apiJobs = [], isLoading: jobsLoading } = useGetAllJobsQuery({ status: "published" });
+  const previewJobs = apiJobs.slice(0, 6);
 
   return (
     <section className="relative py-16 md:py-24 bg-slate-50 overflow-hidden">
@@ -127,42 +146,94 @@ export default function ImmigrantJobsSection() {
             })}
           </div>
 
-          {/* Right: Sample Roles */}
+          {/* Right: Live Job Listings */}
           <div className="space-y-3">
             <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6">
               {t("featuredTitle")}
             </h3>
-            {roles.map(({ title, location, type }, i) => {
-              const color = ROLE_COLORS[i];
+
+            {/* Loading skeletons */}
+            {jobsLoading && Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-[88px] bg-white rounded-2xl border border-slate-100 animate-pulse" />
+            ))}
+
+            {/* Live job cards */}
+            {!jobsLoading && previewJobs.map((job: any, i: number) => {
+              const color  = ROLE_COLORS[i % ROLE_COLORS.length];
+              const color2 = ROLE_GRADIENTS[i % ROLE_GRADIENTS.length];
+              const badge  = deriveBadge(job.type, i);
+              const badgeStyle = badge ? BADGE_STYLES[badge] : null;
               return (
-                <div
-                  key={i}
-                  className="group flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-blue-200 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
-                >
-                  <div
-                    className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center font-black text-xs"
-                    style={{ background: color + "18", border: `1.5px solid ${color}40`, color }}
-                  >
-                    {title.charAt(0)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm text-slate-900 truncate group-hover:text-blue-700 transition-colors">
-                      {title}
-                    </p>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
-                      <span className="text-xs text-slate-400">{location}</span>
+                <Link href={`/jobs/${job.slug}`} key={job._id}>
+                  <div className="group relative flex flex-col gap-2.5 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden">
+                    {/* top accent bar */}
+                    <div
+                      className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ background: `linear-gradient(to right, ${color}, ${color2})` }}
+                    />
+
+                    {/* header row */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center font-black text-sm"
+                          style={{ background: color + "18", border: `1.5px solid ${color}40`, color }}
+                        >
+                          {job.title?.charAt(0) ?? "J"}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-sm text-slate-900 truncate leading-tight">
+                            {job.title}
+                          </p>
+                          <div className="flex items-center gap-1 mt-0.5">
+                            <Building2 className="w-3 h-3 text-slate-400 shrink-0" />
+                            <span className="text-[11px] text-slate-400 truncate">{job.category}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {badgeStyle && (
+                        <span
+                          className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1"
+                          style={{ background: badgeStyle.bg, color: badgeStyle.color }}
+                        >
+                          {badge === "Hot" && <Flame className="w-2.5 h-2.5" />}
+                          {badge === "New" && <BadgeCheck className="w-2.5 h-2.5" />}
+                          {badge}
+                        </span>
+                      )}
                     </div>
+
+                    {/* location + type row */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1 text-[11px] text-slate-400">
+                        <MapPin className="w-3 h-3 shrink-0" />
+                        <span>{job.location ?? "Remote"}</span>
+                      </div>
+                      <span
+                        className="shrink-0 text-[11px] font-bold px-2.5 py-0.5 rounded-full"
+                        style={{ background: color + "15", color, border: `1px solid ${color}30` }}
+                      >
+                        {job.type}
+                      </span>
+                    </div>
+
+                    {/* salary */}
+                    {job.salary && (
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold" style={{ color }}>
+                        <DollarSign className="w-3 h-3" />
+                        {job.salary}
+                      </div>
+                    )}
                   </div>
-                  <span
-                    className="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full"
-                    style={{ background: color + "15", color, border: `1px solid ${color}30` }}
-                  >
-                    {type}
-                  </span>
-                </div>
+                </Link>
               );
             })}
+
+            {/* No jobs fallback */}
+            {!jobsLoading && previewJobs.length === 0 && (
+              <p className="text-center text-sm text-slate-400 py-8">No job listings available right now.</p>
+            )}
+
             <p className="text-center text-xs text-slate-400 pt-2 font-medium">
               {t("moreListings")}
             </p>

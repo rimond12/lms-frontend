@@ -3,13 +3,17 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Loader2, AlertCircle } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { useGetJobBySlugQuery } from "@/app/redux/api/jobsApi/jobsApi";
+import { useUser } from "@/app/[locale]/@auth/user.provider";
 
 export default function JobDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params?.slug as string;
+  const { user } = useUser();
 
   const {
     data: job,
@@ -49,6 +53,15 @@ export default function JobDetailPage() {
 
   // ── Helpers ──
   const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+
+  const handleApply = () => {
+    if (!user) {
+      toast.error("Please log in to apply for this job");
+      router.push("/login");
+      return;
+    }
+    router.push(`/jobs/${job.slug}/apply`);
+  };
 
   return (
     <div className="min-h-screen dark:bg-gray-950 font-sans transition-colors">
@@ -130,11 +143,12 @@ export default function JobDetailPage() {
               )}
             </div>
           </div>
-          <Link href={`/jobs/${job.slug}/apply`}>
-            <button className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm shrink-0">
-              Apply Now
-            </button>
-          </Link>
+          <button
+            onClick={handleApply}
+            className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm shrink-0 cursor-pointer"
+          >
+            Apply Now
+          </button>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -211,11 +225,12 @@ export default function JobDetailPage() {
 
           {/* Apply Now (middle) */}
           <div className="text-center py-2">
-            <Link href={`/jobs/${job.slug}/apply`}>
-              <button className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm shrink-0">
-                Apply Now
-              </button>
-            </Link>
+            <button
+              onClick={handleApply}
+              className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm shrink-0 cursor-pointer"
+            >
+              Apply Now
+            </button>
           </div>
 
           {/* Benefits */}

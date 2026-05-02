@@ -87,7 +87,7 @@ export default function VerifyCertificatePage() {
               Certificate Verification
             </h1>
             <p className="text-lg text-blue-100 max-w-2xl mx-auto">
-              Verify the authenticity of certificates issued by CADDCORE C.
+              Verify the authenticity of certificates issued by IMMIGRANT JOBS WORLD .
               Enter the student&apos;s email or certificate number to validate.
             </p>
           </div>
@@ -332,7 +332,7 @@ export default function VerifyCertificatePage() {
                             <div>
                               <p className="text-sm text-gray-500">Issued By</p>
                               <p className="font-semibold text-gray-900">
-                                CADDCORE
+                                IMMIGRANT JOBS WORLD
                               </p>
                             </div>
                           </div>
