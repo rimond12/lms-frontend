@@ -534,6 +534,45 @@ function TrainingEditor({ data, onSave, saving }: { data: ILandingPageCMS["train
   );
 }
 
+// ─── LogoRowEditor must live OUTSIDE PartnersEditor so React never
+//     unmounts/remounts it on every local-state change (which would
+//     cause inputs to lose focus after every keystroke).
+function LogoRowEditor({
+  label,
+  logos,
+  onUpdateLogo,
+  onRemoveLogo,
+  onAddLogo,
+}: {
+  label: string;
+  logos: IPartnerLogo[];
+  onUpdateLogo: (i: number, key: keyof IPartnerLogo, val: string) => void;
+  onRemoveLogo: (i: number) => void;
+  onAddLogo: () => void;
+}) {
+  return (
+    <SectionCard title={label} icon={Users}>
+      <div className="space-y-3">
+        {logos.map((logo, i) => (
+          <div key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
+            <div className="flex justify-between items-center gap-3">
+              <div className="flex-1">
+                <Label>Partner Name</Label>
+                <Input value={logo.name} onChange={(v) => onUpdateLogo(i, "name", v)} placeholder="Partner Name" />
+              </div>
+              {logos.length > 1 && (
+                <RemoveBtn onClick={() => onRemoveLogo(i)} />
+              )}
+            </div>
+            <CmsImageUpload label="Logo Image" value={logo.img} onChange={(v) => onUpdateLogo(i, "img", v)} />
+          </div>
+        ))}
+        <AddRowBtn onClick={onAddLogo} label="Add Logo" />
+      </div>
+    </SectionCard>
+  );
+}
+
 function PartnersEditor({ data, onSave, saving }: { data: ILandingPageCMS["ourJourney"]; onSave: (d: ILandingPageCMS["ourJourney"]) => void; saving: boolean }) {
   const [local, setLocal] = useState(data);
   useEffect(() => setLocal(data), [data]);
@@ -544,27 +583,11 @@ function PartnersEditor({ data, onSave, saving }: { data: ILandingPageCMS["ourJo
     setLocal((p) => ({ ...p, [row]: logos }));
   };
 
-  const LogoRowEditor = ({ rowKey, label }: { rowKey: "row1" | "row2" | "row3"; label: string }) => (
-    <SectionCard title={label} icon={Users}>
-      <div className="space-y-3">
-        {local[rowKey].map((logo, i) => (
-          <div key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
-            <div className="flex justify-between items-center gap-3">
-              <div className="flex-1">
-                <Label>Partner Name</Label>
-                <Input value={logo.name} onChange={(v) => updateLogo(rowKey, i, "name", v)} placeholder="Partner Name" />
-              </div>
-              {local[rowKey].length > 1 && (
-                <RemoveBtn onClick={() => setLocal((p) => ({ ...p, [rowKey]: p[rowKey].filter((_, j) => j !== i) }))} />
-              )}
-            </div>
-            <CmsImageUpload label="Logo Image" value={logo.img} onChange={(v) => updateLogo(rowKey, i, "img", v)} />
-          </div>
-        ))}
-        <AddRowBtn onClick={() => setLocal((p) => ({ ...p, [rowKey]: [...p[rowKey], { name: "", img: "" }] }))} label="Add Logo" />
-      </div>
-    </SectionCard>
-  );
+  const removeLogo = (row: "row1" | "row2" | "row3", i: number) =>
+    setLocal((p) => ({ ...p, [row]: p[row].filter((_, j) => j !== i) }));
+
+  const addLogo = (row: "row1" | "row2" | "row3") =>
+    setLocal((p) => ({ ...p, [row]: [...p[row], { name: "", img: "" }] }));
 
   return (
     <div className="space-y-6">
@@ -580,9 +603,27 @@ function PartnersEditor({ data, onSave, saving }: { data: ILandingPageCMS["ourJo
           </div>
         </div>
       </SectionCard>
-      <LogoRowEditor rowKey="row1" label="Row 1 — Scrolls Left" />
-      <LogoRowEditor rowKey="row2" label="Row 2 — Scrolls Right" />
-      <LogoRowEditor rowKey="row3" label="Row 3 — Scrolls Left" />
+      <LogoRowEditor
+        label="Row 1 — Scrolls Left"
+        logos={local.row1}
+        onUpdateLogo={(i, key, val) => updateLogo("row1", i, key, val)}
+        onRemoveLogo={(i) => removeLogo("row1", i)}
+        onAddLogo={() => addLogo("row1")}
+      />
+      <LogoRowEditor
+        label="Row 2 — Scrolls Right"
+        logos={local.row2}
+        onUpdateLogo={(i, key, val) => updateLogo("row2", i, key, val)}
+        onRemoveLogo={(i) => removeLogo("row2", i)}
+        onAddLogo={() => addLogo("row2")}
+      />
+      <LogoRowEditor
+        label="Row 3 — Scrolls Left"
+        logos={local.row3}
+        onUpdateLogo={(i, key, val) => updateLogo("row3", i, key, val)}
+        onRemoveLogo={(i) => removeLogo("row3", i)}
+        onAddLogo={() => addLogo("row3")}
+      />
       <div className="flex justify-end">
         <SaveButton loading={saving} onClick={() => onSave(local)} />
       </div>

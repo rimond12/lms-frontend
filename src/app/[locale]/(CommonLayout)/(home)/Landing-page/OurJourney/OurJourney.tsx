@@ -7,6 +7,14 @@ import { useTranslations } from "next-intl";
 
 interface Logo { name: string; img: string; }
 
+const FILE_URL = process.env.NEXT_PUBLIC_FILE_URL || "";
+
+function resolveImg(value: string): string {
+  if (!value) return "";
+  if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("/")) return value;
+  return `${FILE_URL}/${value}`;
+}
+
 const DEFAULT_ROW1: Logo[] = [
   { name: "Bangladesh Education Board", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
   { name: "NSDA", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
@@ -31,7 +39,7 @@ const DEFAULT_ROW3: Logo[] = [
 
 const LogoCard = ({ logo }: { logo: Logo }) => (
   <div className="flex flex-col items-center mx-12">
-    <img src={logo.img} alt={logo.name} className="h-14 md:h-16 object-contain" />
+    <img src={resolveImg(logo.img)} alt={logo.name} className="h-14 md:h-16 object-contain" />
     <p className="text-[11px] text-gray-500 mt-4 font-semibold uppercase text-center">{logo.name}</p>
   </div>
 );
