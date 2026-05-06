@@ -205,7 +205,7 @@ export default function VouchersPage() {
       <OurServices />
       <TrainingSection />
       <OurJourney />
-      <JoinInstructor />
+      {/* <JoinInstructor /> */}
       <ApplySection />
       <SuccessStories />
     </div>
