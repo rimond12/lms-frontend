@@ -6,11 +6,11 @@ import { useGetActiveVouchersQuery } from '@/app/redux/api/VoucherApi/voucherApi
 import { Tag, Phone, ArrowRight, Sparkles, Award } from 'lucide-react';
 import Hero from './Landing-page/hero/hero';
 import StatsSection from './Landing-page/StatsSection/StatsSection';
-import SeminarSchedule from './Landing-page/SeminarSchedule/SeminarSchedule';
+// import SeminarSchedule from './Landing-page/SeminarSchedule/SeminarSchedule';
 import PopularCourses from './Landing-page/PopularCourses/PopularCourses';
 import OurServices from './Landing-page/OurServices/OurServices';
 import OurJourney from './Landing-page/OurJourney/OurJourney';
-import JoinInstructor from './Landing-page/JoinInstructor/JoinInstructor';
+// import JoinInstructor from './Landing-page/JoinInstructor/JoinInstructor';
 import SuccessStories from './Landing-page/SuccessStories/SuccessStories';
 import ApplySection from './Landing-page/ApplySection/ApplySection';
 import RecruitmentServices from './Landing-page/RecruitmentServices/RecruitmentServices';
