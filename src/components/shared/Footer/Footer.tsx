@@ -161,7 +161,7 @@ export const Footer = () => {
                 </Link>
               </li>
             </ul>
-            <div className="mt-6 pl-2">
+            {/* <div className="mt-6 pl-2">
               <Image
                 src="https://res.cloudinary.com/dalpf8iip/image/upload/v1749027587/images__8_-removebg-preview_qfukeu.png"
                 width={140}
@@ -169,7 +169,7 @@ export const Footer = () => {
                 alt="Autodesk Authorised Training Centre"
                 className="opacity-90 hover:opacity-100 transition-opacity"
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Others - Col Span 3 */}
@@ -219,7 +219,7 @@ export const Footer = () => {
                 </Link>
               </li>
             </ul>
-            <div className="pt-2">
+            {/* <div className="pt-2">
               <Image
                 src="https://res.cloudinary.com/dalpf8iip/image/upload/v1753593763/Pi7_autodesk-learning-partner-logo-rgb-black_wpqshs.webp"
                 width={140}
@@ -227,7 +227,7 @@ export const Footer = () => {
                 alt="Autodesk Learning Partner"
                 className="opacity-90 hover:opacity-100 transition-opacity"
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Support Center - Col Span 3 */}
@@ -261,7 +261,7 @@ export const Footer = () => {
               <div className="flex gap-3 mt-6">
                 {/* Social Icons with improved hover effects */}
                 <a
-                  href="https://facebook.com/caddcorebd"
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -277,7 +277,7 @@ export const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.youtube.com/c/caddcorebd"
+                  href=""
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -293,7 +293,7 @@ export const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.linkedin.com/company/cadd-core-ltd/"
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -309,7 +309,7 @@ export const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/+8801611223637"
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-green-500 hover:bg-green-600 hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -331,7 +331,7 @@ export const Footer = () => {
       </div>
 
       {/* Payment Banner */}
-      <div className="border-t border-gray-900 bg-[#0f0f0f]/50">
+      {/* <div className="border-t border-gray-900 bg-[#0f0f0f]/50">
         <div className="max-w-7xl mx-auto px-4 py-2">
           <div className="bg-black/40 rounded-xl p-4 border border-gray-800/50">
             <Image
@@ -343,14 +343,14 @@ export const Footer = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Copyright Bar */}
       <div className="border-t border-gray-900 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-medium tracking-wide">
             <p className="flex items-center gap-2">
-              <span>© {currentYear} CADD CORE.</span>
+              <span>© {currentYear} IMMIGRANT JOBS WORLD</span>
               <span className="hidden md:inline text-gray-800">|</span>
               <span>{t("allRights")}</span>
             </p>
