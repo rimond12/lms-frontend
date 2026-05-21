@@ -78,10 +78,9 @@ export const Footer = () => {
                     {t("mobile")}
                   </p>
                   <p className="text-sm font-medium text-white hover:text-red-400 transition-colors">
-                    +880 1611-223631
-                  </p>
+                                      </p>
                   <p className="text-sm font-medium text-white hover:text-red-400 transition-colors">
-                    +880 1611-223637
+                    09606-810081
                   </p>
                 </div>
               </div>
@@ -124,7 +123,7 @@ export const Footer = () => {
               {t("quickLinks")}
             </h2>
             <ul className="space-y-3">
-              <li>
+              {/* <li>
                 <Link
                   href="/#seminar-time"
                   className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group"
@@ -132,8 +131,8 @@ export const Footer = () => {
                   <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-red-500 transition-colors"></span>
                   {t("seminarTime")}
                 </Link>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <Link
                   href="/#success-story"
                   className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group"
@@ -141,7 +140,7 @@ export const Footer = () => {
                   <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-red-500 transition-colors"></span>
                   {t("successStory")}
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/about-us"
@@ -152,13 +151,13 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link
+                {/* <Link
                   href="/student-corner"
                   className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group"
                 >
                   <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-red-500 transition-colors"></span>
                   {t("verificationCenter")}
-                </Link>
+                </Link> */}
               </li>
             </ul>
             {/* <div className="mt-6 pl-2">
@@ -174,13 +173,13 @@ export const Footer = () => {
 
           {/* Others - Col Span 3 */}
           <div className="lg:col-span-3 space-y-6">
-            <h2 className="text-lg font-bold text-white tracking-tight">
+            {/* <h2 className="text-lg font-bold text-white tracking-tight">
               {t("others")}
-            </h2>
-            <ul className="space-y-3">
+            </h2> */}
+            {/* <ul className="space-y-3">
               <li>
                 <a
-                  href="https://www.facebook.com/groups/caddcore"
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group"
@@ -191,7 +190,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://www.facebook.com/caddcorebd"
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group"
@@ -218,7 +217,7 @@ export const Footer = () => {
                   {t("refundPolicy")}
                 </Link>
               </li>
-            </ul>
+            </ul> */}
             {/* <div className="pt-2">
               <Image
                 src="https://res.cloudinary.com/dalpf8iip/image/upload/v1753593763/Pi7_autodesk-learning-partner-logo-rgb-black_wpqshs.webp"
@@ -238,7 +237,7 @@ export const Footer = () => {
 
             <div className="bg-gray-900/50 p-6 rounded-2xl border border-gray-800">
               <p className="text-xl font-bold bg-linear-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                +880 9613-202060
+                09606-810081
               </p>
               <p className="text-xs font-medium text-gray-500 mt-2 uppercase tracking-wider flex items-center gap-2">
                 <svg
@@ -354,7 +353,7 @@ export const Footer = () => {
               <span className="hidden md:inline text-gray-800">|</span>
               <span>{t("allRights")}</span>
             </p>
-            <div className="flex items-center gap-6">
+            {/* <div className="flex items-center gap-6">
               <span className="flex items-center gap-1.5">
                 <Shield size={12} className="text-gray-600" />
                 Trade License: 000257
@@ -367,7 +366,7 @@ export const Footer = () => {
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500/50 animate-pulse"></div>
                 V: 1.0.1
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

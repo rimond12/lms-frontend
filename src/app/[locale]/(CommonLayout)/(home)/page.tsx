@@ -11,11 +11,12 @@ import PopularCourses from './Landing-page/PopularCourses/PopularCourses';
 import OurServices from './Landing-page/OurServices/OurServices';
 import OurJourney from './Landing-page/OurJourney/OurJourney';
 // import JoinInstructor from './Landing-page/JoinInstructor/JoinInstructor';
-import SuccessStories from './Landing-page/SuccessStories/SuccessStories';
+// import SuccessStories from './Landing-page/SuccessStories/SuccessStories';
 import ApplySection from './Landing-page/ApplySection/ApplySection';
 import RecruitmentServices from './Landing-page/RecruitmentServices/RecruitmentServices';
 import TrainingSection from './Landing-page/TrainingSection/TrainingSection';
 import ImmigrantJobsSection from './Landing-page/ImmigrantJobsSection/ImmigrantJobsSection';
+import EngineeringSuccess from './Landing-page/EngineeringSuccess/EngineeringSuccess';
 
 
 
@@ -207,7 +208,8 @@ export default function VouchersPage() {
       <OurJourney />
       {/* <JoinInstructor /> */}
       <ApplySection />
-      <SuccessStories />
+      {/* <SuccessStories /> */}
+         <EngineeringSuccess />
     </div>
   );
 }
