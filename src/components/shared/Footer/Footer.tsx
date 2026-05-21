@@ -260,7 +260,7 @@ export const Footer = () => {
               <div className="flex gap-3 mt-6">
                 {/* Social Icons with improved hover effects */}
                 <a
-                  href="#"
+                  href="https://www.facebook.com/immigrantjobsworld"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -276,7 +276,7 @@ export const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href=""
+                  href="https://www.youtube.com/@ImmigrantJobsWorld"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -292,7 +292,7 @@ export const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/company/immigrant-jobs-world"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
@@ -307,7 +307,7 @@ export const Footer = () => {
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
                   </svg>
                 </a>
-                <a
+                {/* <a
                   href="#"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -322,7 +322,7 @@ export const Footer = () => {
                   >
                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99 0-3.903-.52-5.586-1.459l-6.353 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.267.655 4.398 1.804 6.166l-1.32 4.825 4.918-1.284z" />
                   </svg>
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
