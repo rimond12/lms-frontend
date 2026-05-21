@@ -1,6 +1,6 @@
 # 🚀 Ultimate Hostinger VPS Deployment Guide (A to Z)
 
-# LMS_CADDCORE
+# LMS_CORE
 
 <!-- use admin
 db.createUser({ user: "admin", pwd: "caddcore1991", roles: ["root"] })
