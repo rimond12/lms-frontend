@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   useGetApprovedSuccessStoriesQuery,
   useSubmitSuccessStoryMutation,
   TSuccessStory,
 } from "@/app/redux/api/successStoryApi/successStoryApi";
+import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
@@ -22,6 +23,23 @@ import "swiper/css/pagination";
 
 const ImmigrantSuccess: React.FC = () => {
   const t = useTranslations("immigrantSuccess");
+  const tStories = useTranslations("successStories");
+  const { data: cmsResponse } = useGetLandingPageCmsQuery();
+  const cms = cmsResponse?.data?.successStories;
+
+  const locale = useLocale();
+  const isBn = locale === "bn";
+
+  const heading = (isBn ? null : cms?.heading) || tStories("heading");
+  const headingHighlight = (isBn ? null : cms?.headingHighlight) || tStories("headingHighlight");
+  const subheading = (isBn ? null : cms?.subheading) || tStories("subheading");
+
+  const shareHeading = cms?.shareHeading || t("share.heading");
+  const shareSubheading = cms?.shareSubheading || t("share.subheading");
+  const shareSubmitBtn = cms?.shareSubmitBtn || t("share.submitBtn");
+  const shareNominateBtn = cms?.shareNominateBtn || t("share.nominateBtn");
+  const shareProcessBtn = cms?.shareProcessBtn || t("share.processBtn");
+
   const { data: response, isLoading: isStoriesLoading } = useGetApprovedSuccessStoriesQuery();
   const [submitStory, { isLoading: isSubmitting }] = useSubmitSuccessStoryMutation();
 
@@ -200,6 +218,20 @@ const ImmigrantSuccess: React.FC = () => {
 
   return (
     <div className="py-12 sm:py-16 px-4 sm:px-7">
+      {/* Section Header */}
+      <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-950 dark:text-white tracking-tight">
+          {heading}{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-blue-600 dark:from-blue-400 dark:to-blue-600">
+            {headingHighlight}
+          </span>
+        </h2>
+        <div className="w-20 h-1.5 bg-blue-700 dark:bg-blue-500 mx-auto mt-4 rounded-full" />
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-4 leading-relaxed font-medium">
+          {subheading}
+        </p>
+      </div>
+
       {/* Testimonial Cards Carousel / Display */}
       <div className="mb-14 sm:mb-20 max-w-7xl mx-auto relative group/carousel">
         {isStoriesLoading ? (
@@ -254,10 +286,10 @@ const ImmigrantSuccess: React.FC = () => {
       {/* Share Success Section */}
       <div className="text-center max-w-3xl mx-auto mt-8">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-700 mb-3 px-2">
-          {t("share.heading")}
+          {shareHeading}
         </h2>
         <p className="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base px-2">
-          {t("share.subheading")}
+          {shareSubheading}
         </p>
 
         {/* Main CTA */}
@@ -266,7 +298,7 @@ const ImmigrantSuccess: React.FC = () => {
           onClick={() => setIsOpen(true)}
           className="bg-blue-700 text-white px-7 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg mb-5 sm:mb-6 flex items-center gap-2 mx-auto hover:bg-blue-900 transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-200 active:scale-95"
         >
-          {t("share.submitBtn")}
+          {shareSubmitBtn}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 sm:h-5 sm:w-5 rotate-45"
@@ -289,13 +321,13 @@ const ImmigrantSuccess: React.FC = () => {
             type="button"
             className="px-5 sm:px-6 py-2 sm:py-2.5 rounded-full border-2 border-blue-700 text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-colors"
           >
-            {t("share.nominateBtn")}
+            {shareNominateBtn}
           </button>
           <button
             type="button"
             className="px-5 sm:px-6 py-2 sm:py-2.5 rounded-full border-2 border-blue-700 text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-colors"
           >
-            {t("share.processBtn")}
+            {shareProcessBtn}
           </button>
         </div>
       </div>
@@ -306,7 +338,7 @@ const ImmigrantSuccess: React.FC = () => {
           <DialogHeader className="border-b border-slate-100 pb-4 mb-4">
             <DialogTitle className="text-xl font-bold text-blue-800 flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-blue-700" />
-              আপনার সাফল্যের গল্প জমা দিন
+              {shareHeading}
             </DialogTitle>
             <p className="text-xs text-slate-500 mt-1">আপনার গৌরবময় বিদেশ যাত্রার অভিজ্ঞতা আমাদের সাথে শেয়ার করুন</p>
           </DialogHeader>

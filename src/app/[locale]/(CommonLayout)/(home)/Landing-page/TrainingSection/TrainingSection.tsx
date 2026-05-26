@@ -6,23 +6,25 @@ import {
   School, Sparkles, FileText, ArrowRight,
 } from "lucide-react";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const TRAINING_ICONS = [BriefcaseBusiness, Globe, Brain];
 const CARD_ICONS = [Clock, FileText];
 
 const TrainingSection = () => {
   const tr = useTranslations("trainingSection");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.trainingSection;
 
-  const badge      = cms?.badge      || tr("badge");
-  const heading1   = cms?.heading1   || tr("heading1");
-  const heading2   = cms?.heading2   || tr("heading2");
-  const subheading = cms?.subheading || tr("subheading");
-  const points     = cms?.points?.length ? cms.points   : tr.raw("points")   as { title: string; description: string }[];
-  const mainCard   = cms?.mainCard        ? cms.mainCard : { title: tr("mainCard.title"), description: tr("mainCard.description"), button: tr("mainCard.button") };
-  const cards      = cms?.cards?.length   ? cms.cards    : tr.raw("cards")    as { title: string; description: string }[];
+  const badge      = (isBn ? null : cms?.badge)      || tr("badge");
+  const heading1   = (isBn ? null : cms?.heading1)   || tr("heading1");
+  const heading2   = (isBn ? null : cms?.heading2)   || tr("heading2");
+  const subheading = (isBn ? null : cms?.subheading) || tr("subheading");
+  const points     = (!isBn && cms?.points?.length) ? cms.points   : tr.raw("points")   as { title: string; description: string }[];
+  const mainCard   = (!isBn && cms?.mainCard)        ? cms.mainCard : { title: tr("mainCard.title"), description: tr("mainCard.description"), button: tr("mainCard.button") };
+  const cards      = (!isBn && cms?.cards?.length)   ? cms.cards    : tr.raw("cards")    as { title: string; description: string }[];
 
   return (
     <section className="relative py-12 md:py-20 lg:py-28 bg-white overflow-hidden text-slate-900">
@@ -78,7 +80,7 @@ const TrainingSection = () => {
 
           {/* Right */}
           <div className="lg:col-span-7 relative">
-            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 p-4 sm:p-2 md:p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-xl">
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 p-4 sm:p-6 md:p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-xl">
               <div className="sm:col-span-2 relative group overflow-hidden p-7 sm:p-8 md:p-10 rounded-[2rem] bg-blue-600 shadow-2xl shadow-blue-200 border border-blue-400">
                 <div className="absolute top-0 right-0 p-6 md:p-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
                   <School size={100} className="text-white md:hidden" />

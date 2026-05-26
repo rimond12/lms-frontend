@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   User,
   MapPin,
@@ -299,14 +299,16 @@ function AddressMap({
 // ─── Main Component ───────────────────────────────────────────────
 export default function ApplySection() {
   const t = useTranslations("applySection");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.applySection;
 
-  const badge = cms?.badge || t("badge");
-  const heading = cms?.heading || t("heading");
-  const headingHighlight = cms?.headingHighlight || t("headingHighlight");
-  const subheading = cms?.subheading || t("subheading");
-  const features = cms?.features?.length
+  const badge = (isBn ? null : cms?.badge) || t("badge");
+  const heading = (isBn ? null : cms?.heading) || t("heading");
+  const headingHighlight = (isBn ? null : cms?.headingHighlight) || t("headingHighlight");
+  const subheading = (isBn ? null : cms?.subheading) || t("subheading");
+  const features = (!isBn && cms?.features?.length)
     ? cms.features
     : [
         { title: t("features.globalNetwork.title"), desc: t("features.globalNetwork.desc") },

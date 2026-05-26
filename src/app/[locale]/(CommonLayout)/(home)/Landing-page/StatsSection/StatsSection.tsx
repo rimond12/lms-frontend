@@ -3,7 +3,7 @@
 import React from "react";
 import CountUp from "react-countup";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const DEFAULT_STAT_META = [
   { end: 12000, suffix: "+", icon: "🎓" },
@@ -17,10 +17,12 @@ const BORDER_COLORS = ["border-slate-800", "border-blue-700", "border-blue-700",
 
 const StatsSection: React.FC = () => {
   const t = useTranslations("stats");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cmsStats = cmsResponse?.data?.stats?.items;
 
-  const stats = cmsStats?.length
+  const stats = (!isBn && cmsStats?.length)
     ? cmsStats
     : DEFAULT_STAT_META.map((meta, i) => ({ ...meta, label: t(STAT_LABEL_KEYS[i]) }));
 

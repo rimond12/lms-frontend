@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useGetCoursesQuery } from "@/app/redux/api/CourseApi/CourseApi";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import AppImage from "@/components/ui/AppImage";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import CourseCard from "@/components/shared/CourseCard";
@@ -82,11 +83,10 @@ const FilterDropdown = ({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 whitespace-nowrap ${
-          isOpen || value
-            ? "bg-blue-50 text-[#1a4da1] shadow-sm ring-1 ring-blue-100"
-            : "bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-        }`}
+        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 whitespace-nowrap ${isOpen || value
+          ? "bg-blue-50 text-[#1a4da1] shadow-sm ring-1 ring-blue-100"
+          : "bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }`}
       >
         {icon && (
           <span
@@ -116,11 +116,10 @@ const FilterDropdown = ({
                   onChange("");
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg transition-colors mb-1 ${
-                  !value
-                    ? "bg-blue-50 text-[#1a4da1] font-medium"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
+                className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg transition-colors mb-1 ${!value
+                  ? "bg-blue-50 text-[#1a4da1] font-medium"
+                  : "text-gray-700 hover:bg-gray-50"
+                  }`}
               >
                 <span>{label}</span>
                 {!value && <CheckCircle size={14} />}
@@ -132,11 +131,10 @@ const FilterDropdown = ({
                     onChange(option.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg transition-colors ${
-                    value === option.value
-                      ? "bg-blue-50 text-[#1a4da1] font-medium"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                  className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg transition-colors ${value === option.value
+                    ? "bg-blue-50 text-[#1a4da1] font-medium"
+                    : "text-gray-700 hover:bg-gray-50"
+                    }`}
                 >
                   <div className="flex items-center gap-2">
                     {option.icon && <span>{option.icon}</span>}
@@ -242,6 +240,7 @@ const VideoCard = ({
 
 // Main Page
 export default function CoursesPage() {
+  const t = useTranslations("courses");
   const router = useRouter();
   const searchParams = useSearchParams();
   const [highlightIndex, setHighlightIndex] = useState(0);
@@ -355,25 +354,20 @@ export default function CoursesPage() {
               <div className="inline-flex items-center gap-2 self-start px-3 py-1 rounded-full bg-blue-50 border border-blue-100/50">
                 <Award size={16} className="text-[#1a4da1]" />
                 <span className="text-xs font-bold text-[#1a4da1] uppercase tracking-wider">
-                  Engineering Excellence
+                  {t("badge")}
                 </span>
               </div>
 
               <h1 className="text-3xl lg:text-[42px] lg:leading-[1.1] font-extrabold text-gray-900 tracking-tight">
-                Design the World with <br className="hidden lg:block" />
+                {t("heading")} <br className="hidden lg:block" />
                 {/* ✅ Blue gradient heading */}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a4da1] to-[#133a7a]">
-                  Civil Engineering Mastery
+                  {t("headingHighlight")}
                 </span>
               </h1>
 
               <p className="text-base text-gray-600 max-w-lg leading-relaxed font-medium">
-                Master industry-standard software like{" "}
-                <span className="text-gray-900 font-semibold">
-                  AutoCAD, Revit, ETABS
-                </span>{" "}
-                & more. From structural analysis to architectural modeling,
-                build your career with practical skills.
+                {t("description")}
               </p>
 
               <div className="flex flex-wrap gap-3 mt-1">
@@ -387,12 +381,7 @@ export default function CoursesPage() {
                   className="px-6 py-2.5 bg-[#1a4da1] text-white text-sm font-bold rounded-lg shadow-lg shadow-blue-200 hover:bg-[#133a7a] hover:shadow-blue-300 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                 >
                   <Book size={18} />
-                  Browse Courses
-                </button>
-                <button className="px-6 py-2.5 bg-white text-gray-900 border border-gray-200 text-sm font-bold rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 flex items-center gap-2">
-                  {/* ✅ Blue play icon */}
-                  <PlayCircle size={18} className="text-[#1a4da1]" />
-                  Watch Demo
+                  {t("browseBtn")}
                 </button>
               </div>
             </motion.div>
@@ -401,11 +390,12 @@ export default function CoursesPage() {
               initial={{ opacity: 0, x: 25 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-white ring-1 ring-gray-100 aspect-video lg:h-[320px] w-full"
             >
-              <VideoCard
-                videoUrl="https://www.youtube.com/watch?v=g9v6Tm_URNs"
-                fallbackImage="https://cdn.mos.cms.futurecdn.net/steVjWGx3vYPjMpJL2jVcV-650-80.jpg.webp"
+              <img
+                src="/images/immigrant-banner.png"
+                alt="Immigrant Jobs World"
+                className="w-full h-full object-cover"
               />
             </motion.div>
           </div>
@@ -428,7 +418,7 @@ export default function CoursesPage() {
                 />
                 <input
                   type="text"
-                  placeholder="Search courses..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-100/50 border-none focus:bg-white focus:ring-1 focus:ring-blue-200 rounded-lg text-sm transition-all placeholder:text-gray-500 font-medium"
@@ -441,7 +431,7 @@ export default function CoursesPage() {
                   className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-bold text-[#1a4da1] bg-blue-50 hover:bg-blue-100 border border-blue-100 rounded-lg transition-colors whitespace-nowrap"
                 >
                   <X size={15} />
-                  <span className="hidden lg:inline">Clear</span>
+                  <span className="hidden lg:inline">{t("clear")}</span>
                 </button>
               )}
             </div>
@@ -506,17 +496,16 @@ export default function CoursesPage() {
               <Search className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
-              No courses found
+              {t("noCourses")}
             </h3>
             <p className="text-gray-500 mb-6">
-              Try adjusting your search or filters to find what you're looking
-              for.
+              {t("tryAdjusting")}
             </p>
             <button
               onClick={clearFilters}
               className="px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-black transition-colors"
             >
-              Clear Filters
+              {t("filter.clearFilters")}
             </button>
           </div>
         )}
@@ -549,11 +538,10 @@ export default function CoursesPage() {
                   <button
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
-                      currentPage === pageNum
-                        ? "bg-[#1a4da1] text-white shadow-md shadow-blue-200"
-                        : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-blue-200"
-                    }`}
+                    className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${currentPage === pageNum
+                      ? "bg-[#1a4da1] text-white shadow-md shadow-blue-200"
+                      : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-blue-200"
+                      }`}
                   >
                     {pageNum}
                   </button>

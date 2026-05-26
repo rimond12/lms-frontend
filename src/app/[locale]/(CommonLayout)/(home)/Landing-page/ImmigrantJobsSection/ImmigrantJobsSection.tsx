@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useGetAllJobsQuery } from "@/app/redux/api/jobsApi/jobsApi";
+import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
 import { getImageUrl } from "@/utils/imageUtils";
 import {
   Briefcase,
@@ -215,17 +216,30 @@ function MiniJobCard({ job, index }: { job: any; index: number }) {
 // ─── Main Section ─────────────────────────────────────────────────
 export default function ImmigrantJobsSection() {
   const t = useTranslations("immigrantJobs");
+  const { data: cmsResponse } = useGetLandingPageCmsQuery();
+  const cms = cmsResponse?.data?.immigrantJobsSection;
 
   const stats = t.raw("stats") as { value: string; label: string }[];
-  const features = t.raw("features") as {
-    title: string;
-    description: string;
-  }[];
-  const jobTypes = t.raw("jobTypes") as {
-    type: string;
-    count: string;
-    description: string;
-  }[];
+  
+  const badge = cms?.badge || t("badge");
+  const heading = cms?.heading || t("heading");
+  const subheading = cms?.subheading || t("subheading");
+  const whyChooseTitle = cms?.whyChooseTitle || t("whyChooseTitle");
+
+  const rawFeatures = t.raw("features") as { title: string; description: string }[];
+  const features = cms?.features && cms.features.length > 0 ? cms.features : rawFeatures;
+
+  const featuredTitle = cms?.featuredTitle || t("featuredTitle");
+  const moreListings = cms?.moreListings || t("moreListings");
+  const employmentTitle = cms?.employmentTitle || t("employmentTitle");
+
+  const rawJobTypes = t.raw("jobTypes") as { type: string; count: string; description: string }[];
+  const jobTypes = cms?.jobTypes && cms.jobTypes.length > 0 ? cms.jobTypes : rawJobTypes;
+
+  const ctaBadge = cms?.ctaBadge || t("ctaBadge");
+  const ctaHeading = cms?.ctaHeading || t("ctaHeading");
+  const ctaSubheading = cms?.ctaSubheading || t("ctaSubheading");
+  const ctaButton = cms?.ctaButton || t("ctaButton");
 
   const { data: apiJobs = [], isLoading: jobsLoading } = useGetAllJobsQuery({
     status: "published",
@@ -258,7 +272,7 @@ export default function ImmigrantJobsSection() {
             }}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>{t("badge")}</span>
+            <span>{badge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white leading-tight mb-4">
             <span
@@ -269,11 +283,11 @@ export default function ImmigrantJobsSection() {
                 backgroundClip: "text",
               }}
             >
-              {t("heading")}
+              {heading}
             </span>
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed max-w-2xl mx-auto">
-            {t("subheading")}
+            {subheading}
           </p>
           <div
             className="h-1 w-16 mx-auto mt-5 rounded-full"
@@ -287,10 +301,10 @@ export default function ImmigrantJobsSection() {
           {/* Left: Why Choose (2 cols wide on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white mb-6">
-              {t("whyChooseTitle")}
+              {whyChooseTitle}
             </h3>
             {features.map(({ title, description }, i) => {
-              const Icon = FEATURE_ICONS[i];
+              const Icon = FEATURE_ICONS[i % FEATURE_ICONS.length];
               return (
                 <div
                   key={i}
@@ -318,7 +332,7 @@ export default function ImmigrantJobsSection() {
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white">
-                {t("featuredTitle")}
+                {featuredTitle}
               </h3>
               <Link href="/jobs">
                 <span
@@ -370,7 +384,7 @@ export default function ImmigrantJobsSection() {
 
             {!jobsLoading && previewJobs.length > 0 && (
               <p className="text-center text-xs text-slate-400 pt-3 font-medium">
-                {t("moreListings")}
+                {moreListings}
               </p>
             )}
           </div>
@@ -379,12 +393,12 @@ export default function ImmigrantJobsSection() {
         {/* ── Employment Type Cards ──────────────────────────── */}
         <div className="mb-14 md:mb-20">
           <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white text-center mb-8">
-            {t("employmentTitle")}
+            {employmentTitle}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-8">
             {jobTypes.map(({ type, count, description }, i) => {
-              const Icon = JOB_TYPE_ICONS[i];
-              const style = JOB_TYPE_COLORS[i];
+              const Icon = JOB_TYPE_ICONS[i % JOB_TYPE_ICONS.length];
+              const style = JOB_TYPE_COLORS[i % JOB_TYPE_COLORS.length];
               return (
                 <div
                   key={i}
@@ -453,19 +467,19 @@ export default function ImmigrantJobsSection() {
               }}
             >
               <CheckCircle className="w-3.5 h-3.5" />
-              <span>{t("ctaBadge")}</span>
+              <span>{ctaBadge}</span>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
-              {t("ctaHeading")}
+              {ctaHeading}
             </h3>
             <p className="text-blue-200 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed">
-              {t("ctaSubheading")}
+              {ctaSubheading}
             </p>
             <Link href="/jobs">
               <button className="group inline-flex items-center gap-3 bg-white font-black text-sm md:text-base px-8 md:px-10 py-3.5 md:py-4 rounded-full shadow-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 cursor-pointer"
                 style={{ color: "#1a4da1" }}
               >
-                {t("ctaButton")}
+                {ctaButton}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>

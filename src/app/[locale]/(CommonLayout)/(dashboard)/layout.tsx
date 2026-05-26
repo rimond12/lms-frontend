@@ -41,6 +41,7 @@ import {
   PanelTop,
 } from "lucide-react";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
+import { logout } from "@/app/[locale]/@auth/AuthService";
 
 // --- NAVIGATION STRUCTURE ---
 const navigationSections = [
@@ -171,6 +172,25 @@ const Sidebar = () => {
   const [collapsedSections, setCollapsedSections] = useState<string[]>([]);
   const pathname = usePathname();
   const user = useUser();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      if (typeof window !== "undefined") {
+        document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      user.setUser(null);
+      user.setIsLoading(false);
+    }
+  };
 
   const toggleSection = (title: string) => {
     setCollapsedSections((prev) =>
@@ -316,7 +336,10 @@ const Sidebar = () => {
             )}
           </AnimatePresence>
           {isExpanded && (
-            <button className="p-1.5 rounded-lg hover:bg-white transition-colors">
+            <button
+              onClick={handleLogout}
+              className="p-1.5 rounded-lg hover:bg-white transition-colors"
+            >
               <LogOut size={16} className="text-gray-400" />
             </button>
           )}
@@ -507,6 +530,26 @@ const MobileSidebar = ({
 }) => {
   const pathname = usePathname();
   const user = useUser();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      if (typeof window !== "undefined") {
+        document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      user.setUser(null);
+      user.setIsLoading(false);
+      onClose();
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -611,7 +654,10 @@ const MobileSidebar = ({
                     Administrator
                   </p>
                 </div>
-                <button className="p-2 rounded-lg hover:bg-white transition-colors">
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-lg hover:bg-white transition-colors"
+                >
                   <LogOut size={16} className="text-gray-400" />
                 </button>
               </div>

@@ -223,6 +223,9 @@ const TopBar = () => {
             >
               info@immigrantjobsworld.com
             </a>
+            <div className="p-1 rounded-full bg-white/10 group-hover:bg-blue-600 transition-colors duration-300">
+              <Mail size={10} className="text-white" />
+            </div>
             <a
               href="mailto:info@caddcore.com"
               className="text-gray-300 group-hover:text-white transition-colors"
@@ -264,12 +267,23 @@ const MobileNav: React.FC<{
 
   const handleLogout = async () => {
     setIsLoading(true);
-    await logout();
-    setUser(null);
-    setIsLoading(false);
-    setUserLoading(false);
-    setIsOpen(false);
-    router.push("/");
+    try {
+      await logout();
+      if (typeof window !== "undefined") {
+        document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setIsLoading(false);
+      setUser(null);
+      setUserLoading(false);
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -351,15 +365,53 @@ const MobileNav: React.FC<{
           </nav>
         </div>
 
-        <div className="p-5 border-t border-gray-100 dark:border-gray-800 space-y-3">
+        <div className="p-5 border-t border-gray-100 dark:border-gray-800 space-y-4">
           {isAuthenticated(user) ? (
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-3 px-4 py-4 text-blue-600 bg-blue-50 dark:bg-blue-900/20 rounded-xl font-semibold"
-            >
-              <LogOut size={18} />
-              <span>{t("logout")}</span>
-            </button>
+            <div className="space-y-4">
+              {/* User Profile Card */}
+              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-800">
+                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20">
+                  {user?.name?.charAt(0)?.toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user?.email}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="grid grid-cols-1 gap-2">
+                {isAdmin(user) && (
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all text-sm"
+                  >
+                    <Layout size={16} />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                )}
+                <Link
+                  href="/user-profile"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-250 dark:hover:bg-gray-750 text-gray-700 dark:text-gray-200 font-semibold rounded-xl transition-all text-sm border border-gray-200/50 dark:border-gray-700/50"
+                >
+                  <User size={16} />
+                  <span>My Profile Dashboard</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-900/20 rounded-xl font-semibold transition-all text-sm"
+                >
+                  <LogOut size={16} />
+                  <span>{t("logout")}</span>
+                </button>
+              </div>
+            </div>
           ) : (
             <Link
               href="/login"
@@ -433,11 +485,22 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     setIsLoading(true);
-    await logout();
-    setUser(null);
-    setIsLoading(false);
-    setUserLoading(false);
-    router.push("/");
+    try {
+      await logout();
+      if (typeof window !== "undefined") {
+        document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setIsLoading(false);
+      setUser(null);
+      setUserLoading(false);
+    }
   };
 
   return (
@@ -508,6 +571,15 @@ const Navbar: React.FC = () => {
                         </p>
                       </div>
                       <div className="py-2">
+                        {isAdmin(user) && (
+                          <Link
+                            href="/dashboard"
+                            className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <Layout size={16} />
+                            <span>Dashboard</span>
+                          </Link>
+                        )}
                         <Link
                           href="/user-profile"
                           className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"

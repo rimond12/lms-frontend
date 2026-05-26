@@ -8,7 +8,7 @@ import {
   FaFolderOpen, FaUserTie, FaCertificate,
 } from "react-icons/fa";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const ICON_STYLE = { color: "#1a4da1" };
 
@@ -23,13 +23,15 @@ const ICONS = [
 
 const OurServices: React.FC = () => {
   const t = useTranslations("ourServices");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.ourServices;
 
-  const headingPrefix    = cms?.headingPrefix    || t("headingPrefix");
-  const headingHighlight = cms?.headingHighlight || t("headingHighlight");
+  const headingPrefix    = (isBn ? null : cms?.headingPrefix)    || t("headingPrefix");
+  const headingHighlight = (isBn ? null : cms?.headingHighlight) || t("headingHighlight");
   const tItems           = t.raw("items") as { title: string; desc: string }[];
-  const items            = cms?.items?.length ? cms.items : tItems;
+  const items            = (!isBn && cms?.items?.length) ? cms.items : tItems;
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true, easing: "ease-out" });
@@ -37,7 +39,7 @@ const OurServices: React.FC = () => {
 
   return (
     <section className="md:py-20 py-10 bg-white">
-      <div className="max-w-7xl mx-auto md:px-6 px-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-16" data-aos="fade-down">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-800">
             {headingPrefix}{" "}

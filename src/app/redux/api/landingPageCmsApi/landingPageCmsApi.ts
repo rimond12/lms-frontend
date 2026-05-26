@@ -38,6 +38,34 @@ export interface IPartnerLogo {
   img: string;
 }
 
+export interface IImmigrantJobFeature {
+  title: string;
+  description: string;
+}
+
+export interface IImmigrantJobType {
+  type: string;
+  count: string;
+  description: string;
+}
+
+export interface IOfflineCourse {
+  _id: string;
+  title: string;
+  slug: string;
+  shortDescription: string;
+  bannerImage: string;
+  duration: string;
+  level: string;
+  tags: string[];
+  price: number;
+  discountedPrice: number;
+  location: string;
+  timing: string;
+  startDate: string;
+  tools: string[];
+}
+
 export interface ILandingPageCMS {
   _id: string;
   hero: {
@@ -99,6 +127,40 @@ export interface ILandingPageCMS {
     heading: string;
     headingHighlight: string;
     subheading: string;
+    shareHeading: string;
+    shareSubheading: string;
+    shareSubmitBtn: string;
+    shareNominateBtn: string;
+    shareProcessBtn: string;
+  };
+  immigrantJobsSection: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    whyChooseTitle: string;
+    features: IImmigrantJobFeature[];
+    featuredTitle: string;
+    moreListings: string;
+    employmentTitle: string;
+    jobTypes: IImmigrantJobType[];
+    ctaBadge: string;
+    ctaHeading: string;
+    ctaSubheading: string;
+    ctaButton: string;
+  };
+  popularCourses: {
+    headingPrefix: string;
+    headingHighlight: string;
+    seeAllText: string;
+  };
+  courseModules: {
+    titlePrefix: string;
+    titleHighlight: string;
+    subtitle: string;
+    onlineTab: string;
+    offlineTab: string;
+    detailsLink: string;
+    offlineCourses: IOfflineCourse[];
   };
   isActive: boolean;
   createdAt: string;

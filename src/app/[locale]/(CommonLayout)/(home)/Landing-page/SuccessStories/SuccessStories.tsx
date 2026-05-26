@@ -8,7 +8,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Link from "next/link";
 import { ArrowRight, Star, Upload, User, Globe, Briefcase, Calendar, MessageSquare } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
 
 import "swiper/css";
@@ -88,12 +88,14 @@ export const TestimonialCard = ({ story }: { story: TSuccessStory }) => {
 const SuccessStories: React.FC = () => {
   const t = useTranslations("successStories");
   const tImm = useTranslations("immigrantSuccess");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.successStories;
-  const heading = cms?.heading || t("heading");
-  const headingHighlight = cms?.headingHighlight || t("headingHighlight");
-  const subheading = cms?.subheading || t("subheading");
+  const heading = (isBn ? null : cms?.heading) || t("heading");
+  const headingHighlight = (isBn ? null : cms?.headingHighlight) || t("headingHighlight");
+  const subheading = (isBn ? null : cms?.subheading) || t("subheading");
 
   const { data: response, isLoading: isStoriesLoading } = useGetApprovedSuccessStoriesQuery();
   const [submitStory, { isLoading: isSubmitting }] = useSubmitSuccessStoryMutation();

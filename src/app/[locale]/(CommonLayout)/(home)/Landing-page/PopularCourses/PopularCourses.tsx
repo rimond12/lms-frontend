@@ -19,10 +19,17 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { useGetCoursesQuery } from "@/app/redux/api/CourseApi/CourseApi";
+import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
 import type { ICourse } from "@/types/course";
 
 const PopularCourses: React.FC = () => {
   const t = useTranslations("popularCourses");
+  const { data: cmsResponse } = useGetLandingPageCmsQuery();
+  const cms = cmsResponse?.data?.popularCourses;
+
+  const headingPrefix = cms?.headingPrefix || t("headingPrefix");
+  const headingHighlight = cms?.headingHighlight || t("headingHighlight");
+  const seeAllText = cms?.seeAllText || t("seeAllButton");
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true, easing: "ease-out" });
@@ -49,8 +56,8 @@ const PopularCourses: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800">
-              {t("headingPrefix")}{" "}
-              <span className="text-blue-700">{t("headingHighlight")}</span>
+              {headingPrefix}{" "}
+              <span className="text-blue-700">{headingHighlight}</span>
             </h2>
             <div className="w-16 md:w-20 h-1.5 bg-blue-700 mx-auto mt-3 rounded-full" />
           </div>
@@ -103,8 +110,8 @@ const PopularCourses: React.FC = () => {
         {/* Heading */}
         <div className="text-center mb-8 md:mb-12" data-aos="fade-down">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800">
-            {t("headingPrefix")}{" "}
-            <span className="text-blue-700">{t("headingHighlight")}</span>
+            {headingPrefix}{" "}
+            <span className="text-blue-700">{headingHighlight}</span>
           </h2>
           <div className="w-16 md:w-20 h-1.5 bg-blue-700 mx-auto mt-3 rounded-full" />
         </div>
@@ -245,7 +252,7 @@ const PopularCourses: React.FC = () => {
             href="/all-courses"
             className="inline-block bg-blue-700 hover:bg-blue-800 text-white px-7 md:px-10 py-3 md:py-3.5 rounded-full font-bold text-sm md:text-base shadow-lg shadow-blue-100 transition-all active:scale-95"
           >
-            {t("seeAllButton")}
+            {seeAllText}
           </Link>
         </div>
       </div>

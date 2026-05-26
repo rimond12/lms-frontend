@@ -3,20 +3,22 @@
 import React from "react";
 import { Globe, FileText, CheckCircle, Users, ClipboardList, LifeBuoy } from "lucide-react";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const ICONS = [Globe, FileText, CheckCircle, ClipboardList, LifeBuoy, Users];
 
 const ModernRecruitment = () => {
   const t = useTranslations("services");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.services;
 
-  const badge    = cms?.badge    || t("badge");
-  const heading1 = cms?.heading1 || t("heading1");
-  const heading2 = cms?.heading2 || t("heading2");
+  const badge    = (isBn ? null : cms?.badge)    || t("badge");
+  const heading1 = (isBn ? null : cms?.heading1) || t("heading1");
+  const heading2 = (isBn ? null : cms?.heading2) || t("heading2");
   const tItems   = t.raw("items") as { title: string; description: string }[];
-  const items    = cms?.items?.length ? cms.items : tItems;
+  const items    = (!isBn && cms?.items?.length) ? cms.items : tItems;
 
   return (
     <section className="py-12 md:py-24 bg-slate-50 overflow-hidden">

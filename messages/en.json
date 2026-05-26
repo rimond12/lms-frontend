@@ -382,7 +382,7 @@
   },
   "courses": {
     "title": "All Courses",
-    "searchPlaceholder": "What do you want to learn today?",
+    "searchPlaceholder": "Search courses...",
     "searchButton": "Search",
     "popular": "Popular",
     "filter": {
@@ -393,7 +393,13 @@
     "showing": "Showing",
     "of": "of",
     "noCourses": "No courses found",
-    "tryAdjusting": "We couldn't find any courses matching your criteria. Try adjusting your filters."
+    "tryAdjusting": "We couldn't find any courses matching your criteria. Try adjusting your filters.",
+    "badge": "Ethical Recruitment",
+    "heading": "Build Your Successful Career",
+    "headingHighlight": "Abroad.",
+    "description": "Immigrant Jobs World is a professional international recruitment company dedicated to helping individuals build successful careers abroad through verified and ethical employment opportunities.",
+    "browseBtn": "Browse Courses",
+    "clear": "Clear"
   },
   "blog": {
     "title": "Latest Articles",

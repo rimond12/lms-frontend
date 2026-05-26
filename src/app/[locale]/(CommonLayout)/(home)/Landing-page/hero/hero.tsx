@@ -7,7 +7,7 @@ import {
   FaChevronLeft, FaChevronRight,
 } from "react-icons/fa";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const FILE_URL = process.env.NEXT_PUBLIC_FILE_URL || "";
 
@@ -38,18 +38,20 @@ export default function Hero() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tHero = useTranslations("hero");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data;
 
   const slides = cms?.hero?.bannerSlides?.length ? cms.hero.bannerSlides : DEFAULT_SLIDES;
-  const headline = cms?.hero?.headline || tHero("headline");
-  const sub = cms?.hero?.sub || tHero("sub");
+  const headline = (isBn ? null : cms?.hero?.headline) || tHero("headline");
+  const sub = (isBn ? null : cms?.hero?.sub) || tHero("sub");
   const translatedCourses = ITEM_KEYS.map((key, i) => ({
     name: tHero(`items.${key}.name`),
     sub: tHero(`items.${key}.sub`),
     iconKey: ITEM_ICON_KEYS[i],
   }));
-  const courses = cms?.hero?.courses?.length ? cms.hero.courses : translatedCourses;
+  const courses = (!isBn && cms?.hero?.courses?.length) ? cms.hero.courses : translatedCourses;
   const isMulti = slides.length > 1;
 
   const advance = useCallback((dir: "next" | "prev") => {

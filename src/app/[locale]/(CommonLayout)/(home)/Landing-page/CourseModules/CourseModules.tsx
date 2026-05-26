@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import { useGetCoursesQuery } from "@/app/redux/api/CourseApi/CourseApi";
+import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
 import CourseCard from "@/components/shared/CourseCard";
 import AppImage from "@/components/ui/AppImage";
 
@@ -41,6 +42,16 @@ interface IOfflineCourse {
 
 const CourseModules: React.FC = () => {
   const t = useTranslations("courseModules");
+  const { data: cmsResponse } = useGetLandingPageCmsQuery();
+  const cms = cmsResponse?.data?.courseModules;
+
+  const titlePrefix = cms?.titlePrefix || t("titlePrefix");
+  const titleHighlight = cms?.titleHighlight || t("titleHighlight");
+  const subtitle = cms?.subtitle || t("subtitle");
+  const onlineTab = cms?.onlineTab || t("onlineTab");
+  const offlineTab = cms?.offlineTab || t("offlineTab");
+  const detailsLink = cms?.detailsLink || t("detailsLink");
+
   const [activeTab, setActiveTab] = useState<"online" | "offline">("online");
   const [highlightIndex, setHighlightIndex] = useState(0);
 
@@ -59,7 +70,7 @@ const CourseModules: React.FC = () => {
   const onlineCourses = data?.data || [];
 
   // Demo Offline Courses
-  const offlineCourses: IOfflineCourse[] = [
+  const defaultOfflineCourses: IOfflineCourse[] = [
     {
       _id: "off-1",
       title: "AutoCAD 2D & 3D Drafting (Offline Masterclass)",
@@ -110,6 +121,8 @@ const CourseModules: React.FC = () => {
     }
   ];
 
+  const offlineCourses = cms?.offlineCourses && cms.offlineCourses.length > 0 ? cms.offlineCourses : defaultOfflineCourses;
+
   return (
     <section className="py-16 md:py-24 bg-gray-50 dark:bg-gray-950 overflow-hidden relative">
       {/* Background accents */}
@@ -120,14 +133,14 @@ const CourseModules: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16" data-aos="fade-up">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-950 dark:text-white tracking-tight">
-            {t("titlePrefix")}{" "}
+            {titlePrefix}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a4da1] to-[#133a7a] dark:from-blue-400 dark:to-blue-600">
-              {t("titleHighlight")}
+              {titleHighlight}
             </span>
           </h2>
           <div className="w-20 h-1.5 bg-[#1a4da1] dark:bg-blue-500 mx-auto mt-4 rounded-full" />
           <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-4 leading-relaxed font-medium">
-            {t("subtitle")}
+            {subtitle}
           </p>
         </div>
 
@@ -143,7 +156,7 @@ const CourseModules: React.FC = () => {
               }`}
             >
               <Video className="w-4 h-4" />
-              {t("onlineTab")}
+              {onlineTab}
             </button>
             <button
               onClick={() => setActiveTab("offline")}
@@ -154,7 +167,7 @@ const CourseModules: React.FC = () => {
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              {t("offlineTab")}
+              {offlineTab}
             </button>
           </div>
         </div>
@@ -329,7 +342,7 @@ const CourseModules: React.FC = () => {
             href="/all-courses"
             className="inline-flex items-center gap-2 bg-[#1a4da1] hover:bg-[#133a7a] dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-8 py-3.5 rounded-full font-bold text-sm md:text-base shadow-lg shadow-blue-200/50 dark:shadow-none transition-all duration-300 active:scale-95 group/btn"
           >
-            {t("detailsLink")}
+            {detailsLink}
             <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1.5" />
           </Link>
         </div>

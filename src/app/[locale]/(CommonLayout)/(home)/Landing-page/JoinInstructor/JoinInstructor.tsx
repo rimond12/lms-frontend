@@ -3,7 +3,7 @@
 import React from "react";
 import { FaLaptop, FaCheckCircle, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const DEFAULT_EMAIL = "info@immigrantjobsworld.com";
 const DEFAULT_PHONE = "+880 1843-432352";
@@ -13,17 +13,19 @@ const royalBlue = "#1a4da1";
 
 const JoinInstructor: React.FC = () => {
   const t = useTranslations("joinInstructor");
+  const locale = useLocale();
+  const isBn = locale === "bn";
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const d = cmsResponse?.data?.joinInstructor;
 
-  const title       = d?.title       || t("title");
-  const brand       = d?.brand       || t("brand");
-  const subtitle    = d?.subtitle    || t("subtitle");
+  const title       = (isBn ? null : d?.title)       || t("title");
+  const brand       = (isBn ? null : d?.brand)       || t("brand");
+  const subtitle    = (isBn ? null : d?.subtitle)    || t("subtitle");
   const bannerImage = d?.bannerImage || DEFAULT_BANNER_IMAGE;
-  const bannerTitle = d?.bannerTitle || t("banner.title");
-  const lookingFor  = d?.lookingFor?.length ? d.lookingFor : [t("lookingFor.item1"), t("lookingFor.item2"), t("lookingFor.item3")];
-  const infoTitle   = d?.infoTitle   || t("info.title");
-  const infoDesc    = d?.infoDesc    || t("info.desc");
+  const bannerTitle = (isBn ? null : d?.bannerTitle) || t("banner.title");
+  const lookingFor  = (!isBn && d?.lookingFor?.length) ? d.lookingFor : [t("lookingFor.item1"), t("lookingFor.item2"), t("lookingFor.item3")];
+  const infoTitle   = (isBn ? null : d?.infoTitle)   || t("info.title");
+  const infoDesc    = (isBn ? null : d?.infoDesc)    || t("info.desc");
   const email       = d?.email       || DEFAULT_EMAIL;
   const phone       = d?.phone       || DEFAULT_PHONE;
 
