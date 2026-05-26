@@ -58,50 +58,71 @@ export default function AboutUsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* About Organization Section */}
       {content && (
-        <section className="bg-white py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">
+        <section className="bg-white py-16 md:py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+
+              {/* Page Heading */}
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center leading-tight tracking-tight">
                 {content.title}
               </h1>
-              <p className="text-lg text-gray-700 leading-relaxed mb-8">
+
+              {/* Divider accent */}
+              <div className="flex justify-center mb-8">
+                <div className="w-16 h-1 rounded-full bg-blue-500 mr-1"></div>
+                <div className="w-4 h-1 rounded-full bg-green-400"></div>
+              </div>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg text-gray-600 leading-[1.9] text-justify hyphens-auto mb-10 mx-auto">
                 {content.description}
               </p>
 
-              {/* Mission & Vision */}
-              <div className="grid md:grid-cols-2 gap-8 mt-12">
+              {/* Mission & Vision — equal-height cards */}
+              <div className="grid sm:grid-cols-2 gap-6 mt-10 items-stretch">
                 {content.mission && (
-                  <div className="bg-blue-50 p-6 rounded-lg">
-                    <h3 className="text-2xl font-bold text-blue-900 mb-4">
-                      Our Mission
-                    </h3>
-                    <p className="text-gray-700">{content.mission}</p>
+                  <div className="flex flex-col bg-blue-50 border border-blue-100 rounded-xl p-6 sm:p-8 shadow-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-6 rounded-full bg-blue-500"></div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-blue-900 leading-snug">
+                        Our Mission
+                      </h3>
+                    </div>
+                    <p className="text-gray-700 text-sm sm:text-base leading-[1.85] text-left flex-1">
+                      {content.mission}
+                    </p>
                   </div>
                 )}
 
                 {content.vision && (
-                  <div className="bg-green-50 p-6 rounded-lg">
-                    <h3 className="text-2xl font-bold text-green-900 mb-4">
-                      Our Vision
-                    </h3>
-                    <p className="text-gray-700">{content.vision}</p>
+                  <div className="flex flex-col bg-green-50 border border-green-100 rounded-xl p-6 sm:p-8 shadow-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-6 rounded-full bg-green-500"></div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-green-900 leading-snug">
+                        Our Vision
+                      </h3>
+                    </div>
+                    <p className="text-gray-700 text-sm sm:text-base leading-[1.85] text-left flex-1">
+                      {content.vision}
+                    </p>
                   </div>
                 )}
               </div>
 
               {/* Core Values */}
               {content.coreValues && content.coreValues.length > 0 && (
-                <div className="mt-12">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                <div className="mt-14">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
                     Our Core Values
                   </h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <p className="text-center text-gray-500 text-sm mb-6">Principles that guide everything we do</p>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {content.coreValues.map((value, index) => (
                       <div
                         key={index}
-                        className="bg-purple-50 p-4 rounded-lg text-center"
+                        className="bg-purple-50 border border-purple-100 p-4 rounded-xl text-center shadow-sm"
                       >
-                        <p className="text-purple-900 font-semibold">{value}</p>
+                        <p className="text-purple-900 font-semibold text-sm sm:text-base leading-snug">{value}</p>
                       </div>
                     ))}
                   </div>
@@ -111,13 +132,13 @@ export default function AboutUsPage() {
               {/* Additional Sections */}
               {content.additionalSections &&
                 content.additionalSections.length > 0 && (
-                  <div className="mt-12 space-y-8">
+                  <div className="mt-14 space-y-8">
                     {content.additionalSections.map((section, index) => (
-                      <div key={index} className="border-l-4 border-primary pl-6">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                      <div key={index} className="border-l-4 border-primary pl-5 sm:pl-6">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 leading-snug">
                           {section.title}
                         </h3>
-                        <p className="text-gray-700">{section.content}</p>
+                        <p className="text-gray-600 text-sm sm:text-base leading-[1.85]">{section.content}</p>
                       </div>
                     ))}
                   </div>
