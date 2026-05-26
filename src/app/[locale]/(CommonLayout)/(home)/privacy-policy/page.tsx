@@ -228,10 +228,11 @@ const PrivacyPolicy: React.FC = () => {
           <p className="text-gray-700 mt-4">
             <strong>Contact:</strong> 📧{" "}
             <a
-              href="mailto:immigrantjobsworld@gmail.com"
+              href="mailto:info@immigrantjobsworld.com"
               className="text-blue-600 hover:underline"
             >
-              immigrantjobsworld@gmail.com
+              info@immigrantjobsworld.com
+              support@immigrantjobsworld.com
             </a>
           </p>
         )}
@@ -274,20 +275,18 @@ const PrivacyPolicy: React.FC = () => {
                       <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
-                        className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-all duration-200 group ${
-                          activeSection === section.id
-                            ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600"
-                            : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                        }`}
+                        className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-all duration-200 group ${activeSection === section.id
+                          ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600"
+                          : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                          }`}
                       >
                         <IconComponent className="h-5 w-5 mr-3 flex-shrink-0" />
                         <span className="font-medium">{section.label}</span>
                         <ChevronRight
-                          className={`h-4 w-4 ml-auto transition-transform ${
-                            activeSection === section.id
-                              ? "rotate-90 text-blue-600"
-                              : "text-gray-400 group-hover:text-blue-600"
-                          }`}
+                          className={`h-4 w-4 ml-auto transition-transform ${activeSection === section.id
+                            ? "rotate-90 text-blue-600"
+                            : "text-gray-400 group-hover:text-blue-600"
+                            }`}
                         />
                       </button>
                     );

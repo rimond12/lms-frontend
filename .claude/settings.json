@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --max-old-space-size=4096 node_modules/.bin/tsc --noEmit --skipLibCheck)",
+      "Bash(node -e \"const { Flag } = require\\('c:/project/LMS_CADDCORE-main/LMS-CLIENT-CODE/node_modules/lucide-react'\\); console.log\\(typeof Flag\\);\")",
+      "Bash(node -e \"const icons = require\\('c:/project/LMS_CADDCORE-main/LMS-CLIENT-CODE/node_modules/lucide-react'\\); ['Upload','ImageIcon','Flag'].forEach\\(n => console.log\\(n, typeof icons[n]\\)\\);\")"
+    ]
+  }
+}

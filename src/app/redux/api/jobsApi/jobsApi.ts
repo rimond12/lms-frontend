@@ -226,6 +226,18 @@ const JobApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/jobs/${id}`, method: "DELETE" }),
       invalidatesTags: ["Job"],
     }),
+
+    // ✅ POST /jobs/upload-image — upload banner image, returns URL string
+    uploadJobImage: builder.mutation<string, FormData>({
+      query: (formData) => ({
+        url: "/jobs/upload-image",
+        method: "POST",
+        body: formData,
+        formData: true,
+      }),
+      transformResponse: (res: any) =>
+        res?.data?.url ?? res?.data?.imageUrl ?? res?.data ?? "",
+    }),
   }),
 });
 
@@ -238,6 +250,7 @@ export const {
   useUpdateJobStatusMutation,
   useDuplicateJobMutation,
   useDeleteJobMutation,
+  useUploadJobImageMutation,
 } = JobApi;
 
 export default JobApi;

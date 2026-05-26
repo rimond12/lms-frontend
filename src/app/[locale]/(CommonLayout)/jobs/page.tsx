@@ -1,8 +1,20 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Loader2, Search, MapPin, X } from "lucide-react";
+import {
+  Loader2,
+  Search,
+  MapPin,
+  X,
+  Globe,
+  Bookmark,
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Briefcase,
+} from "lucide-react";
+import { getImageUrl } from "@/utils/imageUtils";
 import { toast } from "react-hot-toast";
 
 // API Hooks
@@ -16,8 +28,60 @@ import { useUser } from "@/app/[locale]/@auth/user.provider";
 
 const ITEMS_PER_PAGE = 9;
 
+// ─── Color Palette ────────────────────────────────────────────────
+const CARD_COLORS = [
+  { from: "#1a4da1", to: "#2B59C3", light: "#EFF6FF", border: "#BFDBFE" },
+  { from: "#0d9488", to: "#14b8a6", light: "#F0FDFA", border: "#99F6E4" },
+  { from: "#7c3aed", to: "#9333ea", light: "#F5F3FF", border: "#DDD6FE" },
+  { from: "#ea580c", to: "#f97316", light: "#FFF7ED", border: "#FED7AA" },
+  { from: "#0891b2", to: "#06b6d4", light: "#ECFEFF", border: "#A5F3FC" },
+  { from: "#059669", to: "#10b981", light: "#ECFDF5", border: "#6EE7B7" },
+];
+
+function getCardColor(index: number) {
+  return CARD_COLORS[index % CARD_COLORS.length];
+}
+
+// ─── Country & Flag Helpers ────────────────────────────────────────
+const FLAG_MAP: Record<string, string> = {
+  "usa": "🇺🇸", "united states": "🇺🇸", "america": "🇺🇸",
+  "uk": "🇬🇧", "united kingdom": "🇬🇧", "england": "🇬🇧", "britain": "🇬🇧",
+  "canada": "🇨🇦",
+  "australia": "🇦🇺",
+  "germany": "🇩🇪",
+  "france": "🇫🇷",
+  "uae": "🇦🇪", "dubai": "🇦🇪", "abu dhabi": "🇦🇪",
+  "qatar": "🇶🇦", "doha": "🇶🇦",
+  "saudi": "🇸🇦", "saudi arabia": "🇸🇦", "riyadh": "🇸🇦",
+  "bangladesh": "🇧🇩", "dhaka": "🇧🇩",
+  "india": "🇮🇳", "delhi": "🇮🇳", "mumbai": "🇮🇳",
+  "singapore": "🇸🇬",
+  "malaysia": "🇲🇾", "kuala lumpur": "🇲🇾",
+  "oman": "🇴🇲", "muscat": "🇴🇲",
+  "kuwait": "🇰🇼",
+  "bahrain": "🇧🇭",
+  "remote": "🌐", "worldwide": "🌐", "global": "🌐",
+};
+
+function getCountryFlag(location: string | undefined, country?: string): string {
+  const src = country || location;
+  if (!src) return "🌍";
+  const lower = src.toLowerCase();
+  for (const [key, flag] of Object.entries(FLAG_MAP)) {
+    if (lower.includes(key)) return flag;
+  }
+  return "🌍";
+}
+
+function getCountryFromLocation(location: string | undefined, country?: string): string {
+  if (country) return country;
+  if (!location) return "Worldwide";
+  const parts = location.split(",");
+  return parts[parts.length - 1].trim() || location;
+}
+
 // ─── Bookmark Button ──────────────────────────────────────────────
-function BookmarkIcon({
+function BookmarkButton({
   jobId,
   savedJobIds,
 }: {
@@ -47,76 +111,176 @@ function BookmarkIcon({
     <button
       onClick={handleClick}
       disabled={isLoading}
-      className="bg-transparent border-none cursor-pointer p-0.5 disabled:opacity-50"
+      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-50 shadow-md ${
+        isSaved
+          ? "bg-blue-600 text-white"
+          : "bg-white/25 text-white hover:bg-white/40 backdrop-blur-sm"
+      }`}
     >
       {isLoading ? (
-        <Loader2 size={14} className="animate-spin text-blue-700" />
+        <Loader2 size={13} className="animate-spin" />
       ) : (
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill={isSaved ? "#1d4ed8" : "none"}
-          stroke={isSaved ? "#1d4ed8" : "#aaa"}
-          strokeWidth="2"
-        >
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-        </svg>
+        <Bookmark size={13} fill={isSaved ? "white" : "none"} />
       )}
     </button>
   );
 }
 
 // ─── Job Card ─────────────────────────────────────────────────────
-function JobCard({ job, savedJobIds }: { job: any; savedJobIds: string[] }) {
-  const initial = job.logo ?? job.title?.charAt(0) ?? "J";
-  const color = job.color ?? "#1d4ed8";
+function JobCard({
+  job,
+  savedJobIds,
+  index,
+}: {
+  job: any;
+  savedJobIds: string[];
+  index: number;
+}) {
+  const color = getCardColor(index);
+  const country = getCountryFromLocation(job.location, job.country);
+  const flag = getCountryFlag(job.location, job.country);
+  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+  const description = (job.about ?? job.desc ?? "").trim();
+  const hasImage = !!job.image;
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-3.5 flex flex-col gap-2.5 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-2.5">
-        <div
-          className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-[10px] shrink-0"
-          style={{
-            background: color + "18",
-            border: `1.5px solid ${color}30`,
-            color: color,
-          }}
-        >
-          {initial}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-1">
-            <div className="min-w-0">
-              <div className="font-bold text-[13px] text-gray-800 dark:text-white leading-snug truncate">
-                {job.title}
-              </div>
-              <div className="text-[11px] text-gray-400 mt-0.5">
-                {job.category || job.company}
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <span className="text-[9.5px] font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-full px-2 py-0.5 whitespace-nowrap">
-                {job.type}
-              </span>
-              <BookmarkIcon jobId={job._id} savedJobIds={savedJobIds} />
-            </div>
+    <Link href={`/jobs/${job.slug}`} className="h-full block">
+      <div className="group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:-translate-y-1.5 cursor-pointer h-full flex flex-col">
+
+        {/* ── Banner / Image Area ──────────────────────────────── */}
+        <div className="relative h-40 flex items-center justify-center overflow-hidden shrink-0">
+
+          {/* Background: uploaded image or gradient */}
+          {hasImage ? (
+            <>
+              <img src={getImageUrl(job.image)} alt={job.title}
+                className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/5" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0"
+                style={{ background: `linear-gradient(135deg, ${color.from} 0%, ${color.to} 100%)` }} />
+              <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full border-[12px] border-white/10" />
+              <div className="absolute -bottom-8 -left-6 w-32 h-32 rounded-full border-[10px] border-white/10" />
+              <div className="absolute top-1/2 right-12 w-10 h-10 rounded-full border-4 border-white/10" />
+              {/* Logo / Initial only shown when no image */}
+              {job.logo && job.logo.startsWith("http") ? (
+                <img src={job.logo} alt={job.title}
+                  className="w-16 h-16 rounded-2xl object-cover shadow-xl border-2 border-white/30 relative z-10" />
+              ) : (
+                <div className="w-16 h-16 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center font-black text-3xl text-white shadow-xl backdrop-blur-sm relative z-10">
+                  {initial}
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Country Badge – top right */}
+          <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-lg border border-white/60">
+            <span className="text-base leading-none">{flag}</span>
+            <span className="text-[11.5px] font-extrabold text-gray-800 dark:text-white max-w-[90px] truncate">
+              {country}
+            </span>
+          </div>
+
+          {/* Bookmark – top left */}
+          <div className="absolute top-3 left-3 z-20">
+            <BookmarkButton jobId={job._id} savedJobIds={savedJobIds} />
+          </div>
+
+          {/* Job Type Chip – bottom left */}
+          <div className="absolute bottom-3 left-3 z-20">
+            <span className="inline-flex items-center gap-1 text-[10.5px] font-bold bg-white/20 text-white border border-white/30 rounded-full px-2.5 py-1 backdrop-blur-sm">
+              <Briefcase size={10} />
+              {job.type}
+            </span>
           </div>
         </div>
-      </div>
-      <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3 m-0">
-        {job.about ?? job.desc}
-      </p>
-      {job.location && (
-        <div className="flex items-center gap-1 text-[10.5px] text-gray-500 dark:text-gray-400">
-          <MapPin size={11} /> {job.location}
+
+        {/* ── Card Body ────────────────────────────────────────── */}
+        <div className="flex flex-col flex-1 p-4 gap-3">
+
+          {/* Title & Company */}
+          <div>
+            <h3 className="font-extrabold text-[14px] text-gray-900 dark:text-white leading-snug line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-200">
+              {job.title}
+            </h3>
+            {(job.company || job.category) && (
+              <div className="flex items-center gap-1 mt-1">
+                <Building2 size={11} className="text-gray-400 shrink-0" />
+                <span className="text-[11px] text-gray-400 truncate font-medium">
+                  {job.company || job.category}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Short Description */}
+          {description ? (
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 flex-1 min-h-0">
+              {description}
+            </p>
+          ) : (
+            <div className="flex-1" />
+          )}
+
+          {/* Country / Location Highlight Row */}
+          <div
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl border"
+            style={{ background: color.light, borderColor: color.border }}
+          >
+            <Globe size={14} style={{ color: color.from }} className="shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-[9.5px] text-gray-400 font-semibold uppercase tracking-wider leading-none mb-0.5">
+                {job.country ? "Country" : "Location"}
+              </p>
+              <p
+                className="text-[12.5px] font-extrabold truncate leading-tight"
+                style={{ color: color.from }}
+              >
+                {flag} {job.country ?? job.location ?? "Worldwide"}
+              </p>
+            </div>
+            {job.salary && (
+              <span
+                className="text-[11px] font-bold shrink-0 px-2 py-0.5 rounded-full"
+                style={{ background: color.from + "18", color: color.from }}
+              >
+                {job.salary}
+              </span>
+            )}
+          </div>
+
+          {/* CTA Button */}
+          <button
+            className="w-full py-2.5 rounded-xl text-white text-[12.5px] font-bold transition-all duration-200 group-hover:opacity-90 group-hover:shadow-lg active:scale-95"
+            style={{
+              background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
+              boxShadow: `0 4px 14px ${color.from}33`,
+            }}
+          >
+            View Details →
+          </button>
         </div>
-      )}
-      <Link href={`/jobs/${job.slug}`}>
-        <button className="w-full bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg py-2 font-bold text-xs transition-colors mt-1 cursor-pointer">
-          Details
-        </button>
-      </Link>
+      </div>
+    </Link>
+  );
+}
+
+// ─── Skeleton Card ────────────────────────────────────────────────
+function SkeletonCard() {
+  return (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
+      <div className="h-40 bg-gray-200 dark:bg-gray-800 animate-pulse" />
+      <div className="p-4 space-y-3">
+        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse w-3/4" />
+        <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse w-1/2" />
+        <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse w-full" />
+        <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse w-5/6" />
+        <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
+        <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
+      </div>
     </div>
   );
 }
@@ -141,7 +305,6 @@ export default function JobsPage() {
   });
   const savedJobIds = savedJobs.map((j: any) => j._id);
 
-  // 3. Logic: Filter Jobs
   const filteredJobs = useMemo(() => {
     return allJobs.filter((job: any) => {
       const matchesSearch =
@@ -172,58 +335,104 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 font-sans transition-colors">
-      {/* HERO SECTION */}
-      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 px-4 sm:px-6 py-8 sm:py-10 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative">
-          <h1 className="text-white text-lg sm:text-xl font-bold mb-1.5">
-            Access 10,000+ of aviation jobs worldwide
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-sans transition-colors">
+
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <div
+        className="relative px-4 sm:px-6 py-12 sm:py-16 overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #0f1e45 0%, #1a4da1 55%, #2B59C3 100%)",
+        }}
+      >
+        {/* Blobs */}
+        <div
+          className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none opacity-10"
+          style={{
+            background: "radial-gradient(circle, #fff 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-16 -left-16 w-72 h-72 rounded-full pointer-events-none opacity-10"
+          style={{
+            background: "radial-gradient(circle, #60a5fa 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-1.5 mb-4">
+            <Globe size={13} className="text-blue-200" />
+            <span className="text-blue-100 text-xs font-bold tracking-wider uppercase">
+              Global Opportunities
+            </span>
+          </div>
+
+          <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">
+            Discover Jobs{" "}
+            <span className="text-blue-300">Worldwide</span>
           </h1>
-          <p className="text-blue-300 text-xs sm:text-[12.5px] mb-5">
-            Match with roles that fit your skills and ambitions.
+          <p className="text-blue-300 text-sm sm:text-base mb-8 max-w-xl leading-relaxed">
+            Access thousands of aviation &amp; engineering opportunities across
+            multiple countries. Find your perfect career match.
           </p>
 
-          <div className="flex items-center bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg max-w-2xl">
-            <div className="pl-3 pr-1 flex items-center shrink-0">
+          {/* Search */}
+          <div className="flex items-center bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-2xl max-w-2xl border border-white/10">
+            <div className="pl-4 pr-2 flex items-center shrink-0">
               <Search size={16} className="text-gray-400" />
             </div>
             <input
+              id="jobs-search-input"
               type="text"
-              placeholder="Search job title or location..."
+              placeholder="Search job title, country or location..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="flex-1 border-none outline-none text-xs sm:text-[12.5px] text-gray-700 dark:text-gray-200 py-3 px-2 bg-transparent"
+              className="flex-1 border-none outline-none text-sm text-gray-700 dark:text-gray-200 py-4 px-2 bg-transparent"
             />
-            <button className="bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold px-4 sm:px-5 py-3 transition-colors shrink-0">
+            <button
+              id="jobs-search-btn"
+              className="font-bold text-sm px-5 py-4 transition-all shrink-0 text-white hover:opacity-90"
+              style={{
+                background: "linear-gradient(135deg, #1a4da1, #2B59C3)",
+              }}
+            >
               Find Job
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 pb-12">
+      {/* ── MAIN CONTENT ─────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 pb-16">
+
         {/* Filter Bar */}
-        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-            Showing{" "}
-            <span className="text-blue-700 font-bold">
-              {filteredJobs.length}
-            </span>{" "}
-            jobs
-          </span>
+        <div className="mb-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+              Showing{" "}
+              <span
+                className="font-extrabold"
+                style={{ color: "#1a4da1" }}
+              >
+                {filteredJobs.length}
+              </span>{" "}
+              {filteredJobs.length === 1 ? "job" : "jobs"} available
+            </span>
+          </div>
 
           <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-            {/* Dynamic Category Dropdown */}
             <select
+              id="jobs-category-filter"
               value={selectedCategory}
               onChange={(e) => {
                 setSelectedCategory(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-[11px] font-bold text-gray-700 dark:text-gray-200 outline-none cursor-pointer"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 outline-none cursor-pointer shadow-sm hover:border-blue-300 transition-colors"
             >
               <option value="">All Categories</option>
               {categories.map((cat: any) => (
@@ -233,16 +442,16 @@ export default function JobsPage() {
               ))}
             </select>
 
-            {/* Job Type Dropdown */}
             <select
+              id="jobs-type-filter"
               value={selectedType}
               onChange={(e) => {
                 setSelectedType(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-[11px] font-bold text-gray-700 dark:text-gray-200 outline-none cursor-pointer"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 outline-none cursor-pointer shadow-sm hover:border-blue-300 transition-colors"
             >
-              <option value="">Job Type</option>
+              <option value="">All Types</option>
               {jobTypes.map((type: any) => (
                 <option key={type} value={type}>
                   {type}
@@ -252,72 +461,101 @@ export default function JobsPage() {
 
             {(selectedCategory || selectedType || search) && (
               <button
+                id="jobs-clear-filters-btn"
                 onClick={() => {
                   setSelectedCategory("");
                   setSelectedType("");
                   setSearch("");
                 }}
-                className="flex items-center gap-1 text-[11px] text-red-500 font-bold px-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+                className="flex items-center gap-1.5 text-xs text-red-500 font-bold px-3 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all border border-red-100 dark:border-red-900/30"
               >
-                <X size={12} /> Clear
+                <X size={12} /> Clear filters
               </button>
             )}
           </div>
         </div>
 
-        {/* Content Section */}
+        {/* Grid */}
         {jobsLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 size={32} className="animate-spin text-blue-700" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
           </div>
         ) : isError ? (
-          <div className="text-center py-16 text-red-400 font-medium">
-            Failed to load data. Please try again.
+          <div className="text-center py-16 text-red-400 font-semibold">
+            Failed to load jobs. Please try again.
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {currentJobs.map((job: any) => (
-                <JobCard key={job._id} job={job} savedJobIds={savedJobIds} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {currentJobs.map((job: any, i: number) => (
+                <JobCard
+                  key={job._id}
+                  job={job}
+                  savedJobIds={savedJobIds}
+                  index={(currentPage - 1) * ITEMS_PER_PAGE + i}
+                />
               ))}
             </div>
 
+            {/* Empty State */}
             {currentJobs.length === 0 && (
-              <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
-                <Search size={40} className="mx-auto text-gray-300 mb-3" />
-                <p className="text-gray-500 font-medium">
-                  No jobs found matching your criteria
+              <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search size={28} className="text-gray-300" />
+                </div>
+                <p className="text-gray-700 dark:text-gray-200 font-bold text-base mb-1">
+                  No jobs found
+                </p>
+                <p className="text-gray-400 text-sm">
+                  Try adjusting your search or filters
                 </p>
               </div>
             )}
 
-            {/* Pagination UI */}
+            {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-1.5 mt-10">
+              <div className="flex justify-center items-center gap-2 mt-10">
                 <button
+                  id="jobs-prev-btn"
                   disabled={currentPage === 1}
                   onClick={() => goToPage(currentPage - 1)}
-                  className="px-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-xs disabled:opacity-30"
+                  className="flex items-center gap-1.5 px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-600 dark:text-gray-300 disabled:opacity-30 hover:border-blue-400 hover:text-blue-700 transition-all"
                 >
-                  {" "}
-                  Prev{" "}
+                  <ChevronLeft size={15} /> Prev
                 </button>
+
                 {[...Array(totalPages)].map((_, i) => (
                   <button
                     key={i}
+                    id={`jobs-page-btn-${i + 1}`}
                     onClick={() => goToPage(i + 1)}
-                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === i + 1 ? "bg-blue-700 text-white shadow-lg" : "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-500"}`}
+                    className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
+                      currentPage === i + 1
+                        ? "text-white shadow-lg"
+                        : "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-500 hover:border-blue-400 hover:text-blue-700"
+                    }`}
+                    style={
+                      currentPage === i + 1
+                        ? {
+                            background:
+                              "linear-gradient(135deg, #1a4da1, #2B59C3)",
+                          }
+                        : {}
+                    }
                   >
                     {i + 1}
                   </button>
                 ))}
+
                 <button
+                  id="jobs-next-btn"
                   disabled={currentPage === totalPages}
                   onClick={() => goToPage(currentPage + 1)}
-                  className="px-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-xs disabled:opacity-30"
+                  className="flex items-center gap-1.5 px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-600 dark:text-gray-300 disabled:opacity-30 hover:border-blue-400 hover:text-blue-700 transition-all"
                 >
-                  {" "}
-                  Next{" "}
+                  Next <ChevronRight size={15} />
                 </button>
               </div>
             )}

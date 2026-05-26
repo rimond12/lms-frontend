@@ -107,6 +107,11 @@ const navigationSections = [
         href: "/dashboard/manage-review",
         icon: Calendar,
       },
+      {
+        name: "Success Stories",
+        href: "/dashboard/manage-success-stories",
+        icon: Award,
+      },
 
       {
         name: "Expert Panel",

@@ -5,6 +5,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { Plus, Minus, Upload, Save, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCreateExpertMutation,  IExpertInput, IExpert, useUpdateExpertPanelMemberMutation } from '@/app/redux/api/expartPanelApi/expartPanelApi';
+import { getImageUrl } from '@/utils/imageUtils';
 
 interface ExpertPanelFormProps {
   expert?: IExpert;
@@ -225,7 +226,11 @@ export default function ExpertPanelForm({ expert, onSuccess, onCancel }: ExpertP
             {photoPreview && (
               <div className="w-20 h-20 rounded-full overflow-hidden">
                 <img 
-                  src={photoPreview} 
+                  src={
+                    photoPreview.startsWith('data:') || photoPreview.startsWith('blob:')
+                      ? photoPreview
+                      : getImageUrl(photoPreview)
+                  } 
                   alt="Preview" 
                   className="w-full h-full object-cover"
                 />

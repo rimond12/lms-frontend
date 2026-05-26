@@ -116,19 +116,17 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
     <li className="relative group uppercase " ref={dropdownRef}>
       <Link
         href={link.href}
-        className={`relative flex items-center px-4 py-2 text-sm font-medium transition-all duration-300 rounded-xl ${
-          isActive
-            ? "text-blue-600 dark:text-blue-400"
-            : "text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
-        }`}
+        className={`relative flex items-center px-4 py-2 text-sm font-medium transition-all duration-300 rounded-xl ${isActive
+          ? "text-blue-600 dark:text-blue-400"
+          : "text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
+          }`}
         onClick={handleClick}
       >
         <span
-          className={`absolute inset-0 rounded-xl transition-all duration-300 ${
-            isActive
-              ? "bg-blue-50/80 dark:bg-blue-900/20"
-              : "bg-transparent group-hover:bg-gray-100/80 dark:group-hover:bg-gray-800/50"
-          }`}
+          className={`absolute inset-0 rounded-xl transition-all duration-300 ${isActive
+            ? "bg-blue-50/80 dark:bg-blue-900/20"
+            : "bg-transparent group-hover:bg-gray-100/80 dark:group-hover:bg-gray-800/50"
+            }`}
         />
 
         <span className="relative z-10 flex items-center gap-1.5">
@@ -136,9 +134,8 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
           {link.dropdown && (
             <ChevronDown
               size={14}
-              className={`transition-transform duration-300 ${
-                isDropdownOpen ? "rotate-180" : ""
-              }`}
+              className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""
+                }`}
             />
           )}
         </span>
@@ -163,11 +160,10 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
                 onClick={() => setDropdownOpen(false)}
               >
                 <span
-                  className={`mr-3 mt-0.5 p-2 rounded-lg transition-all duration-200 ${
-                    item.featured
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover/item:bg-blue-100 dark:group-hover/item:bg-blue-900/30 group-hover/item:text-blue-600"
-                  }`}
+                  className={`mr-3 mt-0.5 p-2 rounded-lg transition-all duration-200 ${item.featured
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover/item:bg-blue-100 dark:group-hover/item:bg-blue-900/30 group-hover/item:text-blue-600"
+                    }`}
                 >
                   {item.icon}
                 </span>
@@ -214,7 +210,7 @@ const TopBar = () => {
               href="tel:+8801611223637"
               className="text-gray-300 group-hover:text-white transition-colors"
             >
-             09606-810081
+              09606-810081
             </a>
           </div>
           <div className="hidden sm:flex items-center gap-2 group cursor-pointer">
@@ -225,7 +221,13 @@ const TopBar = () => {
               href="mailto:info@caddcore.com"
               className="text-gray-300 group-hover:text-white transition-colors"
             >
-              immigrantjobsworld@gmail.com
+              info@immigrantjobsworld.com
+            </a>
+            <a
+              href="mailto:info@caddcore.com"
+              className="text-gray-300 group-hover:text-white transition-colors"
+            >
+              support@immigrantjobsworld.com
             </a>
           </div>
         </div>

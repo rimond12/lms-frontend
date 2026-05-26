@@ -1,17 +1,33 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { VideoCard } from "@/components/shared/SuccessVideoCard";
-import { successStoriesData } from "@/data/successStoriesData";
 import Link from "next/link";
+
+import { useGetApprovedSuccessStoriesQuery } from "@/app/redux/api/successStoryApi/successStoryApi";
+import { TestimonialCard } from "@/app/[locale]/(CommonLayout)/(home)/Landing-page/SuccessStories/SuccessStories";
 import ModernSectionHeader from "@/components/shared/ModernSectionHeader";
 import { Button } from "../ui/Button";
 
 export default function SuccessStoriesHome() {
-  const featuredStories = successStoriesData
-    .filter((story) => story.featured)
-    .slice(0, 3);
+  const { data: response, isLoading } = useGetApprovedSuccessStoriesQuery();
+  const stories = response?.data || [];
+  
+  // Get top 3 success stories
+  const featuredStories = stories.slice(0, 3);
+
+  if (isLoading) {
+    return (
+      <div className="py-10 text-center text-slate-500 font-medium animate-pulse">
+        Loading success stories...
+      </div>
+    );
+  }
+
+  if (stories.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-10 lg:py-12 bg-white relative overflow-hidden">
@@ -19,22 +35,22 @@ export default function SuccessStoriesHome() {
         <ModernSectionHeader
           badge="সাফল্য"
           title="আমাদের শিক্ষার্থীদের সাফল্যের গল্প"
-          subtitle="ক্যাড কোর প্রশিক্ষণের মাধ্যমে তাদের ক্যারিয়ার গড়ে তোলা সফল প্রকৌশলীদের অনুপ্রেরণাদায়ক যাত্রা"
+          subtitle="ইমিগ্র্যান্ট জবস ওয়ার্ল্ডের মাধ্যমে বিদেশে ক্যারিয়ার গড়া সফল প্রার্থীদের অনুপ্রেরণাদায়ক যাত্রা"
           align="center"
         />
 
-        {/* Video Grid */}
+        {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 mb-10">
           {featuredStories.map((story, index) => (
             <motion.div
-              key={story.id}
+              key={story._id || index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
               className="group"
             >
-              <VideoCard video={story} />
+              <TestimonialCard story={story} />
             </motion.div>
           ))}
         </div>
@@ -51,7 +67,7 @@ export default function SuccessStoriesHome() {
             <Link href="/success-stories">
               <Button
                 size="lg"
-                className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 text-sm font-semibold rounded-lg shadow-sm hover:shadow-md transition-all group"
+                className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 text-sm font-semibold rounded-lg shadow-sm hover:shadow-md transition-all group"
               >
                 সব সাফল্যের গল্প দেখুন
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

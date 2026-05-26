@@ -64,6 +64,7 @@ const baseApi = createApi({
     "Lead",
     "JobCategory",
     "LandingPageCMS",
+    "SuccessStory",
   ],
   endpoints: () => ({}),
 });

@@ -213,7 +213,7 @@ export default function ManageExpertPanelPage() {
               {searchTerm ? 'Try adjusting your search criteria' : 'Get started by adding your first expert'}
             </p>
             <button
-              onClick={() => router.push('/dashboard/add-expart-panel-member')}
+              onClick={() => router.push('/dashboard/add-expert-panel-member')}
               className="bg-red-800 hover:bg-red-900 text-white px-6 py-2 rounded-lg shadow-lg transition-colors"
             >
               Add Expert

@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 const FILE_URL = process.env.NEXT_PUBLIC_FILE_URL || "";
 
 function resolveImg(src: string): string {
-  if (!src) return "/images/main-hero.jpeg";
+  if (!src) return "";
   if (src.startsWith("http") || src.startsWith("/")) return src;
   return `${FILE_URL}/${src}`;
 }

@@ -12,7 +12,7 @@ import {
   ICategory
 } from '@/app/redux/api/expartPanelApi/expartPanelApi';
 import { Button } from '@/components/ui/Button';
-import Image from 'next/image';
+import AppImage from '@/components/ui/AppImage';
 import Link from 'next/link';
 import {
   Plus,
@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import toast from 'react-hot-toast';
+import ExpertPanelForm from '@/components/events/ExpertPanelForm';
 
 export default function ExpertManager() {
   const { data: expertsData, isLoading: expertsLoading } = useGetExpertsQuery({ limit: 100 });
@@ -42,6 +43,34 @@ export default function ExpertManager() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [editingExpert, setEditingExpert] = useState<IExpert | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const handleEdit = (expert: IExpert) => {
+    setEditingExpert(expert);
+    setShowEditModal(true);
+  };
+
+  const handleEditSuccess = () => {
+    setShowEditModal(false);
+    setEditingExpert(null);
+    toast.success('Expert updated successfully!');
+  };
+
+  const handleEditCancel = () => {
+    setShowEditModal(false);
+    setEditingExpert(null);
+  };
+
+  const handleAddSuccess = () => {
+    setShowAddModal(false);
+    toast.success('Expert created successfully!');
+  };
+
+  const handleAddCancel = () => {
+    setShowAddModal(false);
+  };
 
   const handleTogglePin = async (expert: IExpert) => {
     try {
@@ -133,12 +162,10 @@ export default function ExpertManager() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Team Members</h2>
-        <Link href="/admin/about-us/experts/new">
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Team Member
-          </Button>
-        </Link>
+        <Button onClick={() => setShowAddModal(true)}>
+          <Plus className="w-4 h-4 mr-2" />
+          Add Team Member
+        </Button>
       </div>
 
       {/* Filters */}
@@ -194,8 +221,8 @@ export default function ExpertManager() {
               {/* Image */}
               <div className="relative h-48 bg-gray-200">
                 {expert.photoUrl ? (
-                  <Image
-                    src={expert.photoUrl}
+                  <AppImage
+                    photoUrl={expert.photoUrl}
                     alt={expert.name}
                     fill
                     className="object-cover"
@@ -277,11 +304,14 @@ export default function ExpertManager() {
                     )}
                   </Button>
 
-                  <Link href={`/admin/about-us/experts/edit/${expert._id}`}>
-                    <Button size="sm" variant="outline" className="w-full">
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </Link>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => handleEdit(expert)}
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
 
                   <Button
                     size="sm"
@@ -297,6 +327,31 @@ export default function ExpertManager() {
           ))
         )}
       </div>
+
+      {/* Add Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <ExpertPanelForm
+              onSuccess={handleAddSuccess}
+              onCancel={handleAddCancel}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && editingExpert && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <ExpertPanelForm
+              expert={editingExpert}
+              onSuccess={handleEditSuccess}
+              onCancel={handleEditCancel}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

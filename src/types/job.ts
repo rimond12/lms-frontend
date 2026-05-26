@@ -18,6 +18,8 @@ export interface IJob {
   date: string;
   category: string;
   location?: string;
+  country?: string;
+  image?: string;
   vacancy?: string;
   experience?: string;
   about?: string;

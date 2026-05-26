@@ -3,11 +3,36 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageUrl } from "@/utils/imageUtils";
 import { useParams, useRouter } from "next/navigation";
 import { Loader2, AlertCircle } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useGetJobBySlugQuery } from "@/app/redux/api/jobsApi/jobsApi";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
+
+const FLAG_MAP: Record<string, string> = {
+  "usa": "🇺🇸", "united states": "🇺🇸", "america": "🇺🇸",
+  "uk": "🇬🇧", "united kingdom": "🇬🇧", "england": "🇬🇧", "britain": "🇬🇧",
+  "canada": "🇨🇦", "australia": "🇦🇺", "germany": "🇩🇪", "france": "🇫🇷",
+  "uae": "🇦🇪", "dubai": "🇦🇪", "abu dhabi": "🇦🇪",
+  "qatar": "🇶🇦", "doha": "🇶🇦",
+  "saudi": "🇸🇦", "saudi arabia": "🇸🇦", "riyadh": "🇸🇦",
+  "bangladesh": "🇧🇩", "dhaka": "🇧🇩",
+  "india": "🇮🇳", "delhi": "🇮🇳", "mumbai": "🇮🇳",
+  "singapore": "🇸🇬", "malaysia": "🇲🇾", "kuala lumpur": "🇲🇾",
+  "oman": "🇴🇲", "muscat": "🇴🇲", "kuwait": "🇰🇼", "bahrain": "🇧🇭",
+  "remote": "🌐", "worldwide": "🌐", "global": "🌐",
+};
+
+function getCountryFlag(country?: string, location?: string): string {
+  const src = country || location;
+  if (!src) return "🌍";
+  const lower = src.toLowerCase();
+  for (const [key, flag] of Object.entries(FLAG_MAP)) {
+    if (lower.includes(key)) return flag;
+  }
+  return "🌍";
+}
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -53,6 +78,9 @@ export default function JobDetailPage() {
 
   // ── Helpers ──
   const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+  const heroBannerUrl = job.image ? getImageUrl(job.image) : "/images/details-banner.png";
+  const countryFlag = getCountryFlag(job.country, job.location);
+  const displayCountry = job.country || (job.location ? job.location.split(",").pop()?.trim() : null);
 
   const handleApply = () => {
     if (!user) {
@@ -68,10 +96,11 @@ export default function JobDetailPage() {
       {/* ── HERO BANNER ── */}
       <div className="relative max-w-7xl mx-auto rounded-xl w-full h-85 mt-5 overflow-hidden">
         <Image
-          src="/images/details-banner.png"
-          alt="Banner"
+          src={heroBannerUrl}
+          alt={job.title ?? "Job Banner"}
           fill
           className="object-cover object-center"
+          unoptimized={!!job.image}
         />
       </div>
 
@@ -79,8 +108,12 @@ export default function JobDetailPage() {
       <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700 transition-colors">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-3 pt-0 pb-3 -mt-12">
-            <div className="w-25 h-25 rounded-full bg-blue-700 dark:bg-blue-600 border-[3px] border-white dark:border-gray-900 shadow-md flex items-center justify-center text-white font-black text-sm shrink-0 relative z-10">
-              {initial}
+            <div className="w-25 h-25 rounded-full bg-blue-700 dark:bg-blue-600 border-[3px] border-white dark:border-gray-900 shadow-md flex items-center justify-center text-white font-black text-2xl shrink-0 relative z-10 overflow-hidden">
+              {job.image ? (
+                <img src={getImageUrl(job.image)} alt={job.title} className="w-full h-full object-cover" />
+              ) : (
+                initial
+              )}
             </div>
             <div className="flex gap-5 flex-wrap pt-10">
               {["Website", "LinkedIn", "Instagram", "Glassdoor", "Kununu"].map(
@@ -129,6 +162,11 @@ export default function JobDetailPage() {
               {job.type && (
                 <span className="text-[10px] font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-full px-2.5 py-0.5">
                   {job.type}
+                </span>
+              )}
+              {displayCountry && (
+                <span className="text-[10px] font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-full px-2.5 py-0.5">
+                  {countryFlag} {displayCountry}
                 </span>
               )}
               {job.location && (

@@ -8,15 +8,15 @@ import Hero from './Landing-page/hero/hero';
 import StatsSection from './Landing-page/StatsSection/StatsSection';
 // import SeminarSchedule from './Landing-page/SeminarSchedule/SeminarSchedule';
 import PopularCourses from './Landing-page/PopularCourses/PopularCourses';
+import CourseModules from './Landing-page/CourseModules/CourseModules';
 import OurServices from './Landing-page/OurServices/OurServices';
 import OurJourney from './Landing-page/OurJourney/OurJourney';
 // import JoinInstructor from './Landing-page/JoinInstructor/JoinInstructor';
-// import SuccessStories from './Landing-page/SuccessStories/SuccessStories';
+import ImmigrantSuccess from './Landing-page/EngineeringSuccess/EngineeringSuccess';
 import ApplySection from './Landing-page/ApplySection/ApplySection';
 import RecruitmentServices from './Landing-page/RecruitmentServices/RecruitmentServices';
 import TrainingSection from './Landing-page/TrainingSection/TrainingSection';
 import ImmigrantJobsSection from './Landing-page/ImmigrantJobsSection/ImmigrantJobsSection';
-import EngineeringSuccess from './Landing-page/EngineeringSuccess/EngineeringSuccess';
 
 
 
@@ -63,27 +63,27 @@ export default function VouchersPage() {
     //       <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
     //       <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     //     </div>
-        
+
     //     <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
     //       <div className="max-w-4xl mx-auto text-center">
     //         <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
     //           <Sparkles className="w-5 h-5 text-yellow-300" />
     //           <span className="text-white font-medium">Official Certification Vouchers</span>
     //         </div>
-            
+
     //         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
     //           SolidWorks Certification
     //           <br />
     //           <span className="text-blue-200">Vouchers</span>
     //         </h1>
-            
+
     //         <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto">
     //           Get official CSWA, CSWP certifications at the best prices. 
     //           Direct purchase via WhatsApp with instant support.
     //         </p>
     //       </div>
     //     </div>
-        
+
     //     {/* Wave SVG */}
     //     <div className="absolute bottom-0 left-0 right-0">
     //       <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -134,7 +134,7 @@ export default function VouchersPage() {
     //                       <Award className="w-20 h-20 text-blue-300" />
     //                     </div>
     //                   )}
-                      
+
     //                   {/* Price Badge */}
     //                   {voucher.price && voucher.price > 0 && (
     //                     <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-xl font-bold shadow-lg">
@@ -148,7 +148,7 @@ export default function VouchersPage() {
     //                   <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
     //                     {voucher.name}
     //                   </h3>
-                      
+
     //                   <p className="text-gray-500 text-sm mb-4 line-clamp-2">
     //                     {voucher.instructionTitle}
     //                   </p>
@@ -198,18 +198,19 @@ export default function VouchersPage() {
     // </div>
     <div>
       <Hero />
-      <StatsSection />
-      {/* <SeminarSchedule /> */}
       <ImmigrantJobsSection />
+      {/* <StatsSection /> */}
+      {/* <SeminarSchedule /> */}
+
       <RecruitmentServices />
       <PopularCourses />
+      <CourseModules />
       <OurServices />
       <TrainingSection />
       <OurJourney />
       {/* <JoinInstructor /> */}
       <ApplySection />
-      {/* <SuccessStories /> */}
-         <EngineeringSuccess />
+      <ImmigrantSuccess />
     </div>
   );
 }

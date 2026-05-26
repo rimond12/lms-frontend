@@ -4,10 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useGetAllJobsQuery } from "@/app/redux/api/jobsApi/jobsApi";
+import { getImageUrl } from "@/utils/imageUtils";
 import {
   Briefcase,
   Globe,
-  Search,
   MapPin,
   ArrowRight,
   Bookmark,
@@ -15,29 +15,43 @@ import {
   Users,
   TrendingUp,
   CheckCircle,
-  Sparkles,
   Building2,
   Award,
-  DollarSign,
   Flame,
   BadgeCheck,
+  Sparkles,
+  Search,
 } from "lucide-react";
 
+// ─── Constants ────────────────────────────────────────────────────
 const FEATURE_ICONS = [Globe, Search, Bookmark, Building2];
-const STAT_ICONS    = [Briefcase, Globe, Users, TrendingUp];
+const STAT_ICONS = [Briefcase, Globe, Users, TrendingUp];
 const JOB_TYPE_ICONS = [Briefcase, Clock, Award];
 const JOB_TYPE_COLORS = [
   { bg: "#EFF6FF", border: "#BFDBFE", color: "#1a4da1" },
   { bg: "#EEF2FF", border: "#C7D2FE", color: "#2B59C3" },
   { bg: "#EFF6FF", border: "#BFDBFE", color: "#1a4da1" },
 ];
-const ROLE_COLORS = ["#0d9488", "#7c3aed", "#ea580c", "#0891b2", "#059669", "#db2777"];
-const ROLE_GRADIENTS = ["#14b8a6", "#9333ea", "#f97316", "#06b6d4", "#10b981", "#ec4899"];
+
+// Color palette for job cards
+const CARD_COLORS = [
+  { from: "#1a4da1", to: "#2B59C3", light: "#EFF6FF", border: "#BFDBFE" },
+  { from: "#0d9488", to: "#14b8a6", light: "#F0FDFA", border: "#99F6E4" },
+  { from: "#7c3aed", to: "#9333ea", light: "#F5F3FF", border: "#DDD6FE" },
+  { from: "#ea580c", to: "#f97316", light: "#FFF7ED", border: "#FED7AA" },
+  { from: "#0891b2", to: "#06b6d4", light: "#ECFEFF", border: "#A5F3FC" },
+  { from: "#059669", to: "#10b981", light: "#ECFDF5", border: "#6EE7B7" },
+];
+
 const BADGE_STYLES: Record<string, { bg: string; color: string }> = {
-  Hot:      { bg: "#fef2f2", color: "#dc2626" },
-  New:      { bg: "#f0fdf4", color: "#16a34a" },
+  Hot: { bg: "#fef2f2", color: "#dc2626" },
+  New: { bg: "#f0fdf4", color: "#16a34a" },
   Flexible: { bg: "#f5f3ff", color: "#7c3aed" },
 };
+
+function getCardColor(i: number) {
+  return CARD_COLORS[i % CARD_COLORS.length];
+}
 
 function deriveBadge(type: string, index: number): string {
   if (type === "Part time") return "Flexible";
@@ -46,38 +60,207 @@ function deriveBadge(type: string, index: number): string {
   return "";
 }
 
+// ─── Country & Flag Helpers ────────────────────────────────────────
+const FLAG_MAP: Record<string, string> = {
+  "usa": "🇺🇸", "united states": "🇺🇸", "america": "🇺🇸",
+  "uk": "🇬🇧", "united kingdom": "🇬🇧", "england": "🇬🇧", "britain": "🇬🇧",
+  "canada": "🇨🇦",
+  "australia": "🇦🇺",
+  "germany": "🇩🇪",
+  "france": "🇫🇷",
+  "uae": "🇦🇪", "dubai": "🇦🇪", "abu dhabi": "🇦🇪",
+  "qatar": "🇶🇦", "doha": "🇶🇦",
+  "saudi": "🇸🇦", "saudi arabia": "🇸🇦", "riyadh": "🇸🇦",
+  "bangladesh": "🇧🇩", "dhaka": "🇧🇩",
+  "india": "🇮🇳", "delhi": "🇮🇳", "mumbai": "🇮🇳",
+  "singapore": "🇸🇬",
+  "malaysia": "🇲🇾", "kuala lumpur": "🇲🇾",
+  "oman": "🇴🇲", "muscat": "🇴🇲",
+  "kuwait": "🇰🇼",
+  "bahrain": "🇧🇭",
+  "remote": "🌐", "worldwide": "🌐", "global": "🌐",
+};
+
+function getCountryFlag(location: string | undefined, country?: string): string {
+  const src = country || location;
+  if (!src) return "🌍";
+  const lower = src.toLowerCase();
+  for (const [key, flag] of Object.entries(FLAG_MAP)) {
+    if (lower.includes(key)) return flag;
+  }
+  return "🌍";
+}
+
+function getCountryFromLocation(location: string | undefined, country?: string): string {
+  if (country) return country;
+  if (!location) return "Worldwide";
+  const parts = location.split(",");
+  return parts[parts.length - 1].trim() || location;
+}
+
+// ─── Mini Job Card (for homepage grid) ────────────────────────────
+function MiniJobCard({ job, index }: { job: any; index: number }) {
+  const color = getCardColor(index);
+  const country = getCountryFromLocation(job.location, job.country);
+  const flag = getCountryFlag(job.location, job.country);
+  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+  const badge = deriveBadge(job.type, index);
+  const badgeStyle = badge ? BADGE_STYLES[badge] : null;
+  const description = (job.about ?? job.desc ?? "").trim();
+  const hasImage = !!job.image;
+
+  return (
+    <Link href={`/jobs/${job.slug}`}>
+      <div className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer h-full flex flex-col">
+
+        {/* Card Banner */}
+        <div className="relative h-28 flex items-center justify-center overflow-hidden shrink-0">
+
+          {/* Background: image or gradient */}
+          {hasImage ? (
+            <>
+              <img src={getImageUrl(job.image)} alt={job.title}
+                className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/5" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0"
+                style={{ background: `linear-gradient(135deg, ${color.from} 0%, ${color.to} 100%)` }} />
+              <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full border-[8px] border-white/10" />
+              <div className="absolute -bottom-6 -left-4 w-24 h-24 rounded-full border-[8px] border-white/10" />
+              {/* Logo / Initial only when no image */}
+              {job.logo && job.logo.startsWith("http") ? (
+                <img src={job.logo} alt={job.title}
+                  className="w-12 h-12 rounded-xl object-cover shadow-lg border-2 border-white/30 relative z-10" />
+              ) : (
+                <div className="w-12 h-12 rounded-xl bg-white/20 border-2 border-white/30 flex items-center justify-center font-black text-2xl text-white shadow-lg relative z-10">
+                  {initial}
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Country Badge – TOP RIGHT */}
+          <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-full px-2 py-0.5 shadow-md">
+            <span className="text-sm leading-none">{flag}</span>
+            <span className="text-[10.5px] font-extrabold text-gray-800 dark:text-white max-w-[70px] truncate">
+              {country}
+            </span>
+          </div>
+
+          {/* Badge chip – BOTTOM LEFT */}
+          {badgeStyle && (
+            <div className="absolute bottom-2 left-2 z-20">
+              <span className="inline-flex items-center gap-1 text-[9.5px] font-bold px-2 py-0.5 rounded-full"
+                style={{ background: "rgba(255,255,255,0.9)", color: badgeStyle.color }}>
+                {badge === "Hot" && <Flame className="w-2.5 h-2.5" />}
+                {badge === "New" && <BadgeCheck className="w-2.5 h-2.5" />}
+                {badge}
+              </span>
+            </div>
+          )}
+
+          {/* Job type – BOTTOM RIGHT */}
+          <div className="absolute bottom-2 right-2 z-20">
+            <span className="text-[9.5px] font-bold bg-white/20 text-white border border-white/30 rounded-full px-2 py-0.5">
+              {job.type}
+            </span>
+          </div>
+        </div>
+
+        {/* Card Body */}
+        <div className="flex flex-col flex-1 p-3 gap-2">
+          {/* Title */}
+          <div>
+            <p className="font-extrabold text-[13px] text-slate-900 dark:text-white leading-snug line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+              {job.title}
+            </p>
+            {(job.company || job.category) && (
+              <div className="flex items-center gap-1 mt-0.5">
+                <Building2 size={10} className="text-slate-400 shrink-0" />
+                <span className="text-[10.5px] text-slate-400 truncate">
+                  {job.company || job.category}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Short description */}
+          {description && (
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 flex-1">
+              {description}
+            </p>
+          )}
+
+          {/* Country / Location highlight */}
+          <div className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl border"
+            style={{ background: color.light, borderColor: color.border }}>
+            <Globe size={12} style={{ color: color.from }} className="shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[9px] text-gray-400 font-semibold uppercase tracking-wider leading-none mb-0.5">
+                {job.country ? "Country" : "Location"}
+              </p>
+              <p className="text-[11px] font-extrabold truncate leading-tight" style={{ color: color.from }}>
+                {flag} {job.country ?? job.location ?? "Worldwide"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+// ─── Main Section ─────────────────────────────────────────────────
 export default function ImmigrantJobsSection() {
   const t = useTranslations("immigrantJobs");
 
-  const stats    = t.raw("stats")    as { value: string; label: string }[];
-  const features = t.raw("features") as { title: string; description: string }[];
-  const jobTypes = t.raw("jobTypes") as { type: string; count: string; description: string }[];
+  const stats = t.raw("stats") as { value: string; label: string }[];
+  const features = t.raw("features") as {
+    title: string;
+    description: string;
+  }[];
+  const jobTypes = t.raw("jobTypes") as {
+    type: string;
+    count: string;
+    description: string;
+  }[];
 
-  const { data: apiJobs = [], isLoading: jobsLoading } = useGetAllJobsQuery({ status: "published" });
+  const { data: apiJobs = [], isLoading: jobsLoading } = useGetAllJobsQuery({
+    status: "published",
+  });
   const previewJobs = apiJobs.slice(0, 6);
 
   return (
-    <section className="relative py-16 md:py-24 bg-slate-50 overflow-hidden">
+    <section className="relative py-16 md:py-24 bg-slate-50 dark:bg-slate-950 overflow-hidden">
 
-      {/* decorative blurs */}
+      {/* Decorative blurs */}
       <div
-        className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none opacity-50"
+        className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none opacity-40"
         style={{ background: "#dbeafe", filter: "blur(100px)" }}
       />
       <div
-        className="absolute bottom-0 left-0 w-72 h-72 rounded-full pointer-events-none opacity-40"
+        className="absolute bottom-0 left-0 w-72 h-72 rounded-full pointer-events-none opacity-30"
         style={{ background: "#e0e7ff", filter: "blur(80px)" }}
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
 
-        {/* Header */}
-        <div className="text-center mb-14 md:mb-20 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold tracking-widest uppercase mb-5">
+        {/* ── Section Header ─────────────────────────────────── */}
+        <div className="text-center mb-12 md:mb-16 max-w-3xl mx-auto">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-bold tracking-widest uppercase mb-5"
+            style={{
+              background: "#EFF6FF",
+              borderColor: "#BFDBFE",
+              color: "#1a4da1",
+            }}
+          >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{t("badge")}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-5">
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white leading-tight mb-4">
             <span
               style={{
                 backgroundImage: "linear-gradient(to right, #1a4da1, #2B59C3)",
@@ -89,40 +272,21 @@ export default function ImmigrantJobsSection() {
               {t("heading")}
             </span>
           </h2>
-          <p className="text-slate-500 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed max-w-2xl mx-auto">
             {t("subheading")}
           </p>
           <div
-            className="h-1.5 w-20 mx-auto mt-6 rounded-full"
+            className="h-1 w-16 mx-auto mt-5 rounded-full"
             style={{ background: "linear-gradient(to right, #1a4da1, #2B59C3)" }}
           />
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-14 md:mb-20">
-          {stats.map(({ value, label }, i) => {
-            const Icon = STAT_ICONS[i];
-            return (
-              <div
-                key={i}
-                className="group bg-white border border-slate-100 rounded-2xl p-5 md:p-7 text-center shadow-sm hover:-translate-y-2 transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-700 transition-colors duration-300">
-                  <Icon className="w-5 h-5 text-blue-700 group-hover:text-white transition-colors duration-300" />
-                </div>
-                <p className="text-2xl md:text-3xl font-black text-blue-700 mb-1">{value}</p>
-                <p className="text-xs md:text-sm text-slate-500 font-semibold">{label}</p>
-              </div>
-            );
-          })}
-        </div>
+        {/* ── Features + Job Cards Grid ──────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-12 items-start mb-14 md:mb-20">
 
-        {/* Features + Sample Roles */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start mb-14 md:mb-20">
-
-          {/* Left: Features */}
-          <div className="space-y-4">
-            <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6">
+          {/* Left: Why Choose (2 cols wide on lg) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white mb-6">
               {t("whyChooseTitle")}
             </h3>
             {features.map(({ title, description }, i) => {
@@ -130,124 +294,96 @@ export default function ImmigrantJobsSection() {
               return (
                 <div
                   key={i}
-                  className="group flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:border-blue-200 hover:-translate-y-2 transition-all duration-300"
+                  className="group flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm hover:border-blue-200 hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="w-11 h-11 shrink-0 flex items-center justify-center rounded-xl bg-blue-50 border border-blue-100 group-hover:bg-blue-700 transition-colors duration-300">
-                    <Icon className="w-5 h-5 text-blue-700 group-hover:text-white transition-colors duration-300" />
+                  <div
+                    className="w-10 h-10 shrink-0 flex items-center justify-center rounded-xl bg-blue-50 border border-blue-100 group-hover:bg-blue-700 transition-colors duration-300"
+                  >
+                    <Icon className="w-4.5 h-4.5 text-blue-700 group-hover:text-white transition-colors duration-300" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-slate-900 mb-1 group-hover:text-blue-700 transition-colors">
+                    <h4 className="font-bold text-sm text-slate-900 dark:text-white mb-0.5 group-hover:text-blue-700 transition-colors">
                       {title}
                     </h4>
-                    <p className="text-sm text-slate-500 leading-relaxed">{description}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                      {description}
+                    </p>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Right: Live Job Listings */}
-          <div className="space-y-3">
-            <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6">
-              {t("featuredTitle")}
-            </h3>
+          {/* Right: Live Job Cards (3 cols wide on lg) */}
+          <div className="lg:col-span-3">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white">
+                {t("featuredTitle")}
+              </h3>
+              <Link href="/jobs">
+                <span
+                  className="inline-flex items-center gap-1 text-xs font-bold transition-colors hover:opacity-80"
+                  style={{ color: "#1a4da1" }}
+                >
+                  View All <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
+            </div>
 
             {/* Loading skeletons */}
-            {jobsLoading && Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-[88px] bg-white rounded-2xl border border-slate-100 animate-pulse" />
-            ))}
-
-            {/* Live job cards */}
-            {!jobsLoading && previewJobs.map((job: any, i: number) => {
-              const color  = ROLE_COLORS[i % ROLE_COLORS.length];
-              const color2 = ROLE_GRADIENTS[i % ROLE_GRADIENTS.length];
-              const badge  = deriveBadge(job.type, i);
-              const badgeStyle = badge ? BADGE_STYLES[badge] : null;
-              return (
-                <Link href={`/jobs/${job.slug}`} key={job._id}>
-                  <div className="group relative flex flex-col gap-2.5 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden">
-                    {/* top accent bar */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      style={{ background: `linear-gradient(to right, ${color}, ${color2})` }}
-                    />
-
-                    {/* header row */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div
-                          className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center font-black text-sm"
-                          style={{ background: color + "18", border: `1.5px solid ${color}40`, color }}
-                        >
-                          {job.title?.charAt(0) ?? "J"}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-bold text-sm text-slate-900 truncate leading-tight">
-                            {job.title}
-                          </p>
-                          <div className="flex items-center gap-1 mt-0.5">
-                            <Building2 className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="text-[11px] text-slate-400 truncate">{job.category}</span>
-                          </div>
-                        </div>
-                      </div>
-                      {badgeStyle && (
-                        <span
-                          className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1"
-                          style={{ background: badgeStyle.bg, color: badgeStyle.color }}
-                        >
-                          {badge === "Hot" && <Flame className="w-2.5 h-2.5" />}
-                          {badge === "New" && <BadgeCheck className="w-2.5 h-2.5" />}
-                          {badge}
-                        </span>
-                      )}
+            {jobsLoading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700"
+                  >
+                    <div className="h-28 bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                    <div className="p-3 space-y-2">
+                      <div className="h-3.5 bg-slate-200 dark:bg-slate-700 rounded animate-pulse w-3/4" />
+                      <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse w-1/2" />
+                      <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse" />
                     </div>
-
-                    {/* location + type row */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1 text-[11px] text-slate-400">
-                        <MapPin className="w-3 h-3 shrink-0" />
-                        <span>{job.location ?? "Remote"}</span>
-                      </div>
-                      <span
-                        className="shrink-0 text-[11px] font-bold px-2.5 py-0.5 rounded-full"
-                        style={{ background: color + "15", color, border: `1px solid ${color}30` }}
-                      >
-                        {job.type}
-                      </span>
-                    </div>
-
-                    {/* salary */}
-                    {job.salary && (
-                      <div className="flex items-center gap-1.5 text-[11px] font-semibold" style={{ color }}>
-                        <DollarSign className="w-3 h-3" />
-                        {job.salary}
-                      </div>
-                    )}
                   </div>
-                </Link>
-              );
-            })}
+                ))}
+              </div>
+            )}
+
+            {/* Live job cards grid */}
+            {!jobsLoading && previewJobs.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {previewJobs.map((job: any, i: number) => (
+                  <MiniJobCard key={job._id} job={job} index={i} />
+                ))}
+              </div>
+            )}
 
             {/* No jobs fallback */}
             {!jobsLoading && previewJobs.length === 0 && (
-              <p className="text-center text-sm text-slate-400 py-8">No job listings available right now.</p>
+              <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                <Globe className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <p className="text-sm text-slate-400">
+                  No job listings available right now.
+                </p>
+              </div>
             )}
 
-            <p className="text-center text-xs text-slate-400 pt-2 font-medium">
-              {t("moreListings")}
-            </p>
+            {!jobsLoading && previewJobs.length > 0 && (
+              <p className="text-center text-xs text-slate-400 pt-3 font-medium">
+                {t("moreListings")}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Employment Type Cards */}
+        {/* ── Employment Type Cards ──────────────────────────── */}
         <div className="mb-14 md:mb-20">
-          <h3 className="text-xl md:text-2xl font-black text-slate-900 text-center mb-8">
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white text-center mb-8">
             {t("employmentTitle")}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-8">
             {jobTypes.map(({ type, count, description }, i) => {
-              const Icon  = JOB_TYPE_ICONS[i];
+              const Icon = JOB_TYPE_ICONS[i];
               const style = JOB_TYPE_COLORS[i];
               return (
                 <div
@@ -261,18 +397,30 @@ export default function ImmigrantJobsSection() {
                   />
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
-                    style={{ background: style.color + "18", border: `2px solid ${style.color}30` }}
+                    style={{
+                      background: style.color + "18",
+                      border: `2px solid ${style.color}30`,
+                    }}
                   >
                     <Icon className="w-6 h-6" style={{ color: style.color }} />
                   </div>
-                  <p className="text-2xl md:text-3xl font-black mb-1" style={{ color: style.color }}>
+                  <p
+                    className="text-2xl md:text-3xl font-black mb-1"
+                    style={{ color: style.color }}
+                  >
                     {count}
                   </p>
-                  <p className="text-base font-bold text-slate-900 mb-2">{type}</p>
-                  <p className="text-sm text-slate-500 leading-relaxed">{description}</p>
+                  <p className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                    {type}
+                  </p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {description}
+                  </p>
                   <div
                     className="absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-700 rounded-b-[2rem]"
-                    style={{ background: `linear-gradient(to right, ${style.color}, ${style.color}88)` }}
+                    style={{
+                      background: `linear-gradient(to right, ${style.color}, ${style.color}88)`,
+                    }}
                   />
                 </div>
               );
@@ -280,10 +428,13 @@ export default function ImmigrantJobsSection() {
           </div>
         </div>
 
-        {/* CTA Banner */}
+        {/* ── CTA Banner ──────────────────────────────────────── */}
         <div
           className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] p-8 sm:p-12 md:p-16 text-center shadow-2xl"
-          style={{ background: "linear-gradient(135deg, #1a2e5a 0%, #1a4da1 55%, #2B59C3 100%)" }}
+          style={{
+            background:
+              "linear-gradient(135deg, #1a2e5a 0%, #1a4da1 55%, #2B59C3 100%)",
+          }}
         >
           <div
             className="absolute -top-16 -left-16 w-64 h-64 rounded-full pointer-events-none"
@@ -296,7 +447,10 @@ export default function ImmigrantJobsSection() {
           <div className="relative">
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-white text-xs font-bold tracking-widest uppercase mb-6"
-              style={{ background: "rgba(255,255,255,0.12)", borderColor: "rgba(255,255,255,0.2)" }}
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                borderColor: "rgba(255,255,255,0.2)",
+              }}
             >
               <CheckCircle className="w-3.5 h-3.5" />
               <span>{t("ctaBadge")}</span>
@@ -308,8 +462,7 @@ export default function ImmigrantJobsSection() {
               {t("ctaSubheading")}
             </p>
             <Link href="/jobs">
-              <button
-                className="group inline-flex items-center gap-3 bg-white font-black text-sm md:text-base px-8 md:px-10 py-3.5 md:py-4 rounded-full shadow-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 cursor-pointer"
+              <button className="group inline-flex items-center gap-3 bg-white font-black text-sm md:text-base px-8 md:px-10 py-3.5 md:py-4 rounded-full shadow-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 cursor-pointer"
                 style={{ color: "#1a4da1" }}
               >
                 {t("ctaButton")}

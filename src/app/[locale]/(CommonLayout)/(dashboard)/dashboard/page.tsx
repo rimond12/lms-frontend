@@ -622,7 +622,7 @@ export default function AdminDashboardPage() {
 
           <div className="h-[280px] w-full mt-auto">
             {chartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <AreaChart
                   data={chartData}
                   margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
@@ -716,7 +716,7 @@ export default function AdminDashboardPage() {
 
           <div className="h-[200px] w-full relative z-10">
             {topBatchesData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <BarChart
                   data={topBatchesData}
                   margin={{ top: 10, right: 0, left: -30, bottom: 0 }}

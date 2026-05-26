@@ -79,7 +79,7 @@ export const Footer = () => {
                   </p>
                   <p className="text-sm font-medium text-white hover:text-red-400 transition-colors"></p>
                   <p className="text-sm font-medium text-white hover:text-red-400 transition-colors">
-                    09606-810081
+                    01843-432352 (Available during business hours)
                   </p>
                 </div>
               </div>
@@ -106,10 +106,11 @@ export const Footer = () => {
                     {t("email")}
                   </p>
                   <a
-                    href="mailto:caddcorebd@gmail.com"
+                    href="mailto:support@immigrantjobsworld.com"
                     className="text-sm text-gray-300 hover:text-red-400 transition-colors"
                   >
-                    immigrantjobsworld@gmail.com
+                    support@immigrantjobsworld.com
+                    info@immigrantjobsworld.com
                   </a>
                 </div>
               </div>
@@ -236,9 +237,9 @@ export const Footer = () => {
 
             <div className="bg-gray-900/50 p-6 rounded-2xl border border-gray-800">
               <p className="text-xl font-bold bg-linear-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                09606-810081
+                01843-432352
               </p>
-              <p className="text-xs font-medium text-gray-500 mt-2 uppercase tracking-wider flex items-center gap-2">
+              {/* <p className="text-xs font-medium text-gray-500 mt-2 uppercase tracking-wider flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
@@ -254,7 +255,35 @@ export const Footer = () => {
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
                 {t("supportTime")}
-              </p>
+              </p> */}
+              <div>
+                {/* Heading with Icon */}
+                <p className="text-xs font-medium text-gray-500 mt-2 uppercase tracking-wider flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  {t("officeHoursTitle")}
+                </p>
+
+                {/* Time Details */}
+                <div className="text-sm text-gray-600 mt-1 font-normal">
+                  <p>{t("saturdayThursday")}: 10:00 AM – 6:00 PM</p>
+                  <p>
+                    {t("friday")}: <span className="text-red-500 font-medium">{t("closed")}</span>
+                  </p>
+                </div>
+              </div>
 
               <div className="flex gap-3 mt-6">
                 {/* Social Icons with improved hover effects */}
