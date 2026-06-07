@@ -5,7 +5,7 @@ export const getImageUrl = (imagePath?: string): string | undefined => {
   if (!imagePath) return undefined;
   if (imagePath.startsWith("http")) return imagePath;
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com";
   const cleanBaseUrl = baseUrl.replace("/api", "");
 
   // Ensure imagePath starts with / for proper URL construction

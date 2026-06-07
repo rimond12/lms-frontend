@@ -143,7 +143,7 @@ export const ExpertsStep: React.FC<ExpertsStepProps> = ({ data, onUpdate }) => {
 
       // Get API URL from environment variable
       const apiUrl =
-        process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud";
+        process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com";
 
       // Upload to backend (note: /api prefix required for all API routes)
       const response = await fetch(`${apiUrl}/api/programs/upload-image`, {

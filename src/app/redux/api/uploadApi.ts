@@ -4,7 +4,7 @@
 // const uploadApi = createApi({
 //   reducerPath: "uploadApi",
 //   baseQuery: fetchBaseQuery({
-//     baseUrl: process.env.NEXT_PUBLIC_UPLOAD_API_URL || "https://api.caddcore.cloud/api",
+//     baseUrl: process.env.NEXT_PUBLIC_UPLOAD_API_URL || "https://api.immigrantjobsworld.com/api",
 
 //     prepareHeaders: async (headers) => {
 //       // Get token from cookies

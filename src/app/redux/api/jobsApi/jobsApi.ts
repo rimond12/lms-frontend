@@ -162,6 +162,7 @@ const JobApi = baseApi.injectEndpoints({
         if (filters?.type) params.append("type", filters.type);
         if (filters?.status) params.append("status", filters.status);
         if (filters?.category) params.append("category", filters.category);
+        if (filters?.country) params.append("country", filters.country);
         const qs = params.toString();
         return `/jobs${qs ? `?${qs}` : ""}`;
       },

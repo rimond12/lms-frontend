@@ -8,8 +8,8 @@ import Link from "next/link";
 import { ArrowLeft, Eye, EyeOff, CheckCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
-import CaddForm from "@/components/common/resubaleform/CaddForm";
-import CaddInput from "@/components/common/resubaleform/CaddInput";
+import ImmigrantForm from "@/components/common/resubaleform/ImmigrantForm";
+import ImmigrantInput from "@/components/common/resubaleform/ImmigrantInput";
 import LoadingSpinner from "@/components/common/LoadingSpinner/LoadingSpinner";
 import { useResetPassword } from "@/app/[locale]/@auth/auth.hook";
 
@@ -33,7 +33,7 @@ export function ResetPassword() {
   const { mutate: handleResetPassword, isPending } = useResetPassword();
 
   useEffect(() => {
-    if (!hasMounted) return; // Only run after component has mounted pant-shirt
+    if (!hasMounted) return;
 
     const tokenParam = searchParams?.get("token");
     if (tokenParam) {
@@ -140,10 +140,10 @@ export function ResetPassword() {
             <p className="text-gray-600 mt-2">Enter your new password below</p>
           </div>
 
-          <CaddForm onSubmit={onSubmit}>
+          <ImmigrantForm onSubmit={onSubmit}>
             <div className="mb-6 space-y-4">
               <div className="relative">
-                <CaddInput
+                <ImmigrantInput
                   label="New Password"
                   name="newPassword"
                   placeholder="Enter your new password"
@@ -164,7 +164,7 @@ export function ResetPassword() {
               </div>
 
               <div className="relative">
-                <CaddInput
+                <ImmigrantInput
                   label="Confirm New Password"
                   name="confirmPassword"
                   placeholder="Confirm your new password"
@@ -213,7 +213,7 @@ export function ResetPassword() {
                 </Link>
               </p>
             </div>
-          </CaddForm>
+          </ImmigrantForm>
         </div>
       </div>
     </section>

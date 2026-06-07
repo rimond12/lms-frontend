@@ -20,7 +20,7 @@ export const CarouselBanner = () => {
   const bannerImages = activeBanners.map((banner: any) =>
     banner.imageUrl.startsWith("http")
       ? banner.imageUrl
-      : `https://api.caddcore.cloud/${banner.imageUrl}`,
+      : `https://api.immigrantjobsworld.com/${banner.imageUrl}`,
   );
 
   const [[page, direction], setPage] = React.useState([0, 0]);

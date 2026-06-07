@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   Loader2,
@@ -28,7 +28,11 @@ import {
   useGetSavedJobsQuery,
 } from "@/app/redux/api/jobsApi/SavedJobsApi";
 import { useGetJobCategoriesQuery } from "@/app/redux/api/jobsApi/JobCategoryApi";
+import { useGetCountriesQuery } from "@/app/redux/api/jobsApi/CountryApi";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter, usePathname } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -64,6 +68,7 @@ const FLAG_MAP: Record<string, string> = {
   "oman": "🇴🇲", "muscat": "🇴🇲",
   "kuwait": "🇰🇼",
   "bahrain": "🇧🇭",
+  "japan": "🇯🇵",
   "remote": "🌐", "worldwide": "🌐", "global": "🌐",
 };
 
@@ -126,11 +131,19 @@ function BookmarkButton({ jobId, savedJobIds }: { jobId: string; savedJobIds: st
 
 // ─── Premium Job Card ──────────────────────────────────────────────
 function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[]; index: number }) {
+  const locale = useLocale();
+  const t = useTranslations("jobsPage");
   const color = getCardColor(index);
   const country = getCountryFromLocation(job.location, job.country);
   const flag = getCountryFlag(job.location, job.country);
-  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
-  const description = (job.about ?? job.desc ?? "").trim();
+  
+  const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayLocation = locale === "bn" ? (job.locationBn || job.location || "Worldwide") : (job.location || "Worldwide");
+  const displayCountry = locale === "bn" ? (job.country || country) : country;
+  const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
+  const description = (locale === "bn" ? (job.aboutBn || job.about || job.desc || "") : (job.about || job.desc || "")).trim();
+
+  const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
   const hasImage = !!job.image;
 
   return (
@@ -160,7 +173,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
 
           {hasImage ? (
             <>
-              <img src={getImageUrl(job.image)} alt={job.title}
+              <img src={getImageUrl(job.image)} alt={displayTitle}
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             </>
@@ -192,7 +205,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
                 <div className="relative z-10 p-2 rounded-2xl bg-white/25 backdrop-blur-sm border border-white/40 shadow-xl">
                   <img
                     src={job.logo}
-                    alt={job.title}
+                    alt={displayTitle}
                     className="w-14 h-14 rounded-xl object-cover"
                   />
                 </div>
@@ -210,7 +223,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
           <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-white/96 dark:bg-gray-900/96 backdrop-blur-md rounded-full px-3 py-1.5 shadow-lg border border-white/60">
             <span className="text-base leading-none">{flag}</span>
             <span className="text-[11px] font-extrabold text-gray-800 dark:text-white max-w-[90px] truncate tracking-tight">
-              {country}
+              {displayCountry}
             </span>
           </div>
 
@@ -223,7 +236,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
           <div className="absolute bottom-3 left-3 z-20">
             <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold bg-black/25 text-white border border-white/25 rounded-full px-3 py-1 backdrop-blur-sm">
               <Briefcase size={9} />
-              {job.type}
+              {t(`types.${job.type}`, job.type)}
             </span>
           </div>
         </div>
@@ -237,7 +250,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
               className="font-extrabold text-[15px] text-gray-900 dark:text-white leading-snug line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-200"
               style={{ letterSpacing: "-0.1px" }}
             >
-              {job.title}
+              {displayTitle}
             </h3>
             {(job.company || job.category) && (
               <div className="flex items-center gap-1.5 mt-1.5">
@@ -272,21 +285,21 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
             <MapPin size={13} style={{ color: color.from }} className="shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest leading-none mb-0.5">
-                {job.country ? "Country" : "Location"}
+                {job.country ? t("card.country") : t("card.location")}
               </p>
               <p
                 className="text-[12.5px] font-extrabold truncate leading-tight"
                 style={{ color: color.from }}
               >
-                {flag} {job.country ?? job.location ?? "Worldwide"}
+                {flag} {job.country ? displayCountry : displayLocation}
               </p>
             </div>
-            {job.salary && (
+            {displaySalary && (
               <span
                 className="text-[11px] font-bold shrink-0 px-2.5 py-1 rounded-full"
                 style={{ background: color.from + "18", color: color.from }}
               >
-                {job.salary}
+                {displaySalary}
               </span>
             )}
           </div>
@@ -300,7 +313,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
               letterSpacing: "0.3px",
             }}
           >
-            Apply Now →
+            {t("card.applyNow")}
           </button>
         </div>
       </div>
@@ -328,14 +341,102 @@ function SkeletonCard() {
   );
 }
 
-// ─── Main Jobs Page ────────────────────────────────────────────────
 export default function JobsPage() {
   const { user } = useUser();
+  const locale = useLocale();
+  const t = useTranslations("jobsPage");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
+
+  // Read active country from URL query parameter ?country=...
+  const selectedCountry = searchParams.get("country") || "";
+
+  // Fetch countries list
+  const { data: countries = [], isLoading: countriesLoading } = useGetCountriesQuery();
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [isDown, setIsDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+
+  const checkScroll = () => {
+    const el = scrollContainerRef.current;
+    if (el) {
+      setCanScrollLeft(el.scrollLeft > 2);
+      setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+    }
+  };
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (el) {
+      checkScroll();
+      el.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
+      
+      const timer = setTimeout(checkScroll, 500);
+      return () => {
+        el.removeEventListener("scroll", checkScroll);
+        window.removeEventListener("resize", checkScroll);
+        clearTimeout(timer);
+      };
+    }
+  }, [countries, countriesLoading]);
+
+  const handleScrollClick = (direction: "left" | "right") => {
+    const el = scrollContainerRef.current;
+    if (el) {
+      const scrollAmount = 300;
+      el.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    setIsDown(true);
+    setStartX(e.pageX - el.offsetLeft);
+    setScrollLeftState(el.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const el = scrollContainerRef.current;
+    if (!el || !isDown) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    el.scrollLeft = scrollLeftState - walk;
+  };
+
+  const handleCountrySelect = (countryName: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (countryName) {
+      params.set("country", countryName);
+    } else {
+      params.delete("country");
+    }
+    setCurrentPage(1);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const { data: categories = [] } = useGetJobCategoriesQuery();
   const {
@@ -348,15 +449,19 @@ export default function JobsPage() {
 
   const filteredJobs = useMemo(() => {
     return allJobs.filter((job: any) => {
+      const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+      const displayLocation = locale === "bn" ? (job.locationBn || job.location) : job.location;
+      
       const matchesSearch =
-        job.title?.toLowerCase().includes(search.toLowerCase()) ||
+        displayTitle?.toLowerCase().includes(search.toLowerCase()) ||
         job.company?.toLowerCase().includes(search.toLowerCase()) ||
-        job.location?.toLowerCase().includes(search.toLowerCase());
+        displayLocation?.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = selectedCategory === "" || job.category === selectedCategory;
       const matchesType = selectedType === "" || job.type === selectedType;
-      return matchesSearch && matchesCategory && matchesType;
+      const matchesCountry = selectedCountry === "" || job.country === selectedCountry;
+      return matchesSearch && matchesCategory && matchesType && matchesCountry;
     });
-  }, [allJobs, search, selectedCategory, selectedType]);
+  }, [allJobs, search, selectedCategory, selectedType, selectedCountry, locale]);
 
   const jobTypes = Array.from(new Set(allJobs.map((j: any) => j.type).filter(Boolean)));
   const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE);
@@ -365,7 +470,7 @@ export default function JobsPage() {
     currentPage * ITEMS_PER_PAGE,
   );
 
-  const hasActiveFilters = !!(selectedCategory || selectedType || search);
+  const hasActiveFilters = !!(selectedCategory || selectedType || search || selectedCountry);
 
   const goToPage = (p: number) => {
     setCurrentPage(p);
@@ -406,7 +511,7 @@ export default function JobsPage() {
           >
             <Sparkles size={13} className="text-blue-200" />
             <span className="text-blue-100 text-xs font-extrabold tracking-widest uppercase">
-              Global Opportunities
+              {locale === "bn" ? "বৈশ্বিক সুযোগ" : "Global Opportunities"}
             </span>
           </div>
 
@@ -414,7 +519,7 @@ export default function JobsPage() {
             className="text-white text-3xl sm:text-4xl md:text-5xl font-black mb-3 leading-tight"
             style={{ letterSpacing: "-1px" }}
           >
-            Discover Jobs{" "}
+            {t("title")}{" "}
             <span
               style={{
                 background: "linear-gradient(90deg, #93c5fd, #60a5fa)",
@@ -423,12 +528,11 @@ export default function JobsPage() {
                 backgroundClip: "text",
               }}
             >
-              Worldwide
+              {t("titleWorldwide")}
             </span>
           </h1>
           <p className="text-blue-300 text-sm sm:text-base mb-10 max-w-xl leading-relaxed">
-            Access thousands of aviation &amp; engineering opportunities across multiple countries.
-            Find your perfect career match.
+            {t("subtitle")}
           </p>
 
           {/* Search bar */}
@@ -442,7 +546,7 @@ export default function JobsPage() {
             <input
               id="jobs-search-input"
               type="text"
-              placeholder="Search job title, company or location…"
+              placeholder={t("searchPlaceholder")}
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -456,16 +560,16 @@ export default function JobsPage() {
               style={{ background: "linear-gradient(135deg, #1a4da1, #2B59C3)" }}
             >
               <Search size={14} />
-              Search
+              {t("searchButton")}
             </button>
           </div>
 
           {/* Quick stats strip */}
           <div className="flex flex-wrap gap-6 mt-8">
             {[
-              { label: "Live Jobs", value: allJobs.length || "—" },
-              { label: "Countries", value: "40+" },
-              { label: "Industries", value: categories.length || "—" },
+              { label: t("stats.liveJobs"), value: allJobs.length || "—" },
+              { label: t("stats.countries"), value: "40+" },
+              { label: t("stats.industries"), value: categories.length || "—" },
             ].map((s, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span
@@ -486,6 +590,155 @@ export default function JobsPage() {
       ══════════════════════════════════════════════════════════ */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-20">
 
+        {/* Country Flag Bar (IMG_2472.JPG Style) */}
+        <div className="mb-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-5 sm:p-6" style={{ borderRadius: "20px", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+          <div className="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-800 pb-3">
+            <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <Globe size={16} className="text-[#1a4da1]" />
+              {t("countryBar.title")}
+            </h2>
+            {selectedCountry && (
+              <button
+                onClick={() => handleCountrySelect("")}
+                className="text-xs text-blue-600 hover:text-blue-700 font-bold transition-all hover:underline"
+              >
+                {t("countryBar.showAll")}
+              </button>
+            )}
+          </div>
+          
+          <div className="relative group/bar">
+            {/* Left Nav Button */}
+            <button
+              onClick={() => handleScrollClick("left")}
+              className={`absolute left-0 top-8 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-all hover:scale-110 hover:bg-gray-50 dark:hover:bg-gray-700 active:scale-95 ${
+                canScrollLeft ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
+              }`}
+              style={{ left: "-10px" }}
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            {/* Right Nav Button */}
+            <button
+              onClick={() => handleScrollClick("right")}
+              className={`absolute right-0 top-8 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-all hover:scale-110 hover:bg-gray-50 dark:hover:bg-gray-700 active:scale-95 ${
+                canScrollRight ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
+              }`}
+              style={{ right: "-10px" }}
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={16} />
+            </button>
+
+            <style dangerouslySetInnerHTML={{ __html: `
+              .custom-flag-scroll::-webkit-scrollbar {
+                display: block !important;
+                height: 4px !important;
+              }
+              .custom-flag-scroll::-webkit-scrollbar-track {
+                background: transparent !important;
+              }
+              .custom-flag-scroll::-webkit-scrollbar-thumb {
+                background: #cbd5e1 !important;
+                border-radius: 9999px !important;
+              }
+              .dark .custom-flag-scroll::-webkit-scrollbar-thumb {
+                background: #475569 !important;
+              }
+              .custom-flag-scroll::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8 !important;
+              }
+              .dark .custom-flag-scroll::-webkit-scrollbar-thumb:hover {
+                background: #64748b !important;
+              }
+            `}} />
+
+            <div
+              ref={scrollContainerRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              className={`custom-flag-scroll flex gap-6 overflow-x-auto pb-3 pt-1 px-1 select-none scroll-smooth ${
+                isDown ? "cursor-grabbing" : "cursor-grab"
+              }`}
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "#cbd5e1 transparent",
+              }}
+            >
+              {/* "All Jobs" Button */}
+              <button
+                onClick={() => handleCountrySelect("")}
+                className="flex flex-col items-center gap-2 shrink-0 cursor-pointer focus:outline-none group transition-transform active:scale-95"
+              >
+                <div
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                    selectedCountry === ""
+                      ? "border-[#1a4da1] bg-blue-50 dark:bg-blue-950/40 ring-4 ring-blue-100 dark:ring-blue-900/30 scale-105 shadow-md"
+                      : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 group-hover:scale-105 group-hover:border-blue-400 group-hover:shadow-sm"
+                  }`}
+                >
+                  <Globe size={24} className={selectedCountry === "" ? "text-[#1a4da1]" : "text-gray-400 group-hover:text-[#1a4da1] transition-colors"} />
+                </div>
+                <div className="text-center min-w-[70px]">
+                  <p className={`text-[11px] font-extrabold leading-tight ${selectedCountry === "" ? "text-[#1a4da1]" : "text-gray-700 dark:text-gray-300"}`}>
+                    {t("countryBar.allCountries")}
+                  </p>
+                  <p className="text-[9px] text-gray-400 font-medium">
+                    {t("countryBar.allJobs")}
+                  </p>
+                </div>
+              </button>
+
+              {/* Skeleton Loading State */}
+              {countriesLoading
+                ? Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="flex flex-col items-center gap-2 shrink-0 animate-pulse">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-200 dark:bg-gray-800" />
+                      <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-12 mx-auto" />
+                      <div className="h-2 bg-gray-200 dark:bg-gray-800 rounded w-8 mx-auto" />
+                    </div>
+                  ))
+                : countries.map((country) => {
+                    const isActive = selectedCountry === country.name;
+                    return (
+                      <button
+                        key={country._id}
+                        onClick={() => handleCountrySelect(isActive ? "" : country.name)}
+                        className="flex flex-col items-center gap-2 shrink-0 cursor-pointer focus:outline-none group transition-transform active:scale-95"
+                      >
+                        <div
+                          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 transition-all duration-300 p-0.5 bg-white dark:bg-gray-950 ${
+                            isActive
+                              ? "border-[#1a4da1] ring-4 ring-blue-100 dark:ring-blue-900/30 scale-105 shadow-md"
+                              : "border-gray-200 dark:border-gray-800 group-hover:scale-105 group-hover:border-blue-400 group-hover:shadow-sm"
+                          }`}
+                        >
+                          <img
+                            src={country.flagIcon}
+                            alt={country.name}
+                            className="w-full h-full object-cover rounded-full"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="text-center min-w-[70px]">
+                          <p className={`text-[11px] font-extrabold leading-tight ${isActive ? "text-[#1a4da1] dark:text-blue-400" : "text-gray-700 dark:text-gray-300"}`}>
+                            {locale === "bn" ? country.nameBn : country.name}
+                          </p>
+                          <p className="text-[9px] text-gray-400 font-medium">
+                            {locale === "bn" ? country.name : country.nameBn}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+            </div>
+          </div>
+        </div>
+
         {/* Filter Bar */}
         <div
           className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-gray-900 px-5 py-4 border border-gray-100 dark:border-gray-800"
@@ -494,11 +747,11 @@ export default function JobsPage() {
           <div className="flex items-center gap-2">
             <SlidersHorizontal size={15} className="text-gray-400" />
             <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-              Showing{" "}
+              {t("filterBar.showing")}{" "}
               <span className="font-extrabold" style={{ color: "#1a4da1" }}>
                 {filteredJobs.length}
               </span>{" "}
-              {filteredJobs.length === 1 ? "job" : "jobs"} available
+              {filteredJobs.length === 1 ? t("filterBar.job") : t("filterBar.jobs")}{" "}{t("filterBar.available")}
             </span>
           </div>
 
@@ -510,7 +763,7 @@ export default function JobsPage() {
               className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3.5 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 outline-none cursor-pointer shadow-sm hover:border-blue-400 transition-colors"
               style={{ borderRadius: "10px" }}
             >
-              <option value="">All Categories</option>
+              <option value="">{t("filterBar.allCategories")}</option>
               {categories.map((cat: any) => (
                 <option key={cat._id} value={cat.name}>
                   {cat.icon} {cat.name}
@@ -525,21 +778,26 @@ export default function JobsPage() {
               className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3.5 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 outline-none cursor-pointer shadow-sm hover:border-blue-400 transition-colors"
               style={{ borderRadius: "10px" }}
             >
-              <option value="">All Types</option>
+              <option value="">{t("filterBar.allTypes")}</option>
               {jobTypes.map((type: any) => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>{t(`types.${type}`, type)}</option>
               ))}
             </select>
 
             {hasActiveFilters && (
               <button
                 id="jobs-clear-filters-btn"
-                onClick={() => { setSelectedCategory(""); setSelectedType(""); setSearch(""); }}
+                onClick={() => {
+                  setSelectedCategory("");
+                  setSelectedType("");
+                  setSearch("");
+                  handleCountrySelect("");
+                }}
                 className="flex items-center gap-1.5 text-xs text-red-500 font-bold px-3.5 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-100 dark:border-red-900/30 transition-all"
                 style={{ borderRadius: "10px" }}
               >
                 <X size={12} />
-                Clear filters
+                {t("filterBar.clearFilters")}
               </button>
             )}
           </div>
@@ -555,7 +813,7 @@ export default function JobsPage() {
             className="text-center py-20 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800"
             style={{ borderRadius: "20px" }}
           >
-            <p className="text-red-400 font-semibold">Failed to load jobs. Please try again.</p>
+            <p className="text-red-400 font-semibold">{t("errorState")}</p>
           </div>
         ) : (
           <>
@@ -583,19 +841,24 @@ export default function JobsPage() {
                   <Search size={28} style={{ color: "#1a4da1", opacity: 0.5 }} />
                 </div>
                 <p className="text-gray-700 dark:text-gray-200 font-bold text-base mb-1.5">
-                  No jobs found
+                  {t("emptyState.noJobs")}
                 </p>
                 <p className="text-gray-400 text-sm">
-                  Try adjusting your search or filters
+                  {t("emptyState.adjustFilters")}
                 </p>
                 {hasActiveFilters && (
                   <button
-                    onClick={() => { setSelectedCategory(""); setSelectedType(""); setSearch(""); }}
+                    onClick={() => {
+                      setSelectedCategory("");
+                      setSelectedType("");
+                      setSearch("");
+                      handleCountrySelect("");
+                    }}
                     className="mt-5 inline-flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl border-2 transition-all hover:-translate-y-0.5"
                     style={{ color: "#1a4da1", borderColor: "#BFDBFE", background: "#EFF6FF" }}
                   >
                     <X size={13} />
-                    Clear all filters
+                    {t("emptyState.clearAll")}
                   </button>
                 )}
               </div>
@@ -611,7 +874,7 @@ export default function JobsPage() {
                   className="flex items-center gap-1.5 px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-600 dark:text-gray-300 disabled:opacity-30 hover:border-blue-400 hover:text-blue-700 transition-all"
                   style={{ borderRadius: "12px" }}
                 >
-                  <ChevronLeft size={15} /> Prev
+                  <ChevronLeft size={15} /> {t("pagination.prev")}
                 </button>
 
                 {[...Array(totalPages)].map((_, i) => (
@@ -642,7 +905,7 @@ export default function JobsPage() {
                   className="flex items-center gap-1.5 px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-600 dark:text-gray-300 disabled:opacity-30 hover:border-blue-400 hover:text-blue-700 transition-all"
                   style={{ borderRadius: "12px" }}
                 >
-                  Next <ChevronRight size={15} />
+                  {t("pagination.next")} <ChevronRight size={15} />
                 </button>
               </div>
             )}

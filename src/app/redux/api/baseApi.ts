@@ -3,11 +3,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    // baseUrl: "https://api.caddcore.cloud/api",
-    // // baseUrl: "https://api.caddcore.cloud/api",
+    // baseUrl: "https://api.immigrantjobsworld.com/api",
+    // // baseUrl: "https://api.immigrantjobsworld.com/api",
 
     baseUrl:
-      process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api",
+      process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api",
     prepareHeaders: async (headers, { getState }) => {
       // Get token from cookies
       let token: string | undefined;
@@ -65,6 +65,7 @@ const baseApi = createApi({
     "JobCategory",
     "LandingPageCMS",
     "SuccessStory",
+    "Country",
   ],
   endpoints: () => ({}),
 });

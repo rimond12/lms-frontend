@@ -8,8 +8,8 @@ import { Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 
 import { toast } from "sonner";
 import { useUserLogin } from "@/app/[locale]/@auth/auth.hook";
-import CaddForm from "@/components/common/resubaleform/CaddForm";
-import CaddInput from "@/components/common/resubaleform/CaddInput";
+import ImmigrantForm from "@/components/common/resubaleform/ImmigrantForm";
+import ImmigrantInput from "@/components/common/resubaleform/ImmigrantInput";
 import { Button } from "@/components/ui/Button";
 
 function useHasMounted() {
@@ -94,10 +94,10 @@ export function LoginClient() {
               </p>
             </div>
 
-            <CaddForm onSubmit={onSubmit}>
+            <ImmigrantForm onSubmit={onSubmit}>
               <div className="space-y-5">
                 <div className="space-y-1.5">
-                  <CaddInput
+                  <ImmigrantInput
                     name="email"
                     label="Email Address"
                     placeholder="name@example.com"
@@ -109,7 +109,7 @@ export function LoginClient() {
 
                 <div className="space-y-1.5">
                   <div className="relative group">
-                    <CaddInput
+                    <ImmigrantInput
                       name="password"
                       label="Password"
                       placeholder="Enter your password"
@@ -164,7 +164,7 @@ export function LoginClient() {
 
                 {/* ✅ Button — ছোট inline spinner, fullscreen loader আলাদা */}
                 <Button
-                  className="w-full h-11 bg-gradient-to-r from-gray-900 to-black hover:from-black hover:to-gray-900 text-white font-medium rounded-xl transition-all duration-300 transform active:scale-[0.98] shadow-lg shadow-gray-900/10 flex items-center justify-center gap-2 group mt-2 disabled:opacity-70"
+                  className="w-full h-11 bg-gradient-to-r from-gray-900 to-black hover:from-black hover:to-gray-950 text-white font-medium rounded-xl transition-all duration-300 transform active:scale-[0.98] shadow-lg shadow-gray-900/10 flex items-center justify-center gap-2 group mt-2 disabled:opacity-70"
                   size="lg"
                   type="submit"
                   disabled={isPending}
@@ -182,7 +182,7 @@ export function LoginClient() {
                   )}
                 </Button>
               </div>
-            </CaddForm>
+            </ImmigrantForm>
 
             <div className="mt-2 pt-2 border-t border-gray-100 text-center">
               <p className="text-gray-500 text-sm">

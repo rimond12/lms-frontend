@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -241,7 +241,6 @@ const VideoCard = ({
 // Main Page
 export default function CoursesPage() {
   const t = useTranslations("courses");
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [highlightIndex, setHighlightIndex] = useState(0);
 
@@ -265,33 +264,16 @@ export default function CoursesPage() {
 
   const itemsPerPage = 12;
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    let hasChanged = false;
-    if (selectedCategory && params.get("category") !== selectedCategory) {
-      params.set("category", selectedCategory);
-      hasChanged = true;
-    } else if (!selectedCategory && params.has("category")) {
-      params.delete("category");
-      hasChanged = true;
-    }
-    if (
-      selectedSubCategory &&
-      params.get("subcategory") !== selectedSubCategory
-    ) {
-      params.set("subcategory", selectedSubCategory);
-      hasChanged = true;
-    } else if (!selectedSubCategory && params.has("subcategory")) {
-      params.delete("subcategory");
-      hasChanged = true;
-    }
-    if (hasChanged) {
-      const newUrl = params.toString()
-        ? `?${params.toString()}`
-        : window.location.pathname;
-      router.replace(newUrl, { scroll: false });
-    }
-  }, [selectedCategory, selectedSubCategory, router, searchParams]);
+  const handleCategoryChange = (categoryId: string | null) => {
+    setSelectedCategory(categoryId);
+    setSelectedSubCategory(null);
+    setCurrentPage(1);
+  };
+
+  const handleSubCategoryChange = (subCategoryId: string | null) => {
+    setSelectedSubCategory(subCategoryId);
+    setCurrentPage(1);
+  };
 
   const queryParams = {
     page: currentPage,
@@ -303,10 +285,20 @@ export default function CoursesPage() {
     ...(selectedSubCategory && { subcategory: selectedSubCategory }),
   };
 
-  const { data, isLoading, error } = useGetCoursesQuery(queryParams);
+  const { data, isLoading, isFetching, error } = useGetCoursesQuery(queryParams);
   const courses = data?.data || [];
   const totalPages = data?.meta?.totalPages || 1;
   const totalCount = data?.meta?.total || 0;
+
+  // Keep last known courses visible during refetch — prevents blank flash
+  const prevCoursesRef = React.useRef<any[]>([]);
+  const displayCourses = courses.length > 0 ? courses : prevCoursesRef.current;
+  React.useEffect(() => {
+    if (courses.length > 0) prevCoursesRef.current = courses;
+  }, [courses]);
+
+  // Only show skeleton on very first load (no data at all yet)
+  const showSkeleton = isLoading && displayCourses.length === 0;
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -324,6 +316,7 @@ export default function CoursesPage() {
     setSelectedLevel("");
     setSelectedCategory(null);
     setSelectedSubCategory(null);
+    setCurrentPage(1);
   };
 
   const hasFilters =
@@ -442,8 +435,8 @@ export default function CoursesPage() {
               <CategoryTabs
                 selectedCategory={selectedCategory}
                 selectedSubCategory={selectedSubCategory}
-                onCategoryChange={setSelectedCategory}
-                onSubCategoryChange={setSelectedSubCategory}
+                onCategoryChange={handleCategoryChange}
+                onSubCategoryChange={handleSubCategoryChange}
                 variant="premium"
                 showSubCategories={false}
                 showIcons={true}
@@ -455,7 +448,14 @@ export default function CoursesPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {isLoading ? (
+        {/* Animated fetch progress bar — slides during category switch */}
+        {isFetching && !showSkeleton && (
+          <div className="w-full h-0.5 bg-gray-100 rounded-full mb-6 overflow-hidden">
+            <div className="h-full w-1/2 bg-[#1a4da1] rounded-full animate-fetch-progress" />
+          </div>
+        )}
+
+        {showSkeleton ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <CardSkeleton key={i} />
@@ -471,18 +471,15 @@ export default function CoursesPage() {
             </h3>
             <p className="text-gray-600">Please try again later.</p>
           </div>
-        ) : courses.length > 0 ? (
+        ) : displayCourses.length > 0 ? (
           <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { staggerChildren: 0.05 } },
-            }}
-            className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-4"
+            key={String(selectedCategory) + String(selectedSubCategory) + selectedType + selectedLevel + searchTerm}
+            initial={{ opacity: 0.6 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className={`max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-4 transition-opacity duration-200 ${isFetching ? 'opacity-50' : 'opacity-100'}`}
           >
-            {courses.map((course: any) => (
+            {displayCourses.map((course: any) => (
               <CourseCard
                 key={course._id}
                 course={course}

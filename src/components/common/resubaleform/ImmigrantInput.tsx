@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"; // If using classNames utility
 import { IInput } from "@/lib/types";
 import { Input } from "@/components/ui/Input";
 
-export default function CaddInput({
+export default function ImmigrantInput({
   variant = "bordered",
   size = "md",
   required = false,

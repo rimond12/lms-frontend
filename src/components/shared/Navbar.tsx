@@ -218,7 +218,7 @@ const TopBar = () => {
               <Mail size={10} className="text-white" />
             </div>
             <a
-              href="mailto:info@caddcore.com"
+              href="mailto:info@immigrantjobsworld.com"
               className="text-gray-300 group-hover:text-white transition-colors"
             >
               info@immigrantjobsworld.com
@@ -227,7 +227,7 @@ const TopBar = () => {
               <Mail size={10} className="text-white" />
             </div>
             <a
-              href="mailto:info@caddcore.com"
+              href="mailto:support@immigrantjobsworld.com"
               className="text-gray-300 group-hover:text-white transition-colors"
             >
               support@immigrantjobsworld.com
@@ -442,7 +442,7 @@ const Navbar: React.FC = () => {
   const navLinks: NavLink[] = [
     { name: t("home"), href: "/", icon: <Home size={18} /> },
     { name: t("courses"), href: "/all-courses", icon: <BookOpen size={18} /> },
-    { name: "Jobs", href: "/jobs", icon: <Briefcase size={18} /> },
+    { name: t("jobs"), href: "/jobs", icon: <Briefcase size={18} /> },
     {
       name: t("resources"),
       href: "#",

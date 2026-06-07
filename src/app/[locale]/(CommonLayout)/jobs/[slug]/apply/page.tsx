@@ -16,6 +16,7 @@ import { useUser } from "@/app/[locale]/@auth/user.provider";
 import { useGetJobBySlugQuery } from "@/app/redux/api/jobsApi/jobsApi";
 import { useApplyToJobMutation } from "@/app/redux/api/jobsApi/JobApplicationApi";
 import { toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 // ─── Submit Result Modal ──────────────────────────────────────────
 function SubmitResultModal({
@@ -26,6 +27,7 @@ function SubmitResultModal({
   onClose: () => void;
   onEdit?: () => void;
 }) {
+  const t = useTranslations("jobsPage");
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
@@ -37,22 +39,22 @@ function SubmitResultModal({
               </div>
             </div>
             <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-1">
-              Application Submitted!
+              {t("apply.successTitle")}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-              আপনার application সফলভাবে জমা হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।
+              {t("apply.successDesc")}
             </p>
             <div className="flex gap-3">
               <Link href="/jobs" className="flex-1">
                 <button onClick={onClose}
                   className="w-full py-2.5 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  Jobs দেখুন
+                  {t("apply.viewJobs")}
                 </button>
               </Link>
               <Link href="/dashboard/my-applications" className="flex-1">
                 <button onClick={onClose}
                   className="w-full py-2.5 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-colors">
-                  My Applications
+                  {t("apply.myApplications")}
                 </button>
               </Link>
             </div>
@@ -65,10 +67,10 @@ function SubmitResultModal({
               </div>
             </div>
             <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-1">
-              কিছু তথ্য missing!
+              {t("apply.missingTitle")}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-              নিচের তথ্যগুলো পূরণ করুন:
+              {t("apply.missingDesc")}
             </p>
             <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-3 mb-5 text-left">
               {missingFields?.map((f, i) => (
@@ -81,11 +83,11 @@ function SubmitResultModal({
             <div className="flex gap-3">
               <button onClick={onClose}
                 className="flex-1 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                বন্ধ করুন
+                {t("apply.close")}
               </button>
               <button onClick={onEdit}
                 className="flex-1 py-2.5 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2">
-                <ArrowLeft size={14} /> Edit করুন
+                <ArrowLeft size={14} /> {t("apply.edit")}
               </button>
             </div>
           </>
@@ -99,6 +101,7 @@ export default function ApplyPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const { user } = useUser();
+  const t = useTranslations("jobsPage");
 
   const { data: job, isLoading: jobLoading } = useGetJobBySlugQuery(slug, { skip: !slug });
   const [applyToJob, { isLoading: isSubmitting }] = useApplyToJobMutation();
@@ -122,19 +125,18 @@ export default function ApplyPage() {
         academicQualifications: user.degreeTitle
           ? `${user.degreeTitle}${user.universityName ? `, ${user.universityName}` : ""}`
           : p.academicQualifications,
-        // ✅ hardSkills, softSkills, certifications — হারাবে না
       }));
     }
-  }, [user?._id]); // ✅ fix: শুধু একবার run হবে
+  }, [user?._id]);
 
   const getMissingFields = () => {
     const missing: string[] = [];
-    if (!formData.name) missing.push("নাম");
-    if (!formData.email) missing.push("Email");
-    if (!formData.phone) missing.push("Phone");
-    if (!formData.address) missing.push("Address");
-    if (!formData.cvUrl) missing.push("CV / Resume");
-    if (!formData.academicQualifications) missing.push("Academic Qualification");
+    if (!formData.name) missing.push(t("apply.fullName"));
+    if (!formData.email) missing.push(t("apply.email"));
+    if (!formData.phone) missing.push(t("apply.phone"));
+    if (!formData.address) missing.push(t("apply.address"));
+    if (!formData.cvUrl) missing.push(t("apply.viewCv"));
+    if (!formData.academicQualifications) missing.push(t("apply.academic"));
     return missing;
   };
 
@@ -144,7 +146,6 @@ export default function ApplyPage() {
   const handleSubmit = async () => {
     const missing = getMissingFields();
 
-    // ✅ Missing থাকলে modal দেখাও
     if (missing.length > 0) {
       setShowModal("missing");
       return;
@@ -172,13 +173,12 @@ export default function ApplyPage() {
         vacancy,
       }).unwrap();
 
-      // ✅ Success modal দেখাও
       setShowModal("success");
     } catch (err: any) {
       if (err?.data?.message?.includes("already")) {
-        toast.error("আপনি এই job এ আগেই apply করেছেন!");
+        toast.error(t("apply.alreadyApplied"));
       } else {
-        toast.error("Apply করতে সমস্যা হয়েছে, আবার চেষ্টা করুন");
+        toast.error(t("apply.applyError"));
       }
     }
   };
@@ -216,10 +216,10 @@ export default function ApplyPage() {
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl px-4 py-3 flex items-start gap-2">
               <AlertCircle size={15} className="text-blue-600 flex-shrink-0 mt-0.5" />
               <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
-                আপনার profile থেকে তথ্য auto-fill হয়েছে।
+                {t("apply.autofillNotice")}
                 {getMissingFields().length > 0 && (
-                  <> কিছু তথ্য missing —{" "}
-                    <Link href="/profile" className="underline font-bold">Profile update করুন</Link>
+                  <> {t("apply.missingProfileInfo")}{" "}
+                    <Link href="/profile" className="underline font-bold">{t("apply.updateProfile")}</Link>
                   </>
                 )}
               </p>
@@ -245,7 +245,7 @@ export default function ApplyPage() {
                   )}
                 </div>
                 <span className={`text-[10px] font-semibold whitespace-nowrap ${step >= s.id ? "text-blue-700 dark:text-blue-400" : "text-gray-400 dark:text-gray-500"}`}>
-                  {s.label}
+                  {s.id === 1 ? t("apply.questionnaire") : t("apply.reviewSubmit")}
                 </span>
               </div>
               {i < STEPS.length - 1 && (
@@ -266,22 +266,22 @@ export default function ApplyPage() {
           <div className="flex gap-3 mb-10">
             <button onClick={() => setShowCancelModal(true)}
               className="flex-1 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-lg py-2.5 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              Cancel
+              {t("apply.cancel")}
             </button>
             <button onClick={handleBack} disabled={step === 1}
               className="flex-1 border border-blue-700 dark:border-blue-500 text-blue-700 dark:text-blue-400 rounded-lg py-2.5 text-sm font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-              {step > 1 ? "Previous" : "Back"}
+              {step > 1 ? t("apply.previous") : t("apply.back")}
             </button>
             {step < 2 ? (
               <button onClick={handleContinue}
                 className="flex-1 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg py-2.5 text-sm font-bold transition-colors">
-                Continue
+                {t("apply.continue")}
               </button>
             ) : (
               <button onClick={handleSubmit} disabled={isSubmitting}
                 className="flex-1 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg py-2.5 text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
                 {isSubmitting ? <Loader2 size={15} className="animate-spin" /> : <CheckCircle size={15} />}
-                Submit
+                {t("apply.submit")}
               </button>
             )}
           </div>
@@ -293,7 +293,7 @@ export default function ApplyPage() {
         <CancelModal onCancel={() => setShowCancelModal(false)} onConfirm={() => window.history.back()} />
       )}
 
-      {/* ✅ Missing fields modal */}
+      {/* Missing fields modal */}
       {showModal === "missing" && (
         <SubmitResultModal
           type="missing"
@@ -303,7 +303,7 @@ export default function ApplyPage() {
         />
       )}
 
-      {/* ✅ Success modal */}
+      {/* Success modal */}
       {showModal === "success" && (
         <SubmitResultModal
           type="success"

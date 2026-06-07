@@ -392,21 +392,21 @@ const Sidebar = () => {
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: isExpanded ? 1 : 0, x: isExpanded ? 0 : -10 }}
           transition={{ delay: 0.1, duration: 0.2 }}
-          className={`flex items-center gap-2.5 ${
+          className={`flex items-center gap-2.5 flex-1 min-w-0 mr-2 ${
             isExpanded ? "block" : "hidden"
           }`}
         >
-          <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center border border-slate-800 shadow-sm relative overflow-hidden group">
+          <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center border border-slate-800 shadow-sm relative overflow-hidden group flex-shrink-0">
             <div className="absolute inset-0 bg-red-600/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             <GraduationCap className="w-4 h-4 text-white relative z-10" />
           </div>
-          <div>
-            <h1 className="font-bold text-[17px] text-blue-600 tracking-tight leading-none">
+          <div className="flex-1 min-w-0">
+            <h1 className="font-bold text-[14px] text-blue-600 tracking-tight leading-tight whitespace-normal break-words">
               IMMIGRANT JOBS WORLD
             </h1>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="text-[8px] font-mono text-slate-400 uppercase tracking-widest">
+              <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+              <p className="text-[8px] font-mono text-slate-400 uppercase tracking-wider truncate">
                 Learning Portal
               </p>
             </div>
@@ -636,19 +636,19 @@ const MobileSidebar = ({
 
             {/* Mobile Header */}
             <div className="relative h-16 px-5 flex items-center justify-between border-b border-slate-100 bg-white/95 backdrop-blur-sm z-10">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center border border-slate-800 shadow-sm relative overflow-hidden">
+              <div className="flex items-center gap-2.5 flex-1 min-w-0 mr-2">
+                <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center border border-slate-800 shadow-sm relative overflow-hidden flex-shrink-0">
                   <div className="absolute inset-0 bg-red-600/10" />
                   <GraduationCap className="w-4 h-4 text-white relative z-10" />
                 </div>
-                <div>
-                  <h1 className="font-bold text-[15px] text-slate-900 tracking-tight leading-none">
+                <div className="flex-1 min-w-0">
+                  <h1 className="font-bold text-[15px] text-slate-900 tracking-tight leading-none truncate">
                     IMMIGRANT JOBS<span className="text-red-600">WORLD</span>
                   </h1>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                    <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
-                      LMS V2.0
+                    <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+                    <p className="text-[9px] font-mono text-slate-400 uppercase tracking-wider truncate">
+                      IJW Portal V2.0
                     </p>
                   </div>
                 </div>

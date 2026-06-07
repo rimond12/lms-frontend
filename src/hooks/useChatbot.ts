@@ -35,7 +35,7 @@ const generateSessionId = (): string => {
 };
 
 // Session storage key
-const SESSION_KEY = "cadd_chatbot_session";
+const SESSION_KEY = "ijw_chatbot_session";
 
 // Get/Create session from localStorage
 const getSession = (): ChatSession => {
@@ -103,7 +103,7 @@ export const useChatbot = (): UseChatbotReturn => {
 
       try {
         const baseUrl =
-          process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+          process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
 
         // Get current messages for context (limit to last 10 for performance)
         const historyMessages = session.messages.slice(-10).map((msg) => ({

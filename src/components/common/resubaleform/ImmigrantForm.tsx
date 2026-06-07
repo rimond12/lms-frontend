@@ -1,5 +1,4 @@
 "use client";
-
 import { ReactNode } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
@@ -13,7 +12,7 @@ interface IProps extends formConfig {
   onSubmit: SubmitHandler<any>;
 }
 
-export default function CaddForm({
+export default function ImmigrantForm({
   children,
   onSubmit,
   defaultValues,

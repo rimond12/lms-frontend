@@ -9,6 +9,7 @@
   "nav": {
     "home": "Home",
     "courses": "Courses",
+    "jobs": "Jobs",
     "events": "Events",
     "about": "About Us",
     "contact": "Contact",
@@ -21,7 +22,7 @@
     "resources": "Resources",
     "blog": "Blog",
     "lms": {
-      "title": "LMS",
+      "title": "Immigrant Jobs World",
       "courses": "All Courses",
       "myCourses": "My Learning",
       "browse": "Browse",
@@ -589,6 +590,119 @@
       "certificate": {
         "title": "Certificate ",
         "description": "National and international certificates to recognize your achievements."
+      }
+    }
+  },
+  "jobsPage": {
+    "title": "Discover Jobs",
+    "titleWorldwide": "Worldwide",
+    "subtitle": "Access thousands of aviation & engineering opportunities across multiple countries. Find your perfect career match.",
+    "searchPlaceholder": "Search job title, company or location...",
+    "searchButton": "Search",
+    "stats": {
+      "liveJobs": "Live Jobs",
+      "countries": "Countries",
+      "industries": "Industries"
+    },
+    "countryBar": {
+      "title": "Jobs by Country",
+      "showAll": "Show All Countries",
+      "allCountries": "All Countries",
+      "allJobs": "All Jobs"
+    },
+    "filterBar": {
+      "showing": "Showing",
+      "job": "job",
+      "jobs": "jobs",
+      "available": "available",
+      "allCategories": "All Categories",
+      "allTypes": "All Types",
+      "clearFilters": "Clear filters"
+    },
+    "card": {
+      "country": "Country",
+      "location": "Location",
+      "applyNow": "Apply Now →",
+      "saved": "Job saved!",
+      "removed": "Job removed",
+      "loginRequired": "Please login to save jobs",
+      "error": "Something went wrong"
+    },
+    "types": {
+      "Full time": "Full time",
+      "Part time": "Part time",
+      "Internship": "Internship"
+    },
+    "emptyState": {
+      "noJobs": "No jobs found",
+      "adjustFilters": "Try adjusting your search or filters",
+      "clearAll": "Clear all filters"
+    },
+    "pagination": {
+      "prev": "Prev",
+      "next": "Next"
+    },
+    "errorState": "Failed to load jobs. Please try again.",
+    "details": {
+      "notFound": "Job not found",
+      "backToJobs": "Back to Jobs",
+      "about": "About the Role",
+      "responsibilities": "Responsibilities",
+      "requirements": "Requirements",
+      "deadline": "Application Deadline",
+      "benefits": "Benefits",
+      "media": "Media",
+      "applyNow": "Apply Now",
+      "loginRequired": "Please log in to apply for this job"
+    },
+    "apply": {
+      "successTitle": "Application Submitted!",
+      "successDesc": "Your application has been submitted successfully. We will contact you soon.",
+      "viewJobs": "View Jobs",
+      "myApplications": "My Applications",
+      "missingTitle": "Some information is missing!",
+      "missingDesc": "Please fill in the following information:",
+      "close": "Close",
+      "edit": "Edit",
+      "alreadyApplied": "You have already applied for this job!",
+      "applyError": "Something went wrong. Please try again.",
+      "autofillNotice": "Information is auto-filled from your profile.",
+      "missingProfileInfo": "Some profile information is missing — ",
+      "updateProfile": "Update Profile",
+      "questionnaire": "Questionnaire",
+      "reviewSubmit": "Review & Submit",
+      "cancel": "Cancel",
+      "previous": "Previous",
+      "back": "Back",
+      "continue": "Continue",
+      "submit": "Submit",
+      "experience": "Experience",
+      "academic": "Academic Qualification",
+      "whyHire": "Why should we hire you?",
+      "experiencePlaceholder": "e.g. 2 years in aviation / customer service",
+      "academicPlaceholder": "e.g. BSc in Hospitality Management",
+      "whyHirePlaceholder": "Tell us your strongest points...",
+      "hardSkills": "Hard Skills",
+      "softSkills": "Soft Skills",
+      "certifications": "Certifications",
+      "tagPlaceholder": "e.g. AutoCAD, MS Office (Press Enter)",
+      "tagPlaceholderSoft": "e.g. Leadership, Communication (Press Enter)",
+      "tagPlaceholderCert": "e.g. First Aid, Safety Training (Press Enter)",
+      "profileInfo": "Profile Information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone number",
+      "address": "Address",
+      "viewCv": "View CV / Resume",
+      "notFilled": "Not filled",
+      "editProfile": "Edit Profile",
+      "qualification": "Qualification",
+      "whyHireMe": "Why Hire Me",
+      "skills": "Skills",
+      "questions": {
+        "relocate": "Are you willing to relocate for this position?",
+        "start30": "Are you available to start within 30 days?",
+        "fixedTerm": "Are you interested in fixed-term positions at CX Airlines?"
       }
     }
   }

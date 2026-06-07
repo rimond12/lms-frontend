@@ -71,7 +71,7 @@ const ClientsAndPartners = () => {
     },
     {
       id: 13,
-      title: "CADD CORE Creative Community",
+      title: "Immigrant Jobs World Creative Community",
       photoUrl:
         "https://res.cloudinary.com/dbkwiwoll/image/upload/v1744100988/craetive-community.bak_xl8ipm.png",
     },

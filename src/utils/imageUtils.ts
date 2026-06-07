@@ -4,8 +4,8 @@ const getServerBaseUrl = (): string => {
   let url =
     process.env.NEXT_PUBLIC_FILE_URL ||
     (process.env.NODE_ENV === "production"
-      ? "https://api.caddcore.cloud"
-      : "https://api.caddcore.cloud");
+      ? "https://api.immigrantjobsworld.com"
+      : "https://api.immigrantjobsworld.com");
 
   // Ensure protocol is present
   if (!url.startsWith("http")) {

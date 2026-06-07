@@ -8,8 +8,8 @@ import Link from "next/link";
 import { ArrowLeft, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
-import CaddForm from "@/components/common/resubaleform/CaddForm";
-import CaddInput from "@/components/common/resubaleform/CaddInput";
+import ImmigrantForm from "@/components/common/resubaleform/ImmigrantForm";
+import ImmigrantInput from "@/components/common/resubaleform/ImmigrantInput";
 import LoadingSpinner from "@/components/common/LoadingSpinner/LoadingSpinner";
 import { useForgotPassword } from "@/app/[locale]/@auth/auth.hook";
 
@@ -111,9 +111,9 @@ export function ForgotPassword() {
             </p>
           </div>
 
-          <CaddForm onSubmit={onSubmit}>
+          <ImmigrantForm onSubmit={onSubmit}>
             <div className="mb-6">
-              <CaddInput
+              <ImmigrantInput
                 label="Email Address"
                 name="email"
                 placeholder="Enter your email address"
@@ -141,7 +141,7 @@ export function ForgotPassword() {
                 </Link>
               </p>
             </div>
-          </CaddForm>
+          </ImmigrantForm>
         </div>
       </div>
     </section>

@@ -71,7 +71,7 @@ export default function SuccessStoriesFullPage() {
     if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
       return imagePath;
     }
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "https://api.caddcore.cloud";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "https://api.immigrantjobsworld.com";
     return `${apiBaseUrl}${imagePath}`;
   };
 
@@ -93,7 +93,7 @@ export default function SuccessStoriesFullPage() {
 
     setIsUploading(true);
     try {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const responseUpload = await fetch(`${apiBaseUrl}/success-stories/upload-image`, {
         method: "POST",
         body: formDataObj,

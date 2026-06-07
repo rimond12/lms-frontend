@@ -14,8 +14,8 @@ import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 
 import { useUserRegistration } from "@/app/[locale]/@auth/auth.hook";
-import CaddForm from "@/components/common/resubaleform/CaddForm";
-import CaddInput from "@/components/common/resubaleform/CaddInput";
+import ImmigrantForm from "@/components/common/resubaleform/ImmigrantForm";
+import ImmigrantInput from "@/components/common/resubaleform/ImmigrantInput";
 import { Button } from "@/components/ui/Button";
 import LoadingSpinner from "@/components/common/LoadingSpinner/LoadingSpinner";
 
@@ -124,14 +124,14 @@ function SignUpContent() {
             </p>
           </div>
 
-          <CaddForm onSubmit={handleSubmit(onSubmit)}>
+          <ImmigrantForm onSubmit={handleSubmit(onSubmit)}>
             <FormProvider {...methods}>
               <div className="space-y-4">
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-gray-700 ml-1">
                     Full Name
                   </label>
-                  <CaddInput
+                  <ImmigrantInput
                     name="name"
                     placeholder="e.g. Ariyan Rakib"
                     className="bg-white/50 h-11"
@@ -142,7 +142,7 @@ function SignUpContent() {
                   <label className="text-sm font-medium text-gray-700 ml-1">
                     Email Address
                   </label>
-                  <CaddInput
+                  <ImmigrantInput
                     name="email"
                     placeholder="name@example.com"
                     type="email"
@@ -154,7 +154,7 @@ function SignUpContent() {
                   <label className="text-sm font-medium text-gray-700 ml-1">
                     Mobile Number
                   </label>
-                  <CaddInput
+                  <ImmigrantInput
                     name="mobileNumber"
                     placeholder="+880 1234-567890"
                     className="bg-white/50 h-11"
@@ -165,7 +165,7 @@ function SignUpContent() {
                   <label className="text-sm font-medium text-gray-700 ml-1">
                     Password
                   </label>
-                  <CaddInput
+                  <ImmigrantInput
                     name="password"
                     placeholder="Create a strong password"
                     type="password"
@@ -194,7 +194,7 @@ function SignUpContent() {
                 </div>
               </div>
             </FormProvider>
-          </CaddForm>
+          </ImmigrantForm>
 
           <div className="mt-8 pt-6 border-t border-gray-100 text-center">
             <p className="text-gray-600 text-sm">

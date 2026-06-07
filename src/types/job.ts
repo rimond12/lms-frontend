@@ -15,6 +15,8 @@ export interface IJob {
   viewCount: number;
   duration?: string;
   salary?: string;
+  dutyTime?: string;
+  dutyTimeBn?: string;
   date: string;
   category: string;
   location?: string;
@@ -26,6 +28,17 @@ export interface IJob {
   qualifications?: string[];
   responsibilities?: string[];
   benefits?: string[];
+  
+  titleBn?: string;
+  locationBn?: string;
+  salaryBn?: string;
+  durationBn?: string;
+  experienceBn?: string;
+  aboutBn?: string;
+  qualificationsBn?: string[];
+  responsibilitiesBn?: string[];
+  benefitsBn?: string[];
+
   createdAt?: string;
   updatedAt?: string;
 }
@@ -108,6 +121,7 @@ export interface IJobFilters {
   type?: TJobType;
   status?: TJobStatus;
   category?: string;
+  country?: string;
 }
 
 export interface IApplicationFilters {

@@ -43,7 +43,7 @@ export const CertificateStep: React.FC<CertificateStepProps> = ({
       formData.append("file", file);
 
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+        process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
 
       console.log("📤 Uploading certificate image...");
       console.log("🔗 Upload URL:", `${baseUrl}/programs/upload-image`);

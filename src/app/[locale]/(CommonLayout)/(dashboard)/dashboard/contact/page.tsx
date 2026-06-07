@@ -127,7 +127,7 @@ export default function ContactManagement() {
       formDataUpload.append("file", file);
 
       const BACKEND_API =
-        process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+        process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
 
       const res = await fetch(`${BACKEND_API}/courses/upload-image`, {
         method: "POST",
@@ -587,7 +587,7 @@ export default function ContactManagement() {
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, content: e.target.value }))
                 }
-                placeholder="e.g., cadcorelms@gmail.com"
+                placeholder="e.g., info@immigrantjobsworld.com"
                 rows={3}
                 required
               />

@@ -2,10 +2,10 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 export const axiosInstance = axios.create({
-  // baseURL:  "https://api.caddcore.cloud/api",
-  // baseURL:  "https://api.caddcore.cloud/api",
+  // baseURL:  "https://api.immigrantjobsworld.com/api",
+  // baseURL:  "https://api.immigrantjobsworld.com/api",
 
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api",
 });
 
 axiosInstance.interceptors.request.use(

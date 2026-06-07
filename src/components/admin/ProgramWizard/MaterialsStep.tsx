@@ -111,7 +111,7 @@ export const MaterialsStep: React.FC<MaterialsStepProps> = ({
 
       // Use correct backend URL
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+        process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const response = await fetch(`${baseUrl}/programs/upload-image`, {
         method: "POST",
         body: formData,

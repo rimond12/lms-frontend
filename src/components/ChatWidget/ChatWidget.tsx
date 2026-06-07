@@ -2,7 +2,7 @@
 
 /**
  * ChatWidget Component
- * Modern floating AI chatbot widget for CADD Core LMS
+ * Modern floating AI chatbot widget for Immigrant Jobs World
  * Features: Glassmorphism design, typing animation, suggestions
  */
 
@@ -114,7 +114,7 @@ const ChatWidget: React.FC = () => {
     const fetchSuggestions = async () => {
       try {
         const baseUrl =
-          process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+          process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
         const response = await fetch(`${baseUrl}/chatbot/suggestions`);
         const data = await response.json();
         if (data.success && data.suggestions) {
@@ -171,7 +171,7 @@ const ChatWidget: React.FC = () => {
               <span className="online-indicator"></span>
             </div>
             <div className="chat-header-text">
-              <h3>ক্যাড বট</h3>
+              <h3>ইমিগ্র্যান্ট বট</h3>
               <p>AI সহায়ক • অনলাইন</p>
             </div>
           </div>
@@ -205,7 +205,7 @@ const ChatWidget: React.FC = () => {
               </div>
               <h4>স্বাগতম! 👋</h4>
               <p>
-                আমি ক্যাড বট, CADD Core এর AI সহায়ক। কোর্স, ব্যাচ, ভর্তি, বা
+                আমি ইমিগ্র্যান্ট বট, Immigrant Jobs World এর AI সহায়ক। কোর্স, ব্যাচ, ভর্তি, বা
                 যেকোনো বিষয়ে আমাকে জিজ্ঞাসা করুন!
               </p>
 

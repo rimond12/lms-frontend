@@ -6,8 +6,10 @@ import { FormData } from "./types";
 import { QUESTIONS } from "./constants";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
 import EditProfileForm from "@/components/forms/EditProfileForm";
+import { useTranslations } from "next-intl";
 
 function ReviewRow({ label, value }: { label: string; value: string }) {
+  const t = useTranslations("jobsPage");
   return (
     <div className="flex flex-col gap-0.5">
       <span className="text-[10px] text-gray-400 dark:text-gray-500">
@@ -18,7 +20,7 @@ function ReviewRow({ label, value }: { label: string; value: string }) {
           value ? "text-gray-700 dark:text-gray-200" : "text-red-400 italic"
         }`}
       >
-        {value || "— Not filled"}
+        {value || `— ${t("apply.notFilled")}`}
       </span>
     </div>
   );
@@ -52,16 +54,17 @@ export function StepReviewSubmit({
 }) {
   const { user, refetch } = useUser();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const t = useTranslations("jobsPage");
 
   // Missing required fields check
   const missingFields: string[] = [];
-  if (!data.name) missingFields.push("Full Name");
-  if (!data.email) missingFields.push("Email");
-  if (!data.phone) missingFields.push("Phone number");
-  if (!data.address) missingFields.push("Address");
-  if (!data.cvUrl) missingFields.push("CV / Resume");
+  if (!data.name) missingFields.push(t("apply.fullName"));
+  if (!data.email) missingFields.push(t("apply.email"));
+  if (!data.phone) missingFields.push(t("apply.phone"));
+  if (!data.address) missingFields.push(t("apply.address"));
+  if (!data.cvUrl) missingFields.push(t("apply.viewCv"));
   if (!data.academicQualifications)
-    missingFields.push("Academic Qualification");
+    missingFields.push(t("apply.academic"));
 
   // After profile update — re-fill form from updated user
   const handleEditSuccess = () => {
@@ -82,10 +85,17 @@ export function StepReviewSubmit({
     setIsEditModalOpen(false);
   };
 
+  const getQuestionText = (index: number, defaultText: string) => {
+    if (index === 0) return t.has("apply.questions.fixedTerm") ? t("apply.questions.fixedTerm") : defaultText;
+    if (index === 1) return t.has("apply.questions.relocate") ? t("apply.questions.relocate") : defaultText;
+    if (index === 2) return t.has("apply.questions.start30") ? t("apply.questions.start30") : defaultText;
+    return defaultText;
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <h2 className="text-lg font-bold text-gray-800 dark:text-white text-center mb-2">
-        Review and Submit
+        {t("apply.reviewSubmit")}
       </h2>
 
       {/* ── Missing fields warning ── */}
@@ -97,7 +107,7 @@ export function StepReviewSubmit({
               className="text-red-500 flex-shrink-0 mt-0.5"
             />
             <p className="text-sm font-bold text-red-700 dark:text-red-400">
-              Some information is missing!
+              {t("apply.missingTitle")}
             </p>
           </div>
           <ul className="text-xs text-red-600 dark:text-red-400 space-y-1 pl-5 mb-3">
@@ -111,18 +121,18 @@ export function StepReviewSubmit({
             onClick={() => setIsEditModalOpen(true)}
             className="flex items-center gap-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors"
           >
-            <User size={13} /> Update Profile
+            <User size={13} /> {t("apply.updateProfile")}
           </button>
         </div>
       )}
 
       {/* ── Profile Information ── */}
-      <ReviewSection title="Profile Information">
+      <ReviewSection title={t("apply.profileInfo")}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-          <ReviewRow label="Full Name" value={data.name} />
-          <ReviewRow label="Email" value={data.email} />
-          <ReviewRow label="Phone" value={data.phone} />
-          <ReviewRow label="Address" value={data.address} />
+          <ReviewRow label={t("apply.fullName")} value={data.name} />
+          <ReviewRow label={t("apply.email")} value={data.email} />
+          <ReviewRow label={t("apply.phone")} value={data.phone} />
+          <ReviewRow label={t("apply.address")} value={data.address} />
         </div>
 
         {data.cvUrl ? (
@@ -132,7 +142,7 @@ export function StepReviewSubmit({
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-blue-700 dark:text-blue-400 hover:underline font-medium mt-1"
           >
-            <FileText size={13} /> View CV / Resume <ExternalLink size={11} />
+            <FileText size={13} /> {t("apply.viewCv")} <ExternalLink size={11} />
           </a>
         ) : (
           <div className="flex flex-col gap-0.5 mt-1">
@@ -140,7 +150,7 @@ export function StepReviewSubmit({
               CV / Resume
             </span>
             <span className="text-xs font-medium text-red-400 italic">
-              — Not filled
+              — {t("apply.notFilled")}
             </span>
           </div>
         )}
@@ -150,22 +160,22 @@ export function StepReviewSubmit({
           onClick={() => setIsEditModalOpen(true)}
           className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-400 hover:underline mt-1 w-fit"
         >
-          <User size={12} /> Edit Profile
+          <User size={12} /> {t("apply.editProfile")}
         </button>
       </ReviewSection>
 
       {/* ── Qualification ── */}
-      <ReviewSection title="Qualification">
+      <ReviewSection title={t("apply.qualification")}>
         <ReviewRow
-          label="Academic Qualification"
+          label={t("apply.academic")}
           value={data.academicQualifications}
         />
-        <ReviewRow label="Experience" value={data.exprience} />
+        <ReviewRow label={t("apply.experience")} value={data.exprience} />
       </ReviewSection>
 
       {/* ── Why Hire ── */}
       {data.whyHireYou && (
-        <ReviewSection title="Why Hire Me">
+        <ReviewSection title={t("apply.whyHireMe")}>
           <p className="text-xs text-gray-700 dark:text-gray-200 leading-relaxed">
             {data.whyHireYou}
           </p>
@@ -174,11 +184,11 @@ export function StepReviewSubmit({
 
       {/* ── Skills ── */}
       {(data.hardSkills.length > 0 || data.softSkills.length > 0) && (
-        <ReviewSection title="Skills">
+        <ReviewSection title={t("apply.skills")}>
           {data.hardSkills.length > 0 && (
             <div>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-1">
-                Hard Skills
+                {t("apply.hardSkills")}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {data.hardSkills.map((s, i) => (
@@ -195,7 +205,7 @@ export function StepReviewSubmit({
           {data.softSkills.length > 0 && (
             <div>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-1">
-                Soft Skills
+                {t("apply.softSkills")}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {data.softSkills.map((s, i) => (
@@ -214,7 +224,7 @@ export function StepReviewSubmit({
 
       {/* ── Certifications ── */}
       {data.certifications.length > 0 && (
-        <ReviewSection title="Certifications">
+        <ReviewSection title={t("apply.certifications")}>
           <div className="flex flex-wrap gap-1.5">
             {data.certifications.map((s, i) => (
               <span
@@ -229,11 +239,11 @@ export function StepReviewSubmit({
       )}
 
       {/* ── Questionnaire answers ── */}
-      <ReviewSection title="Questionnaire">
+      <ReviewSection title={t("apply.questionnaire")}>
         {QUESTIONS.map((q, i) => (
           <div key={i} className="flex flex-col gap-0.5">
             <span className="text-[11px] text-gray-500 dark:text-gray-400">
-              {q}
+              {getQuestionText(i, q)}
             </span>
             <span className="text-xs font-medium text-gray-700 dark:text-gray-200">
               {data.answers[`q${i}`] || "—"}

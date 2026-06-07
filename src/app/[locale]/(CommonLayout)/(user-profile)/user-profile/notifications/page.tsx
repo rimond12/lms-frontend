@@ -412,8 +412,8 @@ function JobNotificationsTab() {
   );
 }
 
-// ─── LMS Notices Tab ──────────────────────────────────────────────
-function LMSNoticesTab() {
+// ─── Immigrant Jobs World Notices Tab ────────────────────────────────────────
+function ImmigrantJobsWorldNoticesTab() {
   const [page, setPage] = useState(1);
   const [selectedNotice, setSelectedNotice] = useState<INotice | null>(null);
   const limit = 10;
@@ -636,8 +636,9 @@ export default function NotificationsPage() {
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
             }`}
           >
-            <Bell size={15} />
-            LMS Notices
+            <Bell size={15} className="flex-shrink-0" />
+            <span className="hidden sm:inline">Immigrant Jobs World Notices</span>
+            <span className="inline sm:hidden">Notices</span>
           </button>
         </div>
 
@@ -650,7 +651,7 @@ export default function NotificationsPage() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15 }}
           >
-            {activeTab === "jobs" ? <JobNotificationsTab /> : <LMSNoticesTab />}
+            {activeTab === "jobs" ? <JobNotificationsTab /> : <ImmigrantJobsWorldNoticesTab />}
           </motion.div>
         </AnimatePresence>
       </div>

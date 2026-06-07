@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { FormData } from "./types";
 import { QUESTIONS } from "./constants";
+import { useTranslations } from "next-intl";
 
 // ─── Tag Input ──────────────────────────────────────────────────
 function TagInput({
@@ -78,6 +79,8 @@ export function StepQuestionnaire({
   data: FormData;
   setData: React.Dispatch<React.SetStateAction<FormData>>;
 }) {
+  const t = useTranslations("jobsPage");
+
   const addTag = (
     field: "hardSkills" | "softSkills" | "certifications",
     value: string,
@@ -89,10 +92,17 @@ export function StepQuestionnaire({
   ) =>
     setData((p) => ({ ...p, [field]: p[field].filter((_, i) => i !== idx) }));
 
+  const getQuestionText = (index: number, defaultText: string) => {
+    if (index === 0) return t.has("apply.questions.fixedTerm") ? t("apply.questions.fixedTerm") : defaultText;
+    if (index === 1) return t.has("apply.questions.relocate") ? t("apply.questions.relocate") : defaultText;
+    if (index === 2) return t.has("apply.questions.start30") ? t("apply.questions.start30") : defaultText;
+    return defaultText;
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <h2 className="text-lg font-bold text-gray-800 dark:text-white text-center">
-        Questionnaire
+        {t("apply.questionnaire")}
       </h2>
 
       {/* ── Yes/No Questions (existing) ── */}
@@ -103,7 +113,7 @@ export function StepQuestionnaire({
             className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl p-4"
           >
             <p className="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-3">
-              {q}
+              {getQuestionText(i, q)}
             </p>
             <div className="flex gap-4">
               {["Yes", "No"].map((opt) => (
@@ -137,14 +147,14 @@ export function StepQuestionnaire({
       {/* ── Experience ── */}
       <div>
         <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-          Experience
+          {t("apply.experience")}
         </label>
         <input
           value={data.exprience}
           onChange={(e) =>
             setData((p) => ({ ...p, exprience: e.target.value }))
           }
-          placeholder="যেমন: 2 years in aviation / customer service"
+          placeholder={t("apply.experiencePlaceholder")}
           className="w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-xs text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 focus:outline-none focus:border-blue-700 dark:focus:border-blue-500 transition-colors"
         />
       </div>
@@ -152,7 +162,7 @@ export function StepQuestionnaire({
       {/* ── Academic Qualification ── */}
       <div>
         <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-          Academic Qualification
+          {t("apply.academic")}
         </label>
         <input
           value={data.academicQualifications}
@@ -162,7 +172,7 @@ export function StepQuestionnaire({
               academicQualifications: e.target.value,
             }))
           }
-          placeholder="যেমন: BSc in Hospitality Management"
+          placeholder={t("apply.academicPlaceholder")}
           className="w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-xs text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 focus:outline-none focus:border-blue-700 dark:focus:border-blue-500 transition-colors"
         />
       </div>
@@ -170,7 +180,7 @@ export function StepQuestionnaire({
       {/* ── Why Hire You ── */}
       <div>
         <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-          Why should we hire you?
+          {t("apply.whyHire")}
         </label>
         <textarea
           value={data.whyHireYou}
@@ -178,37 +188,37 @@ export function StepQuestionnaire({
             setData((p) => ({ ...p, whyHireYou: e.target.value }))
           }
           rows={4}
-          placeholder="আপনার strongest points বলুন..."
+          placeholder={t("apply.whyHirePlaceholder")}
           className="w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-xs text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 focus:outline-none focus:border-blue-700 dark:focus:border-blue-500 resize-none transition-colors"
         />
       </div>
 
       {/* ── Hard Skills ── */}
       <TagInput
-        label="Hard Skills"
+        label={t("apply.hardSkills")}
         tags={data.hardSkills}
         color="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-        placeholder="যেমন: AutoCAD, MS Office (Enter চাপুন)"
+        placeholder={t("apply.tagPlaceholder")}
         onAdd={(v) => addTag("hardSkills", v)}
         onRemove={(i) => removeTag("hardSkills", i)}
       />
 
       {/* ── Soft Skills ── */}
       <TagInput
-        label="Soft Skills"
+        label={t("apply.softSkills")}
         tags={data.softSkills}
         color="bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
-        placeholder="যেমন: Leadership, Communication (Enter চাপুন)"
+        placeholder={t("apply.tagPlaceholderSoft")}
         onAdd={(v) => addTag("softSkills", v)}
         onRemove={(i) => removeTag("softSkills", i)}
       />
 
       {/* ── Certifications ── */}
       <TagInput
-        label="Certifications"
+        label={t("apply.certifications")}
         tags={data.certifications}
         color="bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-        placeholder="যেমন: First Aid, Safety Training (Enter চাপুন)"
+        placeholder={t("apply.tagPlaceholderCert")}
         onAdd={(v) => addTag("certifications", v)}
         onRemove={(i) => removeTag("certifications", i)}
       />

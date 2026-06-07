@@ -65,7 +65,7 @@ export const LearningSoftwareStep: React.FC<LearningSoftwareStepProps> = ({
 
       // Use correct backend URL
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+        process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const response = await fetch(
         `${baseUrl}/programs/upload-learning-software-image`,
         {

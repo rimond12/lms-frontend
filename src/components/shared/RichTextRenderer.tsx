@@ -34,7 +34,7 @@ export default function RichTextRenderer({
       (match, attributes, src) => {
         // If the src doesn't start with http/https, prepend the backend URL
         const baseUrl =
-          process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud";
+          process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com";
         const fullUrl = src.startsWith("/")
           ? `${baseUrl}${src}`
           : `${baseUrl}/${src}`;

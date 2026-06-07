@@ -88,7 +88,7 @@ export default function AboutUsPage() {
                         Our Mission
                       </h3>
                     </div>
-                    <p className="text-gray-700 text-sm sm:text-base leading-[1.85] text-left flex-1">
+                    <p className="text-gray-700 text-sm sm:text-base leading-[1.85] text-justify hyphens-auto flex-1">
                       {content.mission}
                     </p>
                   </div>
@@ -102,7 +102,7 @@ export default function AboutUsPage() {
                         Our Vision
                       </h3>
                     </div>
-                    <p className="text-gray-700 text-sm sm:text-base leading-[1.85] text-left flex-1">
+                    <p className="text-gray-700 text-sm sm:text-base leading-[1.85] text-justify hyphens-auto flex-1">
                       {content.vision}
                     </p>
                   </div>

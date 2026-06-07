@@ -85,7 +85,7 @@ function getImageUrl(photoUrl?: string): string {
   if (!photoUrl) return "/images/course-thumbnail.jpg";
   if (photoUrl.startsWith("http")) return photoUrl;
   const baseUrl =
-    process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud";
+    process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com";
   // Ensure we have a proper path separator
   const cleanPhotoUrl = photoUrl.startsWith("/") ? photoUrl : `/${photoUrl}`;
   return `${baseUrl}${cleanPhotoUrl}`;

@@ -28,7 +28,7 @@ export const ChangelogModal = ({
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-6 bg-red-600 rounded-full"></span>
             <DialogTitle className="text-xl font-bold text-white">
-              What's New in CADD CORE
+              What's New in Immigrant Jobs World
             </DialogTitle>
           </div>
           <DialogDescription className="text-gray-400 text-sm mt-1">

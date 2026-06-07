@@ -247,8 +247,8 @@ export const useImageUpload = (
         const apiBaseUrl =
           typeof window !== "undefined"
             ? process.env.NEXT_PUBLIC_API_URL ||
-              "https://api.caddcore.cloud/api"
-            : "https://api.caddcore.cloud/api";
+              "https://api.immigrantjobsworld.com/api"
+            : "https://api.immigrantjobsworld.com/api";
 
         // Construct full URL - remove /api prefix from endpoint if it exists since apiBaseUrl already includes it
         const cleanEndpoint = endpoint.startsWith("/api")

@@ -20,7 +20,7 @@ export interface VideoPlayerProps {
   onTimeUpdate?: (time: number) => void;
   autoPlay?: boolean;
   onViewed?: () => void;
-  // Navigation props for LMS-style player
+  // Navigation props for Immigrant Jobs World-style player
   onPreviousLesson?: () => void;
   onNextLesson?: () => void;
   hasPreviousLesson?: boolean;

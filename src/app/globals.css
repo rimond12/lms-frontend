@@ -220,6 +220,16 @@
   }
 }
 
+@keyframes fetch-progress {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-fetch-progress {
+  animation: fetch-progress 1.2s ease-in-out infinite;
+}
+
 /* News page specific animations */
 @keyframes breaking-pulse {
   0%,

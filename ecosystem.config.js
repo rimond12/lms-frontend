@@ -4,7 +4,7 @@ module.exports = {
     // FRONTEND APPLICATION (Next.js)
     // -------------------------------------------------------------------------
     {
-      name: 'lms-client',
+      name: 'immigrant-jobs-world-client',
       cwd: '.', // Current directory (LMS-CLIENT-CODE)
       script: 'node_modules/next/dist/bin/next',
       args: 'start',

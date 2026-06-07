@@ -28,6 +28,7 @@ import {
   ImageIcon,
   Flag,
 } from "lucide-react";
+import { useLocale } from "next-intl";
 import {
   useGetAllJobsQuery,
   useCreateJobMutation,
@@ -38,6 +39,7 @@ import {
   useUploadJobImageMutation,
 } from "@/app/redux/api/jobsApi/jobsApi";
 import { useGetJobCategoriesQuery } from "@/app/redux/api/jobsApi/JobCategoryApi";
+import { useGetCountriesQuery } from "@/app/redux/api/jobsApi/CountryApi";
 import { getImageUrl } from "@/utils/imageUtils";
 import type {
   IJob,
@@ -162,21 +164,21 @@ const ListField = ({
   label, value, setValue, field, color, form, onAdd, onRemove,
 }: {
   label: string; value: string; setValue: (v: string) => void;
-  field: "qualifications" | "responsibilities" | "benefits"; color: string;
+  field: "qualifications" | "responsibilities" | "benefits" | "qualificationsBn" | "responsibilitiesBn" | "benefitsBn"; color: string;
   form: ICreateJobPayload;
-  onAdd: (field: "qualifications" | "responsibilities" | "benefits", value: string, clear: () => void) => void;
-  onRemove: (field: "qualifications" | "responsibilities" | "benefits", idx: number) => void;
+  onAdd: (field: "qualifications" | "responsibilities" | "benefits" | "qualificationsBn" | "responsibilitiesBn" | "benefitsBn", value: string, clear: () => void) => void;
+  onRemove: (field: "qualifications" | "responsibilities" | "benefits" | "qualificationsBn" | "responsibilitiesBn" | "benefitsBn", idx: number) => void;
 }) => (
   <div className="sm:col-span-2">
     <label className="block text-xs font-bold text-[#1a4da1] mb-1.5 uppercase tracking-wide">{label}</label>
     <div className="flex gap-2 mb-2">
       <input
         value={value} onChange={(e) => setValue(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && onAdd(field, value, () => setValue(""))}
+        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), onAdd(field, value, () => setValue("")))}
         placeholder="লিখুন এবং Enter চাপুন..."
         className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4da1]"
       />
-      <button type="button" onClick={() => onAdd(field, value, () => setValue(""))}
+      <button type="button" onClick={(e) => { e.preventDefault(); onAdd(field, value, () => setValue("")); }}
         className="px-3 py-2 bg-[#1a4da1] text-white rounded-lg text-sm hover:bg-[#133a7a] transition-colors">
         <Plus size={14} />
       </button>
@@ -200,6 +202,18 @@ const JobDetailsModal = ({
 }) => {
   const flag = getCountryFlag(job.country, job.location);
   const displayCountry = getDisplayCountry(job.country, job.location);
+  const locale = useLocale();
+
+  const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayAbout = locale === "bn" ? (job.aboutBn || job.about) : job.about;
+  const displayLocation = locale === "bn" ? (job.locationBn || job.location) : job.location;
+  const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
+  const displayExperience = locale === "bn" ? (job.experienceBn || job.experience) : job.experience;
+  const displayDutyTime = locale === "bn" ? (job.dutyTimeBn || job.dutyTime) : job.dutyTime;
+
+  const displayQualifications = locale === "bn" ? (job.qualificationsBn || job.qualifications) : job.qualifications;
+  const displayResponsibilities = locale === "bn" ? (job.responsibilitiesBn || job.responsibilities) : job.responsibilities;
+  const displayBenefits = locale === "bn" ? (job.benefitsBn || job.benefits) : job.benefits;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/50 backdrop-blur-sm">
@@ -209,7 +223,7 @@ const JobDetailsModal = ({
         <div className="relative h-36 sm:h-44 overflow-hidden rounded-t-2xl shrink-0">
           {job.image ? (
             <>
-              <img src={getImageUrl(job.image)} alt={job.title}
+              <img src={getImageUrl(job.image)} alt={displayTitle}
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
             </>
@@ -219,7 +233,7 @@ const JobDetailsModal = ({
           <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="text-base sm:text-xl font-black text-white truncate leading-tight">{job.title}</h2>
+                <h2 className="text-base sm:text-xl font-black text-white truncate leading-tight">{displayTitle}</h2>
                 <p className="text-blue-200 text-sm mt-0.5">{job.category} · {job.type}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -240,11 +254,12 @@ const JobDetailsModal = ({
         <div className="p-4 sm:p-6 space-y-5">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
-              { icon: <MapPin size={14} />, label: "Location", value: job.location || "—" },
+              { icon: <MapPin size={14} />, label: "Location", value: displayLocation || "—" },
               { icon: <Flag size={14} />, label: "Country", value: `${flag} ${displayCountry}` },
               { icon: <Users size={14} />, label: "Vacancy", value: job.vacancy || "—" },
-              { icon: <Clock size={14} />, label: "Experience", value: job.experience || "—" },
-              { icon: <TrendingUp size={14} />, label: "Salary", value: job.salary || "—" },
+              { icon: <Clock size={14} />, label: "Experience", value: displayExperience || "—" },
+              { icon: <TrendingUp size={14} />, label: "Salary", value: displaySalary || "—" },
+              { icon: <Clock size={14} />, label: "Duty Time", value: displayDutyTime || "—" },
               { icon: <Calendar size={14} />, label: "Deadline", value: job.deadline || "—" },
               { icon: <Eye size={14} />, label: "Views", value: String(job.viewCount ?? 0) },
             ].map((item, i) => (
@@ -255,18 +270,18 @@ const JobDetailsModal = ({
             ))}
           </div>
 
-          {job.about && (
+          {displayAbout && (
             <div>
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">About</p>
-              <p className="text-sm text-gray-700 leading-relaxed">{job.about}</p>
+              <p className="text-sm text-gray-700 leading-relaxed">{displayAbout}</p>
             </div>
           )}
 
-          {job.qualifications?.length ? (
+          {displayQualifications?.length ? (
             <div>
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Qualifications</p>
               <ul className="space-y-1.5">
-                {job.qualifications.map((q, i) => (
+                {displayQualifications.map((q, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
                     <CheckCircle size={14} className="text-green-500 mt-0.5 flex-shrink-0" /> {q}
                   </li>
@@ -275,11 +290,11 @@ const JobDetailsModal = ({
             </div>
           ) : null}
 
-          {job.responsibilities?.length ? (
+          {displayResponsibilities?.length ? (
             <div>
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Responsibilities</p>
               <ul className="space-y-1.5">
-                {job.responsibilities.map((r, i) => (
+                {displayResponsibilities.map((r, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
                     <CheckCircle size={14} className="text-blue-500 mt-0.5 flex-shrink-0" /> {r}
                   </li>
@@ -288,11 +303,11 @@ const JobDetailsModal = ({
             </div>
           ) : null}
 
-          {job.benefits?.length ? (
+          {displayBenefits?.length ? (
             <div>
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Benefits</p>
               <div className="flex flex-wrap gap-2">
-                {job.benefits.map((b, i) => (
+                {displayBenefits.map((b, i) => (
                   <span key={i} className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">{b}</span>
                 ))}
               </div>
@@ -324,9 +339,12 @@ const JobDetailsModal = ({
 const EMPTY_FORM: ICreateJobPayload = {
   title: "", slug: "", type: "Full time", status: "draft",
   category: "", location: "", country: "", image: "",
-  salary: "", duration: "", vacancy: "", experience: "",
+  salary: "", duration: "", dutyTime: "", vacancy: "", experience: "",
   about: "", deadline: "", date: new Date().toISOString().split("T")[0],
   qualifications: [], responsibilities: [], benefits: [],
+  titleBn: "", locationBn: "", salaryBn: "", durationBn: "", dutyTimeBn: "",
+  experienceBn: "", aboutBn: "", qualificationsBn: [],
+  responsibilitiesBn: [], benefitsBn: [],
 };
 
 // ─── Job Form ────────────────────────────────────────────────────────
@@ -340,6 +358,12 @@ const JobForm = ({
   const [qualInput, setQualInput] = useState("");
   const [respInput, setRespInput] = useState("");
   const [benInput, setBenInput] = useState("");
+
+  const [activeTab, setActiveTab] = useState<"en" | "bn">("en");
+  const [qualInputBn, setQualInputBn] = useState("");
+  const [respInputBn, setRespInputBn] = useState("");
+  const [benInputBn, setBenInputBn] = useState("");
+
   const [imagePreview, setImagePreview] = useState<string | null>(
     initial?.image ? getImageUrl(initial.image) : null,
   );
@@ -348,10 +372,10 @@ const JobForm = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: categories = [] } = useGetJobCategoriesQuery({ active: true });
+  const { data: countries = [] } = useGetCountriesQuery();
   const [uploadJobImage] = useUploadJobImageMutation();
 
-  const selectedCountryFlag =
-    COUNTRIES.find((c) => c.name === form.country)?.flag ?? (form.country ? "🏳️" : "🌍");
+  const selectedCountryFlag = getCountryFlag(form.country);
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -360,7 +384,7 @@ const JobForm = ({
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const addItem = (
-    field: "qualifications" | "responsibilities" | "benefits",
+    field: "qualifications" | "responsibilities" | "benefits" | "qualificationsBn" | "responsibilitiesBn" | "benefitsBn",
     value: string, clear: () => void,
   ) => {
     if (!value.trim()) return;
@@ -369,7 +393,7 @@ const JobForm = ({
   };
 
   const removeItem = (
-    field: "qualifications" | "responsibilities" | "benefits", idx: number,
+    field: "qualifications" | "responsibilities" | "benefits" | "qualificationsBn" | "responsibilitiesBn" | "benefitsBn", idx: number,
   ) => setForm((p) => ({ ...p, [field]: p[field]?.filter((_, i) => i !== idx) }));
 
   const handleImageUpload = async (file: File) => {
@@ -519,9 +543,8 @@ const JobForm = ({
             />
           </div>
 
-          {/* ── Basic Fields ─────────────────────────────────────── */}
-          <Field label="Job Title *" name="title" placeholder="Junior CAD Designer" form={form} onChange={handleInput} />
-          <Field label="Slug *" name="slug" placeholder="junior-cad-designer" form={form} onChange={handleInput} />
+          {/* ── Shared Fields ─────────────────────────────────────── */}
+          <Field label="Slug *" name="slug" placeholder="software-engineer" form={form} onChange={handleInput} />
 
           <div>
             <label className="block text-xs font-bold text-[#1a4da1] mb-1.5 uppercase tracking-wide">Job Type *</label>
@@ -556,8 +579,8 @@ const JobForm = ({
               <select name="country" value={form.country || ""} onChange={handle}
                 className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4da1] bg-white">
                 <option value="">— Select Country —</option>
-                {COUNTRIES.map((c) => (
-                  <option key={c.name} value={c.name}>{c.flag} {c.name}</option>
+                {countries.map((c: any) => (
+                  <option key={c.name} value={c.name}>{getCountryFlag(c.name)} {c.name}</option>
                 ))}
               </select>
             </div>
@@ -568,27 +591,82 @@ const JobForm = ({
             )}
           </div>
 
-          <Field label="Location" name="location" placeholder="Dhaka, Bangladesh" form={form} onChange={handleInput} />
-          <Field label="Salary" name="salary" placeholder="৳ 30,000 - 50,000" form={form} onChange={handleInput} />
-          <Field label="Duration" name="duration" placeholder="6 months" form={form} onChange={handleInput} />
           <Field label="Vacancy" name="vacancy" placeholder="3" form={form} onChange={handleInput} />
-          <Field label="Experience" name="experience" placeholder="1-2 years" form={form} onChange={handleInput} />
           <Field label="Date" name="date" type="date" form={form} onChange={handleInput} />
           <Field label="Deadline" name="deadline" type="date" form={form} onChange={handleInput} />
 
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-bold text-[#1a4da1] mb-1.5 uppercase tracking-wide">About the Job</label>
-            <textarea name="about" value={form.about || ""} onChange={handle} rows={3}
-              placeholder="Job সম্পর্কে সংক্ষেপে লিখুন..."
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4da1] resize-none" />
+          {/* ── Tab Selector ─────────────────────────────────────── */}
+          <div className="sm:col-span-2 flex border border-gray-100 my-2 bg-gray-50/50 p-1 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setActiveTab("en")}
+              className={`flex-1 py-2 text-center text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2
+                ${activeTab === "en"
+                  ? "bg-white text-[#1a4da1] shadow-sm border border-gray-100"
+                  : "text-gray-500 hover:text-gray-700"}`}
+            >
+              🇬🇧 English Content (Required)
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("bn")}
+              className={`flex-1 py-2 text-center text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2
+                ${activeTab === "bn"
+                  ? "bg-white text-[#1a4da1] shadow-sm border border-gray-100"
+                  : "text-gray-500 hover:text-gray-700"}`}
+            >
+              🇧🇩 Bengali Content (Optional)
+            </button>
           </div>
 
-          <ListField label="Qualifications" value={qualInput} setValue={setQualInput} field="qualifications"
-            color="bg-green-50 text-green-700" form={form} onAdd={addItem} onRemove={removeItem} />
-          <ListField label="Responsibilities" value={respInput} setValue={setRespInput} field="responsibilities"
-            color="bg-blue-50 text-blue-700" form={form} onAdd={addItem} onRemove={removeItem} />
-          <ListField label="Benefits" value={benInput} setValue={setBenInput} field="benefits"
-            color="bg-purple-50 text-purple-700" form={form} onAdd={addItem} onRemove={removeItem} />
+          {/* ── Tab Content ──────────────────────────────────────── */}
+          {activeTab === "en" ? (
+            <>
+              <Field label="Job Title *" name="title" placeholder="Software Engineer" form={form} onChange={handleInput} />
+              <Field label="Location" name="location" placeholder="Dhaka, Bangladesh" form={form} onChange={handleInput} />
+              <Field label="Salary" name="salary" placeholder="৳ 30,000 - 50,000" form={form} onChange={handleInput} />
+              <Field label="Duration" name="duration" placeholder="6 months" form={form} onChange={handleInput} />
+              <Field label="Duty Time" name="dutyTime" placeholder="8 hours / day" form={form} onChange={handleInput} />
+              <Field label="Experience" name="experience" placeholder="1-2 years" form={form} onChange={handleInput} />
+              
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-[#1a4da1] mb-1.5 uppercase tracking-wide">About the Job</label>
+                <textarea name="about" value={form.about || ""} onChange={handle} rows={3}
+                  placeholder="Describe the job role..."
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4da1] resize-none" />
+              </div>
+
+              <ListField label="Qualifications" value={qualInput} setValue={setQualInput} field="qualifications"
+                color="bg-green-50 text-green-700" form={form} onAdd={addItem} onRemove={removeItem} />
+              <ListField label="Responsibilities" value={respInput} setValue={setRespInput} field="responsibilities"
+                color="bg-blue-50 text-blue-700" form={form} onAdd={addItem} onRemove={removeItem} />
+              <ListField label="Benefits" value={benInput} setValue={setBenInput} field="benefits"
+                color="bg-purple-50 text-purple-700" form={form} onAdd={addItem} onRemove={removeItem} />
+            </>
+          ) : (
+            <>
+              <Field label="Job Title (Bengali)" name="titleBn" placeholder="সফটওয়্যার ইঞ্জিনিয়ার" form={form} onChange={handleInput} />
+              <Field label="Location (Bengali)" name="locationBn" placeholder="ঢাকা, বাংলাদেশ" form={form} onChange={handleInput} />
+              <Field label="Salary (Bengali)" name="salaryBn" placeholder="৳ ৩০,০০০ - ৫০,০০০" form={form} onChange={handleInput} />
+              <Field label="Duration (Bengali)" name="durationBn" placeholder="৬ মাস" form={form} onChange={handleInput} />
+              <Field label="Duty Time (Bengali)" name="dutyTimeBn" placeholder="৮ ঘণ্টা / দিন" form={form} onChange={handleInput} />
+              <Field label="Experience (Bengali)" name="experienceBn" placeholder="১-২ বছর" form={form} onChange={handleInput} />
+              
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-[#1a4da1] mb-1.5 uppercase tracking-wide">About the Job (Bengali)</label>
+                <textarea name="aboutBn" value={form.aboutBn || ""} onChange={handle} rows={3}
+                  placeholder="জব সম্পর্কে বিস্তারিত লিখুন..."
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4da1] resize-none" />
+              </div>
+
+              <ListField label="Qualifications (Bengali)" value={qualInputBn} setValue={setQualInputBn} field="qualificationsBn"
+                color="bg-green-50 text-green-700" form={form} onAdd={addItem} onRemove={removeItem} />
+              <ListField label="Responsibilities (Bengali)" value={respInputBn} setValue={setRespInputBn} field="responsibilitiesBn"
+                color="bg-blue-50 text-blue-700" form={form} onAdd={addItem} onRemove={removeItem} />
+              <ListField label="Benefits (Bengali)" value={benInputBn} setValue={setBenInputBn} field="benefitsBn"
+                color="bg-purple-50 text-purple-700" form={form} onAdd={addItem} onRemove={removeItem} />
+            </>
+          )}
         </div>
 
         <div className="sticky bottom-0 bg-white border-t px-4 sm:px-6 py-4 flex justify-end gap-3 rounded-b-2xl">
@@ -619,8 +697,17 @@ const AdminJobCard = ({
   const color = getCardColor(index);
   const flag = getCountryFlag(job.country, job.location);
   const displayCountry = getDisplayCountry(job.country, job.location);
-  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
-  const description = (job.about ?? "").trim();
+  const locale = useLocale();
+
+  const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayAbout = locale === "bn" ? (job.aboutBn || job.about) : job.about;
+  const displayLocation = locale === "bn" ? (job.locationBn || job.location) : job.location;
+  const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
+  const displayExperience = locale === "bn" ? (job.experienceBn || job.experience) : job.experience;
+  const displayDutyTime = locale === "bn" ? (job.dutyTimeBn || job.dutyTime) : job.dutyTime;
+
+  const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
+  const description = (displayAbout ?? "").trim();
   const cat = categories.find((c) => c.name === job.category);
   const hasImage = !!job.image;
 
@@ -633,7 +720,7 @@ const AdminJobCard = ({
         {/* Background: image or gradient */}
         {hasImage ? (
           <>
-            <img src={getImageUrl(job.image!)} alt={job.title}
+            <img src={getImageUrl(job.image!)} alt={displayTitle}
               className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/5" />
           </>
@@ -682,7 +769,7 @@ const AdminJobCard = ({
         {/* Title & Category */}
         <div>
           <h3 className="font-extrabold text-[14px] text-gray-900 leading-snug line-clamp-2 group-hover:text-blue-700 transition-colors duration-200">
-            {job.title}
+            {displayTitle}
           </h3>
           {job.category && (
             <div className="flex items-center gap-1 mt-1">
@@ -709,7 +796,7 @@ const AdminJobCard = ({
           <div className="flex-1 min-w-0">
             <p className="text-[9px] text-gray-400 font-semibold uppercase tracking-wider leading-none mb-0.5">Location</p>
             <p className="text-[12px] font-extrabold truncate leading-tight" style={{ color: color.from }}>
-              {flag} {job.location ?? displayCountry}
+              {flag} {displayLocation ?? displayCountry}
             </p>
           </div>
           {job.deadline && (
@@ -722,17 +809,20 @@ const AdminJobCard = ({
 
         {/* Meta row */}
         <div className="flex items-center gap-2 flex-wrap text-[10.5px] text-gray-500">
-          {job.salary && (
+          {displaySalary && (
             <span className="font-bold px-2 py-0.5 rounded-full"
               style={{ background: color.from + "18", color: color.from }}>
-              {job.salary}
+              {displaySalary}
             </span>
           )}
           {job.vacancy && (
             <span className="flex items-center gap-0.5"><Users size={10} /> {job.vacancy} vacancy</span>
           )}
-          {job.experience && (
-            <span className="flex items-center gap-0.5"><Clock size={10} /> {job.experience}</span>
+          {displayExperience && (
+            <span className="flex items-center gap-0.5"><Clock size={10} /> {displayExperience}</span>
+          )}
+          {displayDutyTime && (
+            <span className="flex items-center gap-0.5"><Clock size={10} /> {displayDutyTime}</span>
           )}
           {hasImage && (
             <span className="flex items-center gap-0.5 text-[#1a4da1]">
@@ -802,8 +892,10 @@ export default function ManageJobsPage() {
   const filtered = jobs.filter((j) => {
     const matchSearch =
       j.title.toLowerCase().includes(search.toLowerCase()) ||
+      (j.titleBn || "").toLowerCase().includes(search.toLowerCase()) ||
       j.category.toLowerCase().includes(search.toLowerCase()) ||
       (j.location || "").toLowerCase().includes(search.toLowerCase()) ||
+      (j.locationBn || "").toLowerCase().includes(search.toLowerCase()) ||
       (j.country || "").toLowerCase().includes(search.toLowerCase());
     const matchCategory = categoryFilter === "all" || j.category === categoryFilter;
     return matchSearch && matchCategory;

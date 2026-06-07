@@ -725,7 +725,7 @@ export const ModulesStep: React.FC<ModulesStepProps> = ({ data, onUpdate }) => {
       formData.append("file", file);
 
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+        process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const response = await fetch(`${baseUrl}/programs/upload-lesson-doc`, {
         method: "POST",
         body: formData,

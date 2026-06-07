@@ -351,7 +351,7 @@ images: {
 
 ## 📄 License
 
-This component is part of the CAD Core LMS project.
+This component is part of the Immigrant Jobs World project.
 
 ---
 

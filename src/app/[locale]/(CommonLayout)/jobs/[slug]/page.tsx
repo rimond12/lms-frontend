@@ -9,6 +9,7 @@ import { Loader2, AlertCircle } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useGetJobBySlugQuery } from "@/app/redux/api/jobsApi/jobsApi";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
+import { useLocale, useTranslations } from "next-intl";
 
 const FLAG_MAP: Record<string, string> = {
   "usa": "🇺🇸", "united states": "🇺🇸", "america": "🇺🇸",
@@ -39,6 +40,8 @@ export default function JobDetailPage() {
   const router = useRouter();
   const slug = params?.slug as string;
   const { user } = useUser();
+  const locale = useLocale();
+  const t = useTranslations("jobsPage");
 
   const {
     data: job,
@@ -64,11 +67,11 @@ export default function JobDetailPage() {
         <div className="text-center text-gray-400">
           <AlertCircle size={40} className="mx-auto mb-3 opacity-30" />
           <p className="font-semibold text-gray-600 dark:text-gray-300">
-            Job পাওয়া যায়নি
+            {t("details.notFound")}
           </p>
           <Link href="/jobs">
             <button className="mt-4 text-sm text-blue-700 hover:underline">
-              ← Jobs এ ফিরে যান
+              ← {t("details.backToJobs")}
             </button>
           </Link>
         </div>
@@ -76,15 +79,27 @@ export default function JobDetailPage() {
     );
   }
 
-  // ── Helpers ──
-  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+  // ── Localized Helpers ──
+  const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayAbout = locale === "bn" ? (job.aboutBn || job.about) : job.about;
+  const displayLocation = locale === "bn" ? (job.locationBn || job.location) : job.location;
+  const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
+  const displayExperience = locale === "bn" ? (job.experienceBn || job.experience) : job.experience;
+  const displayDuration = locale === "bn" ? (job.durationBn || job.duration) : job.duration;
+  const displayDutyTime = locale === "bn" ? (job.dutyTimeBn || job.dutyTime) : job.dutyTime;
+  
+  const displayQualifications = locale === "bn" ? (job.qualificationsBn || job.qualifications) : job.qualifications;
+  const displayResponsibilities = locale === "bn" ? (job.responsibilitiesBn || job.responsibilities) : job.responsibilities;
+  const displayBenefits = locale === "bn" ? (job.benefitsBn || job.benefits) : job.benefits;
+
+  const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
   const heroBannerUrl = job.image ? getImageUrl(job.image) : "/images/details-banner.png";
   const countryFlag = getCountryFlag(job.country, job.location);
   const displayCountry = job.country || (job.location ? job.location.split(",").pop()?.trim() : null);
 
   const handleApply = () => {
     if (!user) {
-      toast.error("Please log in to apply for this job");
+      toast.error(t("details.loginRequired"));
       router.push("/login");
       return;
     }
@@ -97,7 +112,7 @@ export default function JobDetailPage() {
       <div className="relative max-w-7xl mx-auto rounded-xl w-full h-85 mt-5 overflow-hidden">
         <Image
           src={heroBannerUrl}
-          alt={job.title ?? "Job Banner"}
+          alt={displayTitle ?? "Job Banner"}
           fill
           className="object-cover object-center"
           unoptimized={!!job.image}
@@ -110,7 +125,7 @@ export default function JobDetailPage() {
           <div className="flex items-center gap-3 pt-0 pb-3 -mt-12">
             <div className="w-25 h-25 rounded-full bg-blue-700 dark:bg-blue-600 border-[3px] border-white dark:border-gray-900 shadow-md flex items-center justify-center text-white font-black text-2xl shrink-0 relative z-10 overflow-hidden">
               {job.image ? (
-                <img src={getImageUrl(job.image)} alt={job.title} className="w-full h-full object-cover" />
+                <img src={getImageUrl(job.image)} alt={displayTitle} className="w-full h-full object-cover" />
               ) : (
                 initial
               )}
@@ -139,11 +154,11 @@ export default function JobDetailPage() {
             href="/jobs"
             className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
           >
-            Jobs
+            {t("details.backToJobs")}
           </Link>
           <span>›</span>
           <span className="text-gray-500 dark:text-gray-300">
-            {job.category ?? job.title}
+            {job.category ?? displayTitle}
           </span>
         </div>
 
@@ -151,7 +166,7 @@ export default function JobDetailPage() {
         <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
           <div>
             <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 leading-tight">
-              {job.title}
+              {displayTitle}
             </h1>
             <div className="flex gap-2 flex-wrap">
               {job.status && (
@@ -161,7 +176,7 @@ export default function JobDetailPage() {
               )}
               {job.type && (
                 <span className="text-[10px] font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-full px-2.5 py-0.5">
-                  {job.type}
+                  {t.has(`types.${job.type}`) ? t(`types.${job.type}`) : job.type}
                 </span>
               )}
               {displayCountry && (
@@ -169,14 +184,19 @@ export default function JobDetailPage() {
                   {countryFlag} {displayCountry}
                 </span>
               )}
-              {job.location && (
+              {displayLocation && (
                 <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full px-2.5 py-0.5">
-                  📍 {job.location}
+                  📍 {displayLocation}
                 </span>
               )}
-              {job.salary && (
+              {displaySalary && (
                 <span className="text-[10px] font-semibold text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 rounded-full px-2.5 py-0.5">
-                  💰 {job.salary}
+                  💰 {displaySalary}
+                </span>
+              )}
+              {displayDutyTime && (
+                <span className="text-[10px] font-semibold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-full px-2.5 py-0.5">
+                  ⏰ {displayDutyTime}
                 </span>
               )}
             </div>
@@ -185,32 +205,32 @@ export default function JobDetailPage() {
             onClick={handleApply}
             className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm shrink-0 cursor-pointer"
           >
-            Apply Now
+            {t("details.applyNow")}
           </button>
         </div>
 
         <div className="flex flex-col gap-4">
           {/* About the Role */}
-          {job.about && (
+          {displayAbout && (
             <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-5 transition-colors">
               <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-3">
-                About the Role
+                {t("details.about")}
               </h2>
               <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                {job.about}
+                {displayAbout}
               </p>
             </div>
           )}
 
           {/* Responsibilities */}
-          {Array.isArray(job.responsibilities) &&
-            job.responsibilities.length > 0 && (
+          {Array.isArray(displayResponsibilities) &&
+            displayResponsibilities.length > 0 && (
               <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-5 transition-colors">
                 <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-3">
-                  Responsibilities
+                  {t("details.responsibilities")}
                 </h2>
                 <ul className="list-disc pl-4 flex flex-col gap-1.5">
-                  {(job.responsibilities as string[]).map(
+                  {(displayResponsibilities as string[]).map(
                     (item: string, i: number) => (
                       <li
                         key={i}
@@ -225,14 +245,14 @@ export default function JobDetailPage() {
             )}
 
           {/* Qualifications / Requirements */}
-          {Array.isArray(job.qualifications) &&
-            job.qualifications.length > 0 && (
+          {Array.isArray(displayQualifications) &&
+            displayQualifications.length > 0 && (
               <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-5 transition-colors">
                 <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-3">
-                  Requirements
+                  {t("details.requirements")}
                 </h2>
                 <ul className="list-disc pl-4 flex flex-col gap-1.5">
-                  {(job.qualifications as string[]).map(
+                  {(displayQualifications as string[]).map(
                     (item: string, i: number) => (
                       <li
                         key={i}
@@ -252,7 +272,7 @@ export default function JobDetailPage() {
               <span className="text-2xl">⏳</span>
               <div>
                 <p className="text-xs font-bold text-orange-700 dark:text-orange-400">
-                  Application Deadline
+                  {t("details.deadline")}
                 </p>
                 <p className="text-sm font-semibold text-orange-800 dark:text-orange-300">
                   {job.deadline}
@@ -267,18 +287,18 @@ export default function JobDetailPage() {
               onClick={handleApply}
               className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm shrink-0 cursor-pointer"
             >
-              Apply Now
+              {t("details.applyNow")}
             </button>
           </div>
 
           {/* Benefits */}
-          {Array.isArray(job.benefits) && job.benefits.length > 0 && (
+          {Array.isArray(displayBenefits) && displayBenefits.length > 0 && (
             <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-5 transition-colors">
               <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-4">
-                Benefits
+                {t("details.benefits")}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {(job.benefits as string[]).map((b: string, i: number) => (
+                {(displayBenefits as string[]).map((b: string, i: number) => (
                   <div
                     key={i}
                     className="text-center py-3 bg-gray-50 dark:bg-gray-800 rounded-xl"
@@ -296,7 +316,7 @@ export default function JobDetailPage() {
           {/* Media placeholder */}
           <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-5 transition-colors">
             <h2 className="text-sm font-bold text-gray-800 dark:text-white mb-4">
-              Media
+              {t("details.media")}
             </h2>
             <div className="grid grid-cols-4 gap-3">
               {[

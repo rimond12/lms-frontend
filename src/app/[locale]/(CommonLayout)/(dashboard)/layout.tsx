@@ -211,21 +211,23 @@ const Sidebar = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: isExpanded ? 1 : 0, x: isExpanded ? 0 : -20 }}
           transition={{ delay: 0.1, duration: 0.2 }}
-          className={`flex items-center gap-3 overflow-hidden whitespace-nowrap ${
+          className={`flex items-center gap-3 overflow-hidden whitespace-nowrap flex-1 min-w-0 mr-2 ${
             isExpanded ? "block" : "hidden"
           }`}
         >
           <Link
             href="/"
-            className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors"
+            className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors flex-shrink-0"
           >
             <GraduationCap className="w-5 h-5 text-white" />
           </Link>
-          <div>
-            <h1 className="font-bold text-base text-gray-900">LMS Admin</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="font-bold text-sm text-gray-900 leading-tight whitespace-normal break-words">
+              Immigrant Jobs World Admin
+            </h1>
             <Link
               href="/"
-              className="text-xs text-gray-600 hover:text-gray-900 hover:underline transition-colors"
+              className="text-xs text-gray-600 hover:text-gray-900 hover:underline transition-colors block mt-0.5"
             >
               ← Back to Home
             </Link>
@@ -233,7 +235,7 @@ const Sidebar = () => {
         </motion.div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0"
         >
           <ChevronLeft
             size={18}
@@ -571,20 +573,20 @@ const MobileSidebar = ({
           >
             {/* Mobile Header */}
             <div className="h-16 px-4 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                 <Link
                   href="/"
-                  className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors"
+                  className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors flex-shrink-0"
                 >
                   <GraduationCap className="w-5 h-5 text-white" />
                 </Link>
-                <div>
-                  <h1 className="font-bold text-base text-gray-900">
-                    LMS Admin
+                <div className="flex-1 min-w-0">
+                  <h1 className="font-bold text-sm text-gray-900 leading-tight whitespace-normal break-words">
+                    Immigrant Jobs World Admin
                   </h1>
                   <Link
                     href="/"
-                    className="text-xs text-gray-600 hover:text-gray-900 hover:underline transition-colors"
+                    className="text-xs text-gray-600 hover:text-gray-900 hover:underline transition-colors block mt-0.5"
                   >
                     ← Back to Home
                   </Link>
@@ -592,7 +594,7 @@ const MobileSidebar = ({
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-xl hover:bg-gray-100 transition-colors flex-shrink-0"
               >
                 <X size={22} className="text-gray-700" />
               </button>

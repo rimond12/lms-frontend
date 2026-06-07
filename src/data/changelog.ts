@@ -91,7 +91,7 @@ export const changelogData: ChangelogItem[] = [
     title: "🚀 OFFICIAL LIVE DEPLOYMENT",
     type: "major",
     changes: [
-      "🎉 **Platform Launch**: Successfully deployed CADD CORE LMS to Production Server.",
+      "🎉 **Platform Launch**: Successfully deployed Immigrant Jobs World to Production Server.",
       "👤 **User Profile**: Complete profile management with personal details.",
       "▶️ **Video Player**: Advanced course video player with playback controls.",
       "📝 **Assignments**: Student assignment submission and grading system.",
@@ -107,7 +107,7 @@ export const changelogData: ChangelogItem[] = [
     title: "Infrastructure & Domain Setup",
     type: "patch",
     changes: [
-      "🌐 **Domain Live**: Configured `caddcore.cloud` with SSL/HTTPS.",
+      "🌐 **Domain Live**: Configured `immigrantjobsworld.com` with SSL/HTTPS.",
       "🔄 **Enrollment Flow**: Fixed redirect issues on the Enroll page refresh.",
       "⚙️ **Server Config**: Optimized Nginx and Backend CORS settings.",
     ],
