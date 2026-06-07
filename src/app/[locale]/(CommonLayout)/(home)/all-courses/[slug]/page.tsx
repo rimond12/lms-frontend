@@ -11,7 +11,7 @@ import ExpertSection from "@/components/programs/ExpertSection";
 import CurriculumSection from "@/components/programs/CurriculumSection";
 import ProjectsSection from "@/components/programs/ProjectsSection";
 import CertificatePreviewSection from "@/components/programs/CertificatePreviewSection";
-import OnJobTrainingSection from "@/components/programs/OnJobTrainingSection";
+// import OnJobTrainingSection from "@/components/programs/OnJobTrainingSection";
 import CourseDetailsHeader from "@/components/programs/CourseDetailsHeader";
 import AppImage from "@/components/ui/AppImage";
 import { toast } from "sonner";
@@ -87,10 +87,10 @@ export default function CourseDetailsPage() {
 
   const { data: accessData } = useCheckAccessQuery(
     { courseId: course?._id || "", resourceType: "material" },
-    { skip: !course?._id },
+    { skip: !course?._id || !user },
   );
 
-  const { data: batchesData } = useGetEnrollableBatchesQuery(course?._id || "", { skip: !course?._id });
+  const { data: batchesData } = useGetEnrollableBatchesQuery(course?._id || "", { skip: !course?._id || !user });
   const availableBatches = batchesData?.data || [];
 
   const now = new Date();
@@ -291,14 +291,14 @@ export default function CourseDetailsPage() {
             )}
 
             {/* On Job Training */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            {/* <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
               className="bg-gradient-to-br from-teal-50 to-white rounded-2xl p-6 border border-teal-100/50 shadow-sm overflow-hidden">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2.5 bg-teal-100 text-teal-600 rounded-xl"><Briefcase className="w-5 h-5" /></div>
                 <h2 className="text-lg font-bold text-gray-900">অন-জব ট্রেইনিং</h2>
               </div>
               <OnJobTrainingSection />
-            </motion.div>
+            </motion.div> */}
 
             {/* Certificate */}
             {course.certificatePreview && (
