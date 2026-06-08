@@ -33,29 +33,29 @@
     "headline": "Elevate Your Skills to a Professional Level",
     "sub": "Be skilled, move forward — Join today...",
     "items": {
-      "honest": {
-        "name": "HONEST",
-        "sub": "Communication"
+      "jobs": {
+        "name": "JOBS",
+        "sub": "Browse by Country"
       },
       "verified": {
-        "name": "VERIFIED",
-        "sub": "Employers"
+        "name": "VISA SUPPORT",
+        "sub": "Documentation"
       },
       "organized": {
-        "name": "ORGANIZED",
-        "sub": "Process"
+        "name": "RELOCATION",
+        "sub": "Assistance"
       },
       "training": {
-        "name": "TRAINING",
-        "sub": "Support"
+        "name": "VERIFICATION",
+        "sub": "Employers"
       },
       "language": {
         "name": "LANGUAGE",
         "sub": "Training"
       },
       "preparation": {
-        "name": "PREPARATION",
-        "sub": "Focus"
+        "name": "INTERVIEW",
+        "sub": "Preparation"
       }
     }
   },
