@@ -87,7 +87,7 @@ export default function JobDetailPage() {
   const displayExperience = locale === "bn" ? (job.experienceBn || job.experience) : job.experience;
   const displayDuration = locale === "bn" ? (job.durationBn || job.duration) : job.duration;
   const displayDutyTime = locale === "bn" ? (job.dutyTimeBn || job.dutyTime) : job.dutyTime;
-  
+
   const displayQualifications = locale === "bn" ? (job.qualificationsBn || job.qualifications) : job.qualifications;
   const displayResponsibilities = locale === "bn" ? (job.responsibilitiesBn || job.responsibilities) : job.responsibilities;
   const displayBenefits = locale === "bn" ? (job.benefitsBn || job.benefits) : job.benefits;
@@ -353,16 +353,16 @@ export default function JobDetailPage() {
                 <path d="M2 12l10 5 10-5" />
               </svg>
             </div>
-            <div>
+            {/* <div>
               <div className="text-xs font-bold text-blue-700 dark:text-blue-400 leading-none">
                 Immigrant Jobs World
               </div>
               <div className="text-[9px] text-gray-400 dark:text-gray-500 mt-0.5">
                 powered by aeroselect
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             {["Imprint", "Privacy", "Explore AeroHire"].map((item) => (
               <a
                 key={item}
@@ -372,7 +372,7 @@ export default function JobDetailPage() {
                 {item}
               </a>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

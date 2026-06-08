@@ -28,6 +28,10 @@ import { Input } from '@/components/ui/Input';
 import toast from 'react-hot-toast';
 import ExpertPanelForm from '@/components/events/ExpertPanelForm';
 
+// Predefined default categories (always available)
+const DEFAULT_CATEGORIES = ['CEO', 'Director', 'Team Member'];
+
+
 export default function ExpertManager() {
   const { data: expertsData, isLoading: expertsLoading } = useGetExpertsQuery({ limit: 100 });
   const { data: categoriesData, isLoading: categoriesLoading } = useGetAboutUsCategoriesQuery(true);
@@ -38,7 +42,12 @@ export default function ExpertManager() {
   const [deleteExpert, { isLoading: isDeleting }] = useDeleteExpertPanelMemberMutation();
 
   const experts = expertsData?.data || [];
-  const categories = categoriesData?.data || [];
+  const dbCategories = categoriesData?.data || [];
+  // Merge predefined + DB categories (remove duplicates)
+  const categories: ICategory[] = [
+    ...DEFAULT_CATEGORIES.map((name, i) => ({ _id: name, name, slug: name.toLowerCase().replace(' ', '-'), description: '', order: i, isActive: true, createdAt: '', updatedAt: '' })),
+    ...dbCategories.filter((c) => !DEFAULT_CATEGORIES.includes(c.name)),
+  ];
   const loading = expertsLoading || categoriesLoading;
 
   const [searchTerm, setSearchTerm] = useState('');

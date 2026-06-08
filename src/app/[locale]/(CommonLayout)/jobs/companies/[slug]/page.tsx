@@ -339,16 +339,16 @@ export default function CompanyDetailPage() {
                 <path d="M2 12l10 5 10-5" />
               </svg>
             </div>
-            <div>
+            {/* <div>
               <div className="text-xs font-bold text-[#1e3a5f] leading-none">
                 Immigrant Jobs World
               </div>
               <div className="text-[9px] text-gray-400 mt-0.5">
                 powered by aeroselect
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             {["Imprint", "Privacy", "Explore AeroHire"].map((item) => (
               <a
                 key={item}
@@ -358,7 +358,7 @@ export default function CompanyDetailPage() {
                 {item}
               </a>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

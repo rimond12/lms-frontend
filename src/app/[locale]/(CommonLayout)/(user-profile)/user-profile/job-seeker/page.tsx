@@ -290,11 +290,10 @@ export default function JobSeekerDashboard() {
                   <button
                     key={p}
                     onClick={() => setChartPeriod(p)}
-                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
-                      chartPeriod === p
-                        ? "bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 shadow-sm"
-                        : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                    }`}
+                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${chartPeriod === p
+                      ? "bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 shadow-sm"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                      }`}
                   >
                     {p}
                   </button>
@@ -425,11 +424,10 @@ export default function JobSeekerDashboard() {
                 className="flex items-center gap-2.5 mb-2.5"
               >
                 <div
-                  className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    item.done
-                      ? "bg-blue-700 dark:bg-blue-600"
-                      : "border-2 border-gray-200 dark:border-gray-700"
-                  }`}
+                  className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${item.done
+                    ? "bg-blue-700 dark:bg-blue-600"
+                    : "border-2 border-gray-200 dark:border-gray-700"
+                    }`}
                 >
                   {item.done && (
                     <svg
@@ -544,11 +542,11 @@ export default function JobSeekerDashboard() {
                             <Clock size={11} />
                             {app.createdAt
                               ? new Date(
-                                  app.createdAt as string,
-                                ).toLocaleDateString("en-GB", {
-                                  day: "numeric",
-                                  month: "short",
-                                })
+                                app.createdAt as string,
+                              ).toLocaleDateString("en-GB", {
+                                day: "numeric",
+                                month: "short",
+                              })
                               : "Recently"}
                           </span>
                         </div>
@@ -675,16 +673,16 @@ export default function JobSeekerDashboard() {
                 <path d="M2 12l10 5 10-5" />
               </svg>
             </div>
-            <div>
+            {/* <div>
               <div className="text-xs font-bold text-blue-700 dark:text-blue-400 leading-none">
                 Immigrant Jobs World
               </div>
               <div className="text-[9px] text-gray-400 dark:text-gray-500 mt-0.5">
                 powered by aeroselect
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             {["Imprint", "Privacy", "Explore AeroHire"].map((item) => (
               <a
                 key={item}
@@ -694,7 +692,7 @@ export default function JobSeekerDashboard() {
                 {item}
               </a>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

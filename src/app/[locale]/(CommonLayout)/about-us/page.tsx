@@ -23,9 +23,25 @@ export default function AboutUsPage() {
 
   const content = contentData?.data;
   const expertsByCategory = expertsData?.data || {};
-  const categories = useMemo(() => {
+  const dbCategories = useMemo(() => {
     return [...(categoriesData?.data || [])].sort((a, b) => a.order - b.order);
   }, [categoriesData]);
+
+  // Build final display list: DB categories (ordered) + any extra categories from experts not in DB
+  const displayCategories = useMemo(() => {
+    const dbCategoryNames = new Set(dbCategories.map((c) => c.name));
+    const expertCategoryKeys = Object.keys(expertsByCategory);
+
+    // Extra categories from experts that aren't registered in DB
+    const extraCategories = expertCategoryKeys
+      .filter((key) => !dbCategoryNames.has(key) && expertsByCategory[key]?.length > 0)
+      .map((key) => ({ _id: key, name: key, description: '', order: 9999 }));
+
+    return [
+      ...dbCategories.filter((c) => expertsByCategory[c.name]?.length > 0),
+      ...extraCategories,
+    ];
+  }, [dbCategories, expertsByCategory]);
 
   const loading = contentLoading || expertsLoading || categoriesLoading;
 
@@ -149,7 +165,7 @@ export default function AboutUsPage() {
       )}
 
       {/* Team Members by Category - Sorted by category order */}
-      {categories.map((category, categoryIndex) => {
+      {displayCategories.map((category, categoryIndex) => {
         const categoryExperts = expertsByCategory[category.name];
         
         if (!categoryExperts || categoryExperts.length === 0) {
@@ -187,7 +203,7 @@ export default function AboutUsPage() {
       })}
 
       {/* No team members message */}
-      {categories.length === 0 && Object.keys(expertsByCategory).length === 0 && (
+      {displayCategories.length === 0 && Object.keys(expertsByCategory).length === 0 && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 text-center">
             <p className="text-gray-500 text-lg">

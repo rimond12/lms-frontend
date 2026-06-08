@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { Plus, Minus, Upload, Save, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useCreateExpertMutation,  IExpertInput, IExpert, useUpdateExpertPanelMemberMutation } from '@/app/redux/api/expartPanelApi/expartPanelApi';
+import { useCreateExpertMutation, IExpertInput, IExpert, useUpdateExpertPanelMemberMutation, useGetAboutUsCategoriesQuery } from '@/app/redux/api/expartPanelApi/expartPanelApi';
 import { getImageUrl } from '@/utils/imageUtils';
+
+// Default predefined categories
+const DEFAULT_CATEGORIES = ['CEO', 'Director', 'Team Member'];
 
 interface ExpertPanelFormProps {
   expert?: IExpert;
@@ -16,6 +19,10 @@ interface ExpertPanelFormProps {
 export default function ExpertPanelForm({ expert, onSuccess, onCancel }: ExpertPanelFormProps) {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>(expert?.photoUrl || '');
+  const [customCategory, setCustomCategory] = useState<string>('');
+  const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
+
+  const { data: categoriesData } = useGetAboutUsCategoriesQuery(true);
   
   const [createExpert, { isLoading: isCreating }] = useCreateExpertMutation();
   const [updateExpert, { isLoading: isUpdating }] = useUpdateExpertPanelMemberMutation();
@@ -37,6 +44,10 @@ export default function ExpertPanelForm({ expert, onSuccess, onCancel }: ExpertP
       institution: expert.institution,
       specialization: expert.specialization,
       bio: expert.bio,
+      shortBio: expert.shortBio || '',
+      category: expert.category || 'Team Member',
+      showOnAboutPage: expert.showOnAboutPage !== false,
+      isActive: expert.isActive !== false,
       jobExperiences: expert.jobExperiences || [{ organization: '', position: '', startDate: '', endDate: '', description: '' }],
       academicQualifications: expert.academicQualifications || [{ degree: '', field: '', institution: '', passingYear: new Date().getFullYear(), grade: '' }],
       socialLinks: expert.socialLinks || { linkedin: '', twitter: '', website: '' },
@@ -48,6 +59,10 @@ export default function ExpertPanelForm({ expert, onSuccess, onCancel }: ExpertP
       institution: '',
       specialization: '',
       bio: '',
+      shortBio: '',
+      category: 'Team Member',
+      showOnAboutPage: true,
+      isActive: true,
       jobExperiences: [{ organization: '', position: '', startDate: '', endDate: '', description: '' }],
       academicQualifications: [{ degree: '', field: '', institution: '', passingYear: new Date().getFullYear(), grade: '' }],
       socialLinks: { linkedin: '', twitter: '', website: '' },
@@ -292,6 +307,81 @@ export default function ExpertPanelForm({ expert, onSuccess, onCancel }: ExpertP
           </div>
         </div>
 
+        {/* Category & Visibility */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Category <span className="text-blue-600 font-semibold">*</span>
+            </label>
+            {showCustomInput ? (
+              <div className="flex gap-2">
+                <input
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  placeholder="Type custom category..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (customCategory.trim()) {
+                      // register it via hidden input trick - use setValue approach
+                    }
+                    setShowCustomInput(false);
+                  }}
+                  className="px-3 py-2 bg-gray-200 rounded-lg text-sm"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <select
+                {...register('category')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
+              >
+                {/* Predefined defaults */}
+                <optgroup label="Default Categories">
+                  {DEFAULT_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </optgroup>
+                {/* DB categories (if any extras beyond defaults) */}
+                {categoriesData?.data && categoriesData.data.filter(
+                  (c) => !DEFAULT_CATEGORIES.includes(c.name)
+                ).length > 0 && (
+                  <optgroup label="Custom Categories">
+                    {categoriesData.data
+                      .filter((c) => !DEFAULT_CATEGORIES.includes(c.name))
+                      .map((cat) => (
+                        <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      ))}
+                  </optgroup>
+                )}
+              </select>
+            )}
+            <p className="text-xs text-gray-500 mt-1">এই category অনুযায়ী About Us page এ group করে দেখাবে</p>
+          </div>
+
+          <div className="flex flex-col justify-center gap-3">
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                {...register('showOnAboutPage')}
+                className="w-4 h-4 accent-blue-600"
+              />
+              <span className="text-sm font-medium text-gray-700">About Us page এ দেখাও</span>
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                {...register('isActive')}
+                className="w-4 h-4 accent-green-600"
+              />
+              <span className="text-sm font-medium text-gray-700">Active (সক্রিয়)</span>
+            </label>
+          </div>
+        </div>
+
         {/* Bio */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Bio *</label>
@@ -302,6 +392,17 @@ export default function ExpertPanelForm({ expert, onSuccess, onCancel }: ExpertP
             placeholder="Brief description about the expert"
           />
           {errors.bio && <p className="text-red-800 text-sm mt-1">{errors.bio.message}</p>}
+        </div>
+
+        {/* Short Bio */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Short Bio <span className="text-gray-400 font-normal">(About Us card এ দেখাবে)</span></label>
+          <textarea
+            {...register('shortBio')}
+            rows={2}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="2-3 line এর সংক্ষিপ্ত পরিচয়..."
+          />
         </div>
 
         {/* Job Experiences */}
