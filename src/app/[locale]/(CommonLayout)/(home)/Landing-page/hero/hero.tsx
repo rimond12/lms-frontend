@@ -98,7 +98,7 @@ function JobsDropdownButton({
       : FALLBACK_COUNTRIES;
 
   return (
-    <div ref={ref} className="relative flex flex-col items-center group">
+    <div ref={ref} className="relative flex flex-col items-center group" style={{ zIndex: open ? 9999 : "auto", overflow: "visible" }}>
       {/* Main JOBS button */}
       <button
         id="hero-jobs-btn"
@@ -149,7 +149,7 @@ function JobsDropdownButton({
 
       {/* Dropdown panel */}
       <div
-        className="absolute left-1/2 z-50"
+        className="absolute left-1/2 z-[9999]"
         style={{
           top: "calc(100% + 16px)",
           pointerEvents: open ? "auto" : "none",
@@ -388,9 +388,9 @@ export default function Hero() {
   };
 
   return (
-    <section className="w-full bg-white overflow-hidden">
+    <section className="w-full bg-white">
       {/* ── Banner Section ──────────────────────────────────────── */}
-      <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+      <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2 overflow-hidden">
         <div className="relative max-w-7xl mx-auto overflow-hidden rounded-[2rem] shadow-xl shadow-blue-900/5 bg-white">
           <div className="relative h-[40vh] sm:h-[50vh] md:h-[65vh] lg:h-[75vh]">
             <img
@@ -445,7 +445,7 @@ export default function Hero() {
       </div>
 
       {/* ── Content & Features ──────────────────────────────────── */}
-      <div className="relative max-w-7xl mx-auto px-6 py-12 lg:py-20">
+      <div className="relative max-w-7xl mx-auto px-6 py-12 lg:py-20 pb-48" style={{ overflow: "visible" }}>
         {/* Soft Background Accent */}
         <div className="absolute -top-24 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
         <div className="absolute -bottom-24 left-0 w-96 h-96 bg-orange-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
@@ -461,7 +461,7 @@ export default function Hero() {
         </div>
 
         {/* ── Interactive Feature Buttons Grid ── */}
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 max-w-6xl mx-auto">
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 max-w-6xl mx-auto" style={{ overflow: "visible" }}>
           {translatedItems.map((item, i) => {
             if (item.key === "jobs") {
               return (
