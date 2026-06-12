@@ -21,20 +21,27 @@ function resolveImg(src: string): string {
   return `${FILE_URL}/${src}`;
 }
 
-// ─── Icon map for CMS-driven icons ──────────────────────────────────
-const ICON_MAP: Record<string, React.ReactNode> = {
-  FaHandshake: <FaHandshake />,
-  FaCheckCircle: <FaCheckCircle />,
-  FaTasks: <FaTasks />,
-  FaChalkboardTeacher: <FaChalkboardTeacher />,
-  FaGlobe: <FaGlobe />,
-  FaBullseye: <FaBullseye />,
+// ─── Full icon map — all options the admin can pick ─────────────────
+const ICON_MAP: Record<string, React.ElementType> = {
+  // Legacy / original
+  FaHandshake,
+  FaCheckCircle,
+  FaTasks,
+  FaChalkboardTeacher,
+  FaGlobe,
+  FaBullseye,
+  // New immigrant-jobs themed icons
+  FaBriefcase,
+  FaPassport,
+  FaPlane,
+  FaLanguage,
+  FaUserCheck,
 };
 
-// ─── Static constants ────────────────────────────────────────────────
-const DEFAULT_SLIDES = [{ image: "/images/main-hero.jpeg", altText: "Hero Banner" }];
-const ITEM_KEYS = ["jobs", "verified", "organized", "training", "language", "preparation"] as const;
-const ITEM_ICON_COMPONENTS = [FaBriefcase, FaCheckCircle, FaTasks, FaChalkboardTeacher, FaLanguage, FaUserCheck];
+// ─── Default i18n fallback items (used when CMS courses array is empty) ─
+const DEFAULT_ITEM_KEYS = ["jobs", "verified", "organized", "training", "language", "preparation"] as const;
+const DEFAULT_ICON_KEYS  = ["FaBriefcase", "FaChalkboardTeacher", "FaLanguage", "FaTasks", "FaPassport", "FaHandshake"];
+
 const SLIDE_DURATION = 5000;
 
 // ─── Flag country map (fallback if API unavailable) ──────────────────
@@ -60,10 +67,19 @@ function JobsDropdownButton({
   subLabel: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const locale = useLocale();
   const router = useRouter();
   const { data: countries = [], isLoading } = useGetCountriesQuery();
+
+  // Track mobile breakpoint
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // Close on outside click
   useEffect(() => {
@@ -97,8 +113,50 @@ function JobsDropdownButton({
         }))
       : FALLBACK_COUNTRIES;
 
+  // Dropdown positioning: fixed+centered on mobile, absolute on desktop
+  const dropdownStyle: React.CSSProperties = isMobile
+    ? {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: open
+          ? "translate(-50%, -50%) scale(1)"
+          : "translate(-50%, -50%) scale(0.92)",
+        pointerEvents: open ? "auto" : "none",
+        opacity: open ? 1 : 0,
+        visibility: open ? "visible" : "hidden",
+        transition: "opacity 0.22s ease, transform 0.22s ease, visibility 0.22s",
+        transformOrigin: "center center",
+        zIndex: 99999,
+        width: "calc(100vw - 32px)",
+        maxWidth: "340px",
+      }
+    : {
+        position: "absolute",
+        top: "calc(100% + 16px)",
+        left: "50%",
+        pointerEvents: open ? "auto" : "none",
+        opacity: open ? 1 : 0,
+        visibility: open ? "visible" : "hidden",
+        transition: "opacity 0.22s ease, transform 0.22s ease, visibility 0.22s",
+        transformOrigin: "top center",
+        transform: open
+          ? "translateX(-50%) scaleY(1) translateY(0)"
+          : "translateX(-50%) scaleY(0.92) translateY(-8px)",
+        zIndex: 9999,
+      };
+
   return (
-    <div ref={ref} className="relative flex flex-col items-center group" style={{ zIndex: open ? 9999 : "auto", overflow: "visible" }}>
+    <>
+      {/* Mobile backdrop */}
+      {isMobile && open && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[99998]"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      <div ref={ref} className="relative flex flex-col items-center group" style={{ zIndex: open && !isMobile ? 9999 : "auto", overflow: "visible" }}>
       {/* Main JOBS button */}
       <button
         id="hero-jobs-btn"
@@ -111,13 +169,13 @@ function JobsDropdownButton({
       >
         {/* Icon circle */}
         <div
-          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-2xl border border-gray-50 shadow-md transition-all duration-500 ease-out"
+          className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center text-lg sm:text-xl lg:text-2xl border border-gray-50 shadow-md transition-all duration-500 ease-out"
           style={{
             background: open
               ? "linear-gradient(135deg, #1a4da1, #2B59C3)"
               : "white",
             color: open ? "white" : "#1a4da1",
-            transform: open ? "translateY(-8px)" : "translateY(0)",
+            transform: open ? "translateY(-6px)" : "translateY(0)",
             boxShadow: open
               ? "0 12px 32px rgba(26,77,161,0.3)"
               : "0 2px 8px rgba(26,77,161,0.08)",
@@ -127,54 +185,42 @@ function JobsDropdownButton({
         </div>
 
         {/* Label */}
-        <div className="text-center mt-5">
+        <div className="text-center mt-3 sm:mt-5">
           <p
-            className="text-[11px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1 justify-center transition-colors duration-300"
+            className="text-[10px] sm:text-[11px] lg:text-xs font-bold uppercase tracking-widest flex items-center gap-1 justify-center transition-colors duration-300"
             style={{ color: open ? "#1a4da1" : "#0f172a" }}
           >
             {label}
             <FaChevronDown
               className="transition-transform duration-300"
               style={{
-                fontSize: "8px",
+                fontSize: "7px",
                 transform: open ? "rotate(180deg)" : "rotate(0deg)",
               }}
             />
           </p>
-          <p className="text-[10px] sm:text-[11px] text-gray-400 mt-1 font-medium italic">
+          <p className="text-[9px] sm:text-[10px] lg:text-[11px] text-gray-400 mt-0.5 sm:mt-1 font-medium italic">
             {subLabel}
           </p>
         </div>
       </button>
 
       {/* Dropdown panel */}
-      <div
-        className="absolute left-1/2 z-[9999]"
-        style={{
-          top: "calc(100% + 16px)",
-          pointerEvents: open ? "auto" : "none",
-          opacity: open ? 1 : 0,
-          visibility: open ? "visible" : "hidden",
-          transition: "opacity 0.22s ease, transform 0.22s ease, visibility 0.22s",
-          transformOrigin: "top center",
-          transform: open
-            ? "translateX(-50%) scaleY(1) translateY(0)"
-            : "translateX(-50%) scaleY(0.92) translateY(-8px)",
-        }}
-      >
-        {/* Arrow pointer */}
-        <div
-          className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100 shadow-sm"
-          style={{ zIndex: 1 }}
-        />
+      <div style={dropdownStyle}>
+        {/* Arrow pointer — only on desktop */}
+        {!isMobile && (
+          <div
+            className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100 shadow-sm"
+            style={{ zIndex: 1 }}
+          />
+        )}
 
         <div
           className="relative bg-white border border-gray-100 overflow-hidden"
           style={{
             borderRadius: "20px",
             boxShadow: "0 20px 60px rgba(26,77,161,0.18), 0 4px 16px rgba(0,0,0,0.08)",
-            minWidth: "260px",
-            maxWidth: "320px",
+            width: "100%",
             zIndex: 2,
           }}
         >
@@ -265,6 +311,7 @@ function JobsDropdownButton({
         </div>
       </div>
     </div>
+  </>
   );
 }
 
@@ -277,7 +324,7 @@ function FeatureButton({
 }: {
   label: string;
   subLabel: string;
-  Icon: React.ComponentType<{ className?: string }>;
+  Icon: React.ElementType;
   index: number;
 }) {
   const [hovered, setHovered] = useState(false);
@@ -297,13 +344,13 @@ function FeatureButton({
         id={`hero-feature-btn-${index}`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-2xl border border-gray-50 transition-all duration-500 ease-out focus:outline-none"
+        className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center text-lg sm:text-xl lg:text-2xl border border-gray-50 transition-all duration-500 ease-out focus:outline-none"
         style={{
           background: hovered
             ? `linear-gradient(135deg, ${color.from}, ${color.to})`
             : "white",
           color: hovered ? "white" : color.from,
-          transform: hovered ? "translateY(-8px)" : "translateY(0)",
+          transform: hovered ? "translateY(-6px)" : "translateY(0)",
           boxShadow: hovered
             ? `0 12px 32px ${color.from}44`
             : "0 2px 8px rgba(26,77,161,0.08)",
@@ -313,14 +360,14 @@ function FeatureButton({
         <Icon className="text-[1em]" />
       </button>
 
-      <div className="text-center mt-5">
+      <div className="text-center mt-3 sm:mt-5">
         <p
-          className="text-[11px] sm:text-xs font-bold uppercase tracking-widest transition-colors duration-300"
+          className="text-[10px] sm:text-[11px] lg:text-xs font-bold uppercase tracking-widest transition-colors duration-300"
           style={{ color: hovered ? color.from : "#0f172a" }}
         >
           {label}
         </p>
-        <p className="text-[10px] sm:text-[11px] text-gray-400 mt-1 font-medium italic">
+        <p className="text-[9px] sm:text-[10px] lg:text-[11px] text-gray-400 mt-0.5 sm:mt-1 font-medium italic">
           {subLabel}
         </p>
       </div>
@@ -340,17 +387,30 @@ export default function Hero() {
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data;
 
-  const slides = cms?.hero?.bannerSlides?.length ? cms.hero.bannerSlides : DEFAULT_SLIDES;
+  const slides = cms?.hero?.bannerSlides?.length ? cms.hero.bannerSlides : [{ image: "/images/main-hero.jpeg", altText: "Hero Banner" }];
   const headline = (isBn ? null : cms?.hero?.headline) || tHero("headline");
-  const sub = (isBn ? null : cms?.hero?.sub) || tHero("sub");
+  const sub      = (isBn ? null : cms?.hero?.sub)      || tHero("sub");
 
-  // Build translated items array
-  const translatedItems = ITEM_KEYS.map((key, i) => ({
-    key,
-    name: tHero(`items.${key}.name`),
-    sub: tHero(`items.${key}.sub`),
-    IconComponent: ITEM_ICON_COMPONENTS[i],
-  }));
+  // ── Build feature items: prefer CMS courses array, fall back to i18n ──
+  // CMS stores each item as { name, sub, iconKey, nameBn?, subBn? }.
+  // The first item (index 0) is always the JOBS dropdown button.
+  const cmsItems = cms?.hero?.courses;
+  const featureItems = (cmsItems && cmsItems.length > 0)
+    ? cmsItems.map((c, i) => ({
+        key: i === 0 ? "jobs" : `item-${i}`,
+        // Use Bengali fields when locale is bn; fall back to English if BN not set
+        name: isBn ? (c.nameBn || c.name) : c.name,
+        sub:  isBn ? (c.subBn  || c.sub)  : c.sub,
+        iconKey: c.iconKey || DEFAULT_ICON_KEYS[i] || "FaBriefcase",
+        isJobs: i === 0,
+      }))
+    : DEFAULT_ITEM_KEYS.map((key, i) => ({
+        key,
+        name: tHero(`items.${key}.name`),
+        sub:  tHero(`items.${key}.sub`),
+        iconKey: DEFAULT_ICON_KEYS[i],
+        isJobs: i === 0,
+      }));
 
   const isMulti = slides.length > 1;
 
@@ -445,25 +505,25 @@ export default function Hero() {
       </div>
 
       {/* ── Content & Features ──────────────────────────────────── */}
-      <div className="relative max-w-7xl mx-auto px-6 py-12 lg:py-20 pb-48" style={{ overflow: "visible" }}>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-20 pb-16 sm:pb-24 lg:pb-48" style={{ overflow: "visible" }}>
         {/* Soft Background Accent */}
         <div className="absolute -top-24 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
         <div className="absolute -bottom-24 left-0 w-96 h-96 bg-orange-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
 
         {/* Heading */}
-        <div className="relative z-10 text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-6">
+        <div className="relative z-10 text-center mb-8 sm:mb-12 lg:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-3 sm:mb-5 lg:mb-6">
             {headline}
           </h2>
-          <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-gray-500 text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed px-2">
             {sub}
           </p>
         </div>
 
         {/* ── Interactive Feature Buttons Grid ── */}
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 max-w-6xl mx-auto" style={{ overflow: "visible" }}>
-          {translatedItems.map((item, i) => {
-            if (item.key === "jobs") {
+        <div className="relative z-10 grid grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6 lg:gap-8 max-w-6xl mx-auto" style={{ overflow: "visible" }}>
+          {featureItems.map((item, i) => {
+            if (item.isJobs) {
               return (
                 <JobsDropdownButton
                   key="jobs"
@@ -472,12 +532,13 @@ export default function Hero() {
                 />
               );
             }
+            const IconComp = ICON_MAP[item.iconKey] ?? FaCheckCircle;
             return (
               <FeatureButton
                 key={item.key}
                 label={item.name}
                 subLabel={item.sub}
-                Icon={item.IconComponent}
+                Icon={IconComp}
                 index={i - 1}
               />
             );

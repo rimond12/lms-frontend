@@ -131,6 +131,16 @@ const navigationSections = [
         href: "/dashboard/landing-page-cms",
         icon: PanelTop,
       },
+      {
+        name: "Navbar CMS",
+        href: "/dashboard/navbar-cms",
+        icon: PanelTop,
+      },
+      {
+        name: "Footer CMS",
+        href: "/dashboard/footer-cms",
+        icon: Settings,
+      },
     ],
   },
   {

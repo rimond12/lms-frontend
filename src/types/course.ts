@@ -107,6 +107,7 @@ export interface ICourse {
   title: string;
   slug: string;
   type: 'training' | 'seminar' | 'webinar' | 'workshop' | 'course';
+  courseType?: 'online' | 'offline';
   description: string;
   bannerImage?: string;
   overviewVideoUrl?: string;
@@ -170,6 +171,7 @@ export interface ICreateCourseRequest {
   title: string;
   slug: string;
   type: 'training' | 'seminar' | 'webinar' | 'workshop' | 'course';
+  courseType?: 'online' | 'offline';
   description: string;
   shortDescription?: string;
   bannerImage?: string;
@@ -223,6 +225,7 @@ export interface IModule {
 
 export interface IUpdateCourseRequest {
   title?: string;
+  courseType?: 'online' | 'offline';
   slug?: string;
   description?: string;
   shortDescription?: string;

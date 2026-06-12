@@ -9,6 +9,8 @@ export interface IHeroCourseItem {
   name: string;
   sub: string;
   iconKey: string;
+  nameBn?: string;
+  subBn?: string;
 }
 
 export interface IStatItem {
@@ -140,6 +142,12 @@ export interface ILandingPageCMS {
     whyChooseTitle: string;
     features: IImmigrantJobFeature[];
     featuredTitle: string;
+    liveBadge: string;
+    listingsSubtext: string;
+    whyUsBadge: string;
+    whyUsSubtext: string;
+    browseAllText: string;
+    viewAllJobs: string;
     moreListings: string;
     employmentTitle: string;
     jobTypes: IImmigrantJobType[];

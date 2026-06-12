@@ -38,24 +38,24 @@
         "sub": "Browse by Country"
       },
       "verified": {
-        "name": "VISA SUPPORT",
-        "sub": "Documentation"
+        "name": "TECHNICAL",
+        "sub": "Training"
       },
       "organized": {
-        "name": "RELOCATION",
-        "sub": "Assistance"
-      },
-      "training": {
-        "name": "VERIFICATION",
-        "sub": "Employers"
-      },
-      "language": {
         "name": "LANGUAGE",
         "sub": "Training"
       },
+      "training": {
+        "name": "CV CREATION",
+        "sub": "Resume Builder"
+      },
+      "language": {
+        "name": "VISA",
+        "sub": "Verification"
+      },
       "preparation": {
-        "name": "INTERVIEW",
-        "sub": "Preparation"
+        "name": "CONSULTANCY",
+        "sub": "Expert Advice"
       }
     }
   },
@@ -389,7 +389,10 @@
     "filter": {
       "allTypes": "All Types",
       "allLevels": "All Levels",
-      "clearFilters": "Clear Filters"
+      "clearFilters": "Clear Filters",
+      "allCourseTypes": "All Mediums",
+      "online": "Online Course",
+      "offline": "Offline Course"
     },
     "showing": "Showing",
     "of": "of",
@@ -422,7 +425,7 @@
   },
   "immigrantJobs": {
     "badge": "Immigrant Jobs World",
-    "heading": "Access 10,000+ Aviation Jobs Worldwide",
+    "heading": "Access 10,000+ Jobs Worldwide",
     "subheading": "Match with roles that fit your skills and ambitions. We connect immigrant talent with verified global employers across every major industry sector.",
     "stats": [
       {
@@ -512,6 +515,12 @@
         "badge": "Flexible"
       }
     ],
+    "liveBadge": "Live Listings",
+    "listingsSubtext": "Hand-picked openings matched to your background. New roles added daily.",
+    "whyUsBadge": "Why Us",
+    "whyUsSubtext": "Everything you need to land your next global opportunity — all in one platform.",
+    "browseAllText": "Browse all opportunities",
+    "viewAllJobs": "View All Jobs",
     "moreListings": "+ thousands more listings waiting for you",
     "employmentTitle": "Explore by Employment Type",
     "jobTypes": [

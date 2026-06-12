@@ -65,63 +65,24 @@ const CourseModules: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch 6 online courses
-  const { data, isLoading, isError } = useGetCoursesQuery({ limit: 6 });
-  const onlineCourses = data?.data || [];
+  // Fetch 6 courses dynamically depending on active tab (online or offline)
+  const { data, isLoading, isError } = useGetCoursesQuery({ limit: 6, courseType: activeTab });
+  const courses = data?.data || [];
 
-  // Demo Offline Courses
-  const defaultOfflineCourses: IOfflineCourse[] = [
-    {
-      _id: "off-1",
-      title: "AutoCAD 2D & 3D Drafting (Offline Masterclass)",
-      slug: "autocad-offline-masterclass",
-      shortDescription: "Master industry-standard 2D/3D civil and architectural drafting in-person with Autodesk certified professionals.",
-      bannerImage: "https://images.unsplash.com/photo-1503387762-592dedb8c310?w=600&auto=format&fit=crop&q=60",
-      duration: "2.5 Months (50 Hours)",
-      level: "beginner",
-      tags: ["AutoCAD", "Drafting", "Civil", "Architecture"],
-      price: 12000,
-      discountedPrice: 8000,
-      location: "Purana Paltan Branch, Dhaka",
-      timing: "Fri & Sat (03:00 PM - 05:30 PM)",
-      startDate: "June 12, 2026",
-      tools: ["AutoCAD", "Autodesk"]
-    },
-    {
-      _id: "off-2",
-      title: "Revit BIM Architecture & Modelling (Offline)",
-      slug: "revit-bim-offline",
-      shortDescription: "Build complete 3D BIM models with professional engineering documentation and walkthroughs.",
-      bannerImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=60",
-      duration: "3 Months (60 Hours)",
-      level: "intermediate",
-      tags: ["Revit", "BIM", "Architecture", "Modeling"],
-      price: 15000,
-      discountedPrice: 10000,
-      location: "Purana Paltan Branch, Dhaka",
-      timing: "Mon & Wed (06:00 PM - 08:30 PM)",
-      startDate: "June 15, 2026",
-      tools: ["Revit", "Autodesk"]
-    },
-    {
-      _id: "off-3",
-      title: "ETABS & SAFE Structural Analysis & Design (Offline)",
-      slug: "etabs-structural-design-offline",
-      shortDescription: "Design safe, cost-effective multi-story structures compliant with BNBC/ACI codes.",
-      bannerImage: "https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?w=600&auto=format&fit=crop&q=60",
-      duration: "2 Months (40 Hours)",
-      level: "advanced",
-      tags: ["ETABS", "Structural", "BNBC Code", "Analysis"],
-      price: 18000,
-      discountedPrice: 12000,
-      location: "Purana Paltan Branch, Dhaka",
-      timing: "Fri & Sat (06:30 PM - 09:00 PM)",
-      startDate: "June 20, 2026",
-      tools: ["ETABS", "SAFE"]
+  const formatStartDate = (dateStr: any) => {
+    if (!dateStr) return "";
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return String(dateStr);
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    } catch {
+      return String(dateStr);
     }
-  ];
-
-  const offlineCourses = cms?.offlineCourses && cms.offlineCourses.length > 0 ? cms.offlineCourses : defaultOfflineCourses;
+  };
 
   return (
     <section className="py-16 md:py-24 bg-gray-50 dark:bg-gray-950 overflow-hidden relative">
@@ -199,17 +160,13 @@ const CourseModules: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                ) : isError ? (
-                  <div className="text-center py-16 bg-white dark:bg-gray-850 rounded-3xl border border-gray-150 dark:border-gray-800 p-8 shadow-sm">
-                    <p className="text-red-500 font-semibold">{t("noCourses")}</p>
-                  </div>
-                ) : onlineCourses.length === 0 ? (
+                ) : isError || courses.length === 0 ? (
                   <div className="text-center py-16 bg-white dark:bg-gray-850 rounded-3xl border border-gray-150 dark:border-gray-800 p-8 shadow-sm">
                     <p className="text-gray-500 dark:text-gray-400 font-semibold">{t("noCourses")}</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {onlineCourses.map((course: any) => (
+                    {courses.map((course: any) => (
                       <CourseCard
                         key={course._id}
                         course={course}
@@ -226,111 +183,140 @@ const CourseModules: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
               >
-                {offlineCourses.map((course, idx) => {
-                  const whatsAppText = encodeURIComponent(
-                    `Hello CADD CORE, I am interested in enrolling in the offline course: "${course.title}". Please send me details regarding classes, batch timing, and discount offer.`
-                  );
-                  const whatsAppLink = `https://wa.me/8801610473379?text=${whatsAppText}`;
-
-                  return (
-                    <motion.div
-                      key={course._id}
-                      className="group flex flex-col h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden transition-all duration-300 hover:border-[#1a4da1] dark:hover:border-blue-500 hover:-translate-y-2 flex flex-col shadow-sm hover:shadow-xl relative"
-                      data-aos="zoom-in"
-                      data-aos-delay={idx * 100}
-                    >
-                      {/* Image section */}
-                      <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-900 flex-shrink-0">
-                        <img
-                          src={course.bannerImage}
-                          alt={course.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-
-                        {/* Offline badge */}
-                        <div className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center shadow-md">
-                          <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse mr-1.5" />
-                          {t("offlineBadge")}
+                {isLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden animate-pulse shadow-sm h-[480px]"
+                      >
+                        <div className="h-48 bg-gray-200 dark:bg-gray-700" />
+                        <div className="p-6 space-y-4">
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
                         </div>
-
-                        {/* Price Badge */}
-                        {course.price && course.price > 0 && (
-                          <div className="absolute top-3 left-3 bg-white text-blue-700 text-[11px] font-bold px-3 py-1 rounded-full shadow-md border border-blue-100">
-                            {t("currencySymbol")}
-                            {(course.discountedPrice ?? course.price).toLocaleString()}
-                          </div>
-                        )}
                       </div>
+                    ))}
+                  </div>
+                ) : isError || courses.length === 0 ? (
+                  <div className="text-center py-16 bg-white dark:bg-gray-850 rounded-3xl border border-gray-150 dark:border-gray-800 p-8 shadow-sm">
+                    <p className="text-gray-500 dark:text-gray-400 font-semibold">{t("noCourses")}</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {courses.map((course: any, idx: number) => {
+                      const whatsAppText = encodeURIComponent(
+                        `Hello CADD CORE, I am interested in enrolling in the offline course: "${course.title}". Please send me details regarding classes, batch timing, and discount offer.`
+                      );
+                      const whatsAppLink = `https://wa.me/8801610473379?text=${whatsAppText}`;
 
-                      {/* Content Section */}
-                      <div className="p-5 flex flex-col flex-1">
-                        {/* Title */}
-                        <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 h-12 group-hover:text-[#1a4da1] dark:group-hover:text-blue-400 transition-colors duration-300">
-                          {course.title}
-                        </h3>
+                      const displayImage = course.bannerImage || course.photoUrl || "https://images.unsplash.com/photo-1503387762-592dedb8c310?w=600&auto=format&fit=crop&q=60";
+                      const displayDesc = course.shortDescription || course.description || "";
+                      const displayLocation = course.location || course.locations || course.venueName || "Purana Paltan Branch, Dhaka";
+                      const displayTiming = course.timing || course.duration || "Fri & Sat (03:00 PM - 05:30 PM)";
+                      const displayTags = course.tags || [];
 
-                        {/* Short Description */}
-                        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
-                          {course.shortDescription}
-                        </p>
+                      return (
+                        <motion.div
+                          key={course._id}
+                          className="group flex flex-col h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden transition-all duration-300 hover:border-[#1a4da1] dark:hover:border-blue-500 hover:-translate-y-2 flex flex-col shadow-sm hover:shadow-xl relative"
+                          data-aos="zoom-in"
+                          data-aos-delay={idx * 100}
+                        >
+                          {/* Image section */}
+                          <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-900 flex-shrink-0">
+                            <img
+                              src={displayImage}
+                              alt={course.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
 
-                        {/* Metadata Details */}
-                        <div className="space-y-2 mb-5 text-[12px] text-gray-600 dark:text-gray-300 border-t border-b border-gray-100 dark:border-gray-700 py-3">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
-                            <span className="font-semibold text-gray-800 dark:text-gray-200">
-                              {t("branchLabel")}:
-                            </span>
-                            <span className="truncate">{course.location}</span>
+                            {/* Offline badge */}
+                            <div className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center shadow-md">
+                              <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse mr-1.5" />
+                              {t("offlineBadge")}
+                            </div>
+
+                            {/* Price Badge */}
+                            {course.price && course.price > 0 && (
+                              <div className="absolute top-3 left-3 bg-white text-blue-700 text-[11px] font-bold px-3 py-1 rounded-full shadow-md border border-blue-100">
+                                {t("currencySymbol")}
+                                {(course.discountedPrice ?? course.price).toLocaleString()}
+                              </div>
+                            )}
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
-                            <span className="font-semibold text-gray-800 dark:text-gray-200">
-                              {t("timingLabel")}:
-                            </span>
-                            <span className="truncate">{course.timing}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
-                            <span className="font-semibold text-gray-800 dark:text-gray-200">
-                              {t("startDateLabel")}:
-                            </span>
-                            <span>{course.startDate}</span>
-                          </div>
-                        </div>
 
-                        {/* Tools Badge List */}
-                        <div className="mb-6">
-                          <div className="flex flex-wrap gap-1.5">
-                            {course.tags.slice(0, 3).map((tag, tIdx) => (
-                              <span
-                                key={tIdx}
-                                className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-blue-100 dark:border-blue-900/30"
+                          {/* Content Section */}
+                          <div className="p-5 flex flex-col flex-1">
+                            {/* Title */}
+                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 h-12 group-hover:text-[#1a4da1] dark:group-hover:text-blue-400 transition-colors duration-300">
+                              {course.title}
+                            </h3>
+
+                            {/* Short Description */}
+                            <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
+                              {displayDesc}
+                            </p>
+
+                            {/* Metadata Details */}
+                            <div className="space-y-2 mb-5 text-[12px] text-gray-600 dark:text-gray-300 border-t border-b border-gray-100 dark:border-gray-700 py-3">
+                              <div className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
+                                <span className="font-semibold text-gray-800 dark:text-gray-200">
+                                  {t("branchLabel")}:
+                                </span>
+                                <span className="truncate">{displayLocation}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Clock className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
+                                <span className="font-semibold text-gray-800 dark:text-gray-200">
+                                  {t("timingLabel")}:
+                                </span>
+                                <span className="truncate">{displayTiming}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
+                                <span className="font-semibold text-gray-800 dark:text-gray-200">
+                                  {t("startDateLabel")}:
+                                </span>
+                                <span>{formatStartDate(course.startDate)}</span>
+                              </div>
+                            </div>
+
+                            {/* Tools Badge List */}
+                            <div className="mb-6">
+                              <div className="flex flex-wrap gap-1.5">
+                                {displayTags.slice(0, 3).map((tag: string, tIdx: number) => (
+                                  <span
+                                    key={tIdx}
+                                    className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-blue-100 dark:border-blue-900/30"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Footer - WhatsApp Action Button */}
+                            <div className="mt-auto pt-2">
+                              <a
+                                href={whatsAppLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 duration-200"
                               >
-                                {tag}
-                              </span>
-                            ))}
+                                <Phone className="w-4 h-4" />
+                                {t("inquireWhatsApp")}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-
-                        {/* Footer - WhatsApp Action Button */}
-                        <div className="mt-auto pt-2">
-                          <a
-                            href={whatsAppLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 duration-200"
-                          >
-                            <Phone className="w-4 h-4" />
-                            {t("inquireWhatsApp")}
-                          </a>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

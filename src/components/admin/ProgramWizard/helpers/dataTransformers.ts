@@ -181,6 +181,7 @@ export interface ProgramPayload {
   title: string;
   slug: string;
   type: "training" | "seminar" | "webinar" | "workshop" | "course";
+  courseType?: "online" | "offline";
   description: string;
   level: "beginner" | "intermediate" | "advanced" | "all-levels";
   accessType: "free" | "paid" | "members-only" | "invite-only";
@@ -219,6 +220,7 @@ export interface ProgramFormData {
   title: string;
   slug: string;
   type: "training" | "seminar" | "webinar" | "workshop" | "course";
+  courseType?: "online" | "offline";
   description: string;
   shortDescription: string;
   level: "beginner" | "intermediate" | "advanced" | "all-levels";
@@ -270,6 +272,7 @@ export const transformProgramData = (program: ProgramFormData): ProgramPayload =
     title: program.title.trim(),
     slug: (program.slug || generateSlug(program.title)).trim(),
     type: program.type,
+    courseType: program.courseType || "online",
     description: program.description.trim(),
     shortDescription: program.shortDescription.trim() || program.description.trim().substring(0, 100),
     level: program.level,

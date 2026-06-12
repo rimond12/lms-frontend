@@ -25,6 +25,7 @@ const CourseApi = baseApi.injectEndpoints({
         page?: number;
         limit?: number;
         type?: string;
+        courseType?: string;
         level?: string;
         searchTerm?: string;
         category?: string;
@@ -38,6 +39,7 @@ const CourseApi = baseApi.injectEndpoints({
           if (filters.page) params.append("page", String(filters.page));
           if (filters.limit) params.append("limit", String(filters.limit));
           if (filters.type) params.append("type", filters.type);
+          if (filters.courseType) params.append("courseType", filters.courseType);
           if (filters.level) params.append("level", filters.level);
           if (filters.searchTerm) params.append("searchTerm", filters.searchTerm);
           if (filters.category) params.append("category", filters.category);

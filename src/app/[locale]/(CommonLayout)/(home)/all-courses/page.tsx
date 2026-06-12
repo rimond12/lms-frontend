@@ -254,6 +254,7 @@ export default function CoursesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedCourseType, setSelectedCourseType] = useState<string>("");
   const [selectedLevel, setSelectedLevel] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     searchParams.get("category") || null,
@@ -279,6 +280,7 @@ export default function CoursesPage() {
     page: currentPage,
     limit: itemsPerPage,
     ...(selectedType && { type: selectedType }),
+    ...(selectedCourseType && { courseType: selectedCourseType }),
     ...(selectedLevel && { level: selectedLevel }),
     ...(searchTerm && { searchTerm }),
     ...(selectedCategory && { category: selectedCategory }),
@@ -305,6 +307,7 @@ export default function CoursesPage() {
   }, [
     searchTerm,
     selectedType,
+    selectedCourseType,
     selectedLevel,
     selectedCategory,
     selectedSubCategory,
@@ -313,6 +316,7 @@ export default function CoursesPage() {
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedType("");
+    setSelectedCourseType("");
     setSelectedLevel("");
     setSelectedCategory(null);
     setSelectedSubCategory(null);
@@ -320,11 +324,12 @@ export default function CoursesPage() {
   };
 
   const hasFilters =
-    searchTerm ||
-    selectedType ||
-    selectedLevel ||
-    selectedCategory ||
-    selectedSubCategory;
+    Boolean(searchTerm) ||
+    Boolean(selectedType) ||
+    Boolean(selectedCourseType) ||
+    Boolean(selectedLevel) ||
+    Boolean(selectedCategory) ||
+    Boolean(selectedSubCategory);
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
@@ -417,6 +422,18 @@ export default function CoursesPage() {
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-100/50 border-none focus:bg-white focus:ring-1 focus:ring-blue-200 rounded-lg text-sm transition-all placeholder:text-gray-500 font-medium"
                 />
               </div>
+
+              {/* Course Type Filter */}
+              <FilterDropdown
+                label={t("filter.allCourseTypes")}
+                icon={<Filter size={16} />}
+                value={selectedCourseType}
+                onChange={setSelectedCourseType}
+                options={[
+                  { label: t("filter.online"), value: "online" },
+                  { label: t("filter.offline"), value: "offline" },
+                ]}
+              />
 
               {hasFilters && (
                 <button

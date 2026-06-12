@@ -66,6 +66,8 @@ const baseApi = createApi({
     "LandingPageCMS",
     "SuccessStory",
     "Country",
+    "Footer",
+    "Navbar",
   ],
   endpoints: () => ({}),
 });

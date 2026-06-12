@@ -11,6 +11,7 @@ export interface ProgramData {
   title: string;
   slug: string;
   type: "training" | "seminar" | "webinar" | "workshop" | "course";
+  courseType?: "online" | "offline";
   description: string;
   shortDescription: string;
   level: "beginner" | "intermediate" | "advanced" | "all-levels";

@@ -119,6 +119,7 @@ export default function CreateProgramWizard() {
     title: "",
     slug: "",
     type: "course",
+    courseType: "online",
     description: "",
     shortDescription: "",
     level: "beginner",

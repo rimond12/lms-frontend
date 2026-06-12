@@ -7,7 +7,6 @@ import {
   useUploadLandingPageCmsImageMutation,
   ILandingPageCMS,
   IHeroSlide,
-  IStatItem,
   IServiceItem,
   IOurServiceItem,
   ITrainingPoint,
@@ -175,12 +174,10 @@ function CmsImageUpload({ value, onChange, label }: { value: string; onChange: (
 
 const TABS = [
   { id: "hero", label: "Hero", icon: Layout },
-  { id: "stats", label: "Stats", icon: BarChart3 },
   { id: "services", label: "Recruitment", icon: Globe },
   { id: "ourServices", label: "Our Services", icon: Settings },
   { id: "trainingSection", label: "Training", icon: BookOpen },
   { id: "ourJourney", label: "Partners", icon: Users },
-  { id: "joinInstructor", label: "Join Instructor", icon: Briefcase },
   { id: "applySection", label: "Apply Section", icon: Star },
   { id: "successStories", label: "Success Stories", icon: Star },
   { id: "immigrantJobsSection", label: "Immigrant Jobs", icon: Briefcase },
@@ -226,7 +223,30 @@ function HeroEditor({ data, onSave, saving }: { data: ILandingPageCMS["hero"]; o
     setLocal((p) => ({ ...p, courses }));
   };
 
-  const ICON_OPTIONS = ["FaHandshake", "FaCheckCircle", "FaTasks", "FaChalkboardTeacher", "FaGlobe", "FaBullseye"];
+  const ICON_OPTIONS = [
+    // Immigrant Jobs theme
+    { value: "FaBriefcase",      label: "Briefcase (JOBS)" },
+    { value: "FaPassport",       label: "Passport (Visa)" },
+    { value: "FaPlane",          label: "Plane (Relocation)" },
+    { value: "FaUserCheck",      label: "User Check (Verification)" },
+    { value: "FaLanguage",       label: "Language (Training)" },
+    { value: "FaCheckCircle",    label: "Check Circle (Interview)" },
+    // General purpose
+    { value: "FaHandshake",      label: "Handshake" },
+    { value: "FaTasks",          label: "Tasks" },
+    { value: "FaChalkboardTeacher", label: "Chalkboard Teacher" },
+    { value: "FaGlobe",          label: "Globe" },
+    { value: "FaBullseye",       label: "Bullseye" },
+  ];
+
+  const DEFAULT_COURSES = [
+    { name: "JOBS",        sub: "Browse by Country", iconKey: "FaBriefcase",       nameBn: "চাকরি",       subBn: "দেশ অনুযায়ী খুঁজুন" },
+    { name: "TECHNICAL",   sub: "Training",          iconKey: "FaChalkboardTeacher", nameBn: "তকনিক্যাল",     subBn: "প্রশিক্ষণ" },
+    { name: "LANGUAGE",    sub: "Training",          iconKey: "FaLanguage",         nameBn: "ভাষা",         subBn: "প্রশিক্ষণ" },
+    { name: "CV CREATION", sub: "Resume Builder",    iconKey: "FaTasks",           nameBn: "সিভি তৈরি",   subBn: "রিজিউম বিল্ডার" },
+    { name: "VISA",        sub: "Verification",      iconKey: "FaPassport",         nameBn: "ভিসা",         subBn: "যাচাইকরণ" },
+    { name: "CONSULTANCY", sub: "Expert Advice",     iconKey: "FaHandshake",        nameBn: "পরামর্শ",       subBn: "বিশেষজ্ঞ মতামত" },
+  ];
 
   return (
     <div className="space-y-6">
@@ -265,31 +285,99 @@ function HeroEditor({ data, onSave, saving }: { data: ILandingPageCMS["hero"]; o
         </div>
       </SectionCard>
 
-      <SectionCard title="Feature Icons (6 items)" icon={Settings}>
-        <div className="space-y-3">
+      <SectionCard title="Feature Buttons (6 items shown on hero)" icon={Settings}>
+        <div className="mb-3 p-3 rounded-xl bg-blue-50 border border-blue-100 flex items-start gap-2">
+          <Briefcase size={14} className="text-blue-600 mt-0.5 shrink-0" />
+          <p className="text-xs text-blue-700 leading-relaxed">
+            <strong>Item 1</strong> is always the <strong>JOBS</strong> dropdown button (country selector). Items 2–6 are decorative feature buttons.
+            The icon key must match exactly (e.g. <code className="bg-blue-100 px-1 rounded">FaBriefcase</code>).
+          </p>
+        </div>
+
+        {local.courses.length === 0 && (
+          <div className="mb-3">
+            <button
+              type="button"
+              onClick={() => setLocal((p) => ({ ...p, courses: DEFAULT_COURSES }))}
+              className="flex items-center gap-1.5 text-xs font-semibold text-white bg-[#1a4da1] hover:bg-[#133a7a] px-3 py-1.5 rounded-lg transition-all"
+            >
+              <Plus size={13} /> Initialize with Defaults
+            </button>
+            <p className="text-xs text-slate-400 mt-1">Populate all 6 slots with the immigrant-jobs theme defaults.</p>
+          </div>
+        )}
+
+        <div className="space-y-4">
           {local.courses.map((course, i) => (
-            <div key={i} className="grid grid-cols-3 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-              <div>
-                <Label>Name</Label>
-                <Input value={course.name} onChange={(v) => updateCourse(i, "name", v)} />
+            <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
+              {/* Row header */}
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  {i === 0 ? "🎯 Button 1 — JOBS Dropdown" : `Button ${i + 1}`}
+                </span>
+                {local.courses.length > 1 && (
+                  <RemoveBtn onClick={() => setLocal((p) => ({ ...p, courses: p.courses.filter((_, j) => j !== i) }))} />
+                )}
               </div>
-              <div>
-                <Label>Sub Text</Label>
-                <Input value={course.sub} onChange={(v) => updateCourse(i, "sub", v)} />
+
+              {/* EN + BN side by side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* English */}
+                <div className="space-y-2 p-3 rounded-lg border border-slate-200 bg-white">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded">EN</span>
+                    <span className="text-[10px] text-slate-400">English</span>
+                  </div>
+                  <div>
+                    <Label>Button Label (EN)</Label>
+                    <Input value={course.name} onChange={(v) => updateCourse(i, "name", v)} placeholder="e.g. JOBS" />
+                  </div>
+                  <div>
+                    <Label>Sub Text (EN)</Label>
+                    <Input value={course.sub} onChange={(v) => updateCourse(i, "sub", v)} placeholder="e.g. Browse by Country" />
+                  </div>
+                </div>
+
+                {/* Bengali */}
+                <div className="space-y-2 p-3 rounded-lg border border-green-100 bg-green-50/40">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="text-[10px] font-extrabold text-green-700 uppercase tracking-widest bg-green-100 px-2 py-0.5 rounded">BN</span>
+                    <span className="text-[10px] text-slate-400">বাংলা</span>
+                  </div>
+                  <div>
+                    <Label>Button Label (BN)</Label>
+                    <Input value={course.nameBn || ""} onChange={(v) => updateCourse(i, "nameBn", v)} placeholder="e.g. চাকরি" />
+                  </div>
+                  <div>
+                    <Label>Sub Text (BN)</Label>
+                    <Input value={course.subBn || ""} onChange={(v) => updateCourse(i, "subBn", v)} placeholder="e.g. দেশ অনুযায়ী খুঁজুন" />
+                  </div>
+                </div>
               </div>
-              <div>
+
+              {/* Icon row */}
+              <div className="max-w-xs">
                 <Label>Icon</Label>
                 <select
                   value={course.iconKey}
                   onChange={(e) => updateCourse(i, "iconKey", e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#1a4da1] bg-white"
                 >
-                  {ICON_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+                  {ICON_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
             </div>
           ))}
         </div>
+        {local.courses.length < 6 && (
+          <AddRowBtn
+            onClick={() => setLocal((p) => ({
+              ...p,
+              courses: [...p.courses, { name: "", sub: "", iconKey: "FaCheckCircle" }],
+            }))}
+            label={`Add Button (${local.courses.length}/6)`}
+          />
+        )}
       </SectionCard>
 
       <div className="flex justify-end pt-2">
@@ -299,57 +387,6 @@ function HeroEditor({ data, onSave, saving }: { data: ILandingPageCMS["hero"]; o
   );
 }
 
-const DEFAULT_STATS: ILandingPageCMS["stats"] = { items: [] };
-
-function StatsEditor({ data, onSave, saving }: { data: ILandingPageCMS["stats"]; onSave: (d: ILandingPageCMS["stats"]) => void; saving: boolean }) {
-  const safeData: ILandingPageCMS["stats"] = { items: data?.items ?? [] };
-  const [local, setLocal] = useState(safeData);
-  useEffect(() => setLocal({ items: data?.items ?? [] }), [data]);
-
-  const update = (i: number, key: keyof IStatItem, val: string | number) => {
-    const items = [...local.items];
-    items[i] = { ...items[i], [key]: val };
-    setLocal({ items });
-  };
-
-  return (
-    <div className="space-y-4">
-      <SectionCard title="Stat Cards" icon={BarChart3}>
-        <div className="space-y-3">
-          {local.items.map((stat, i) => (
-            <div key={i} className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100">
-              <div>
-                <Label>Icon (emoji)</Label>
-                <Input value={stat.icon} onChange={(v) => update(i, "icon", v)} placeholder="🎓" />
-              </div>
-              <div>
-                <Label>Count</Label>
-                <Input type="number" value={String(stat.end)} onChange={(v) => update(i, "end", Number(v))} placeholder="12000" />
-              </div>
-              <div>
-                <Label>Suffix</Label>
-                <Input value={stat.suffix} onChange={(v) => update(i, "suffix", v)} placeholder="+ or %" />
-              </div>
-              <div className="flex gap-2 items-end">
-                <div className="flex-1">
-                  <Label>Label</Label>
-                  <Input value={stat.label} onChange={(v) => update(i, "label", v)} placeholder="Graduated Students" />
-                </div>
-                {local.items.length > 1 && (
-                  <RemoveBtn onClick={() => setLocal({ items: local.items.filter((_, j) => j !== i) })} />
-                )}
-              </div>
-            </div>
-          ))}
-          <AddRowBtn onClick={() => setLocal({ items: [...local.items, { end: 0, suffix: "", label: "", icon: "⭐" }] })} label="Add Stat" />
-        </div>
-      </SectionCard>
-      <div className="flex justify-end">
-        <SaveButton loading={saving} onClick={() => onSave(local)} />
-      </div>
-    </div>
-  );
-}
 
 const DEFAULT_SERVICES: ILandingPageCMS["services"] = { badge: "", heading1: "", heading2: "", items: [] };
 
@@ -695,73 +732,6 @@ function PartnersEditor({ data, onSave, saving }: { data: ILandingPageCMS["ourJo
   );
 }
 
-const DEFAULT_JOIN_INSTRUCTOR: ILandingPageCMS["joinInstructor"] = {
-  title: "", brand: "", subtitle: "", bannerImage: "", bannerTitle: "",
-  lookingFor: [], infoTitle: "", infoDesc: "", email: "", phone: "",
-};
-
-function JoinInstructorEditor({ data, onSave, saving }: { data: ILandingPageCMS["joinInstructor"]; onSave: (d: ILandingPageCMS["joinInstructor"]) => void; saving: boolean }) {
-  const safeData = { ...DEFAULT_JOIN_INSTRUCTOR, ...data, lookingFor: data?.lookingFor ?? [] };
-  const [local, setLocal] = useState(safeData);
-  useEffect(() => setLocal({ ...DEFAULT_JOIN_INSTRUCTOR, ...data, lookingFor: data?.lookingFor ?? [] }), [data]);
-  const set = (key: string, val: string) => setLocal((p) => ({ ...p, [key]: val }));
-
-  return (
-    <div className="space-y-6">
-      <SectionCard title="Section Header" icon={Briefcase}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div><Label>Title</Label><Input value={local.title} onChange={(v) => set("title", v)} /></div>
-          <div><Label>Brand Name</Label><Input value={local.brand} onChange={(v) => set("brand", v)} /></div>
-          <div><Label>Subtitle</Label><Input value={local.subtitle} onChange={(v) => set("subtitle", v)} /></div>
-        </div>
-      </SectionCard>
-
-      <SectionCard title="Banner Image" icon={ImageIcon}>
-        <div className="space-y-3">
-          <CmsImageUpload label="Banner Image" value={local.bannerImage} onChange={(v) => set("bannerImage", v)} />
-          <div>
-            <Label>Banner Title (supports \n for new line)</Label>
-            <Textarea value={local.bannerTitle} onChange={(v) => set("bannerTitle", v)} rows={2} />
-          </div>
-        </div>
-      </SectionCard>
-
-      <SectionCard title="Looking For (checklist)" icon={Settings}>
-        <div className="space-y-2">
-          {local.lookingFor.map((item, i) => (
-            <div key={i} className="flex gap-2 items-center">
-              <div className="flex-1">
-                <Input value={item} onChange={(v) => {
-                  const arr = [...local.lookingFor];
-                  arr[i] = v;
-                  setLocal((p) => ({ ...p, lookingFor: arr }));
-                }} placeholder="Checklist item" />
-              </div>
-              {local.lookingFor.length > 1 && (
-                <RemoveBtn onClick={() => setLocal((p) => ({ ...p, lookingFor: p.lookingFor.filter((_, j) => j !== i) }))} />
-              )}
-            </div>
-          ))}
-          <AddRowBtn onClick={() => setLocal((p) => ({ ...p, lookingFor: [...p.lookingFor, ""] }))} label="Add Item" />
-        </div>
-      </SectionCard>
-
-      <SectionCard title="Info Box & Contact" icon={Settings}>
-        <div className="space-y-4">
-          <div><Label>Info Box Title</Label><Input value={local.infoTitle} onChange={(v) => set("infoTitle", v)} /></div>
-          <div><Label>Info Box Description</Label><Textarea value={local.infoDesc} onChange={(v) => set("infoDesc", v)} rows={3} /></div>
-          <div className="grid grid-cols-2 gap-4">
-            <div><Label>Email</Label><Input value={local.email} onChange={(v) => set("email", v)} /></div>
-            <div><Label>Phone</Label><Input value={local.phone} onChange={(v) => set("phone", v)} /></div>
-          </div>
-        </div>
-      </SectionCard>
-      <div className="flex justify-end">
-        <SaveButton loading={saving} onClick={() => onSave(local)} />
-      </div>
-    </div>
-  );
-}
 
 const DEFAULT_APPLY: ILandingPageCMS["applySection"] = {
   badge: "", heading: "", headingHighlight: "", subheading: "", features: [],
@@ -868,7 +838,9 @@ function PopularCoursesEditor({ data, onSave, saving }: { data: ILandingPageCMS[
 
 const DEFAULT_IMMIGRANT_JOBS: ILandingPageCMS["immigrantJobsSection"] = {
   badge: "", heading: "", subheading: "", whyChooseTitle: "",
-  features: [], featuredTitle: "", moreListings: "", employmentTitle: "",
+  features: [], featuredTitle: "",
+  liveBadge: "", listingsSubtext: "", whyUsBadge: "", whyUsSubtext: "", browseAllText: "", viewAllJobs: "",
+  moreListings: "", employmentTitle: "",
   jobTypes: [], ctaBadge: "", ctaHeading: "", ctaSubheading: "", ctaButton: "",
 };
 
@@ -901,6 +873,27 @@ function ImmigrantJobsEditor({ data, onSave, saving }: { data: ILandingPageCMS["
           <div><Label>Featured Positions Title</Label><Input value={local.featuredTitle || ""} onChange={(v) => set("featuredTitle", v)} /></div>
           <div><Label>More Listings Label</Label><Input value={local.moreListings || ""} onChange={(v) => set("moreListings", v)} /></div>
           <div><Label>Employment Title</Label><Input value={local.employmentTitle || ""} onChange={(v) => set("employmentTitle", v)} /></div>
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Featured Jobs Sub-Section Labels" icon={Briefcase}>
+        <div className="mb-3 p-3 rounded-xl bg-blue-50 border border-blue-100">
+          <p className="text-xs text-blue-700 leading-relaxed">
+            These labels appear inside the <strong>Featured Job Openings</strong> block (the job cards grid area).
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><Label>"Live Listings" Badge Text</Label><Input value={local.liveBadge || ""} onChange={(v) => set("liveBadge", v)} placeholder="e.g. Live Listings" /></div>
+          <div><Label>Browse All Link Text</Label><Input value={local.browseAllText || ""} onChange={(v) => set("browseAllText", v)} placeholder="e.g. Browse all opportunities" /></div>
+          <div><Label>Top "View All" Button Text</Label><Input value={local.viewAllJobs || ""} onChange={(v) => set("viewAllJobs", v)} placeholder="e.g. View All Jobs" /></div>
+          <div className="md:col-span-2"><Label>Listings Sub-text (under featured title)</Label><Textarea value={local.listingsSubtext || ""} onChange={(v) => set("listingsSubtext", v)} rows={2} placeholder="e.g. Hand-picked openings matched to your background. New roles added daily." /></div>
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Why Choose Us Sub-Section Labels" icon={Settings}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><Label>"Why Us" Badge Text</Label><Input value={local.whyUsBadge || ""} onChange={(v) => set("whyUsBadge", v)} placeholder="e.g. Why Us" /></div>
+          <div className="md:col-span-2"><Label>Why Us Sub-text (under why choose title)</Label><Textarea value={local.whyUsSubtext || ""} onChange={(v) => set("whyUsSubtext", v)} rows={2} placeholder="e.g. Everything you need to land your next global opportunity — all in one platform." /></div>
         </div>
       </SectionCard>
 
@@ -1139,8 +1132,6 @@ export default function LandingPageCMSPage() {
     switch (activeTab) {
       case "hero":
         return <HeroEditor data={cms.hero ?? DEFAULT_HERO} saving={saving} onSave={(d) => handleSave("hero", d as any)} />;
-      case "stats":
-        return <StatsEditor data={cms.stats ?? DEFAULT_STATS} saving={saving} onSave={(d) => handleSave("stats", d as any)} />;
       case "services":
         return <ServicesEditor data={cms.services ?? DEFAULT_SERVICES} saving={saving} onSave={(d) => handleSave("services", d as any)} />;
       case "ourServices":
@@ -1149,8 +1140,6 @@ export default function LandingPageCMSPage() {
         return <TrainingEditor data={cms.trainingSection ?? DEFAULT_TRAINING} saving={saving} onSave={(d) => handleSave("trainingSection", d as any)} />;
       case "ourJourney":
         return <PartnersEditor data={cms.ourJourney ?? DEFAULT_JOURNEY} saving={saving} onSave={(d) => handleSave("ourJourney", d as any)} />;
-      case "joinInstructor":
-        return <JoinInstructorEditor data={cms.joinInstructor ?? DEFAULT_JOIN_INSTRUCTOR} saving={saving} onSave={(d) => handleSave("joinInstructor", d as any)} />;
       case "applySection":
         return <ApplyEditor data={cms.applySection ?? DEFAULT_APPLY} saving={saving} onSave={(d) => handleSave("applySection", d as any)} />;
       case "successStories":

@@ -7,7 +7,7 @@ import { Tag, Phone, ArrowRight, Sparkles, Award } from 'lucide-react';
 import Hero from './Landing-page/hero/hero';
 import StatsSection from './Landing-page/StatsSection/StatsSection';
 // import SeminarSchedule from './Landing-page/SeminarSchedule/SeminarSchedule';
-import PopularCourses from './Landing-page/PopularCourses/PopularCourses';
+// import PopularCourses from './Landing-page/PopularCourses/PopularCourses';
 import CourseModules from './Landing-page/CourseModules/CourseModules';
 import OurServices from './Landing-page/OurServices/OurServices';
 import OurJourney from './Landing-page/OurJourney/OurJourney';
@@ -203,7 +203,7 @@ export default function VouchersPage() {
       {/* <SeminarSchedule /> */}
 
       <RecruitmentServices />
-      <PopularCourses />
+      {/* <PopularCourses /> */}
       <CourseModules />
       <OurServices />
       <TrainingSection />

@@ -34,8 +34,15 @@ import { logout } from "@/app/[locale]/@auth/AuthService";
 import { Link, useRouter, usePathname } from "@/i18n/routing";
 import { isAuthenticated, isAdmin } from "@/utils/auth";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useGetNavbarQuery } from "@/app/redux/api/navbarApi/navbarApi";
+import * as Icons from "lucide-react";
+
+const getIcon = (iconName: string, size = 18) => {
+  const IconComponent = (Icons as any)[iconName];
+  return IconComponent ? React.createElement(IconComponent, { size }) : null;
+};
 
 // Define the type for a navigation link
 interface NavLink {
@@ -197,66 +204,14 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
   );
 };
 
-const TopBar = () => {
-  return (
-    <div className="bg-slate-900 text-white/90 backdrop-blur-md items-center border-b border-white/10 text-[11px] font-medium tracking-wide">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-10">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="p-1 rounded-full bg-white/10 group-hover:bg-blue-600 transition-colors duration-300">
-              <Phone size={10} className="text-white" />
-            </div>
-            <a
-              href="tel:+8801611223637"
-              className="text-gray-300 group-hover:text-white transition-colors"
-            >
-              09606-810081
-            </a>
-          </div>
-          <div className="hidden sm:flex items-center gap-2 group cursor-pointer">
-            <div className="p-1 rounded-full bg-white/10 group-hover:bg-blue-600 transition-colors duration-300">
-              <Mail size={10} className="text-white" />
-            </div>
-            <a
-              href="mailto:info@immigrantjobsworld.com"
-              className="text-gray-300 group-hover:text-white transition-colors"
-            >
-              info@immigrantjobsworld.com
-            </a>
-            <div className="p-1 rounded-full bg-white/10 group-hover:bg-blue-600 transition-colors duration-300">
-              <Mail size={10} className="text-white" />
-            </div>
-            <a
-              href="mailto:support@immigrantjobsworld.com"
-              className="text-gray-300 group-hover:text-white transition-colors"
-            >
-              support@immigrantjobsworld.com
-            </a>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link
-            href="#"
-            className="hidden sm:flex items-center gap-1.5 hover:text-blue-400 transition-colors"
-          >
-            <HelpCircle size={12} />
-            <span>Help Center</span>
-          </Link>
-          <div className="w-px h-3 bg-white/20 mx-1 hidden sm:block" />
-          <div className="scale-90 origin-right">
-            <LanguageSwitcher />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+
 
 const MobileNav: React.FC<{
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   navLinks: NavLink[];
-}> = ({ isOpen, setIsOpen, navLinks }) => {
+  showLanguageToggle: boolean;
+}> = ({ isOpen, setIsOpen, navLinks, showLanguageToggle }) => {
   const { user, setUser, setIsLoading: setUserLoading } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
@@ -300,12 +255,17 @@ const MobileNav: React.FC<{
         <div className="relative flex justify-between items-center p-5 border-b border-gray-100 dark:border-gray-800">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400" />
           <LogoCompact />
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800"
-          >
-            <X size={20} className="text-gray-600 dark:text-gray-400" />
-          </button>
+          <div className="flex items-center gap-2">
+            {showLanguageToggle && (
+              <LanguageSwitcher className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 border border-transparent hover:border-gray-200 dark:hover:border-gray-700" />
+            )}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800"
+            >
+              <X size={20} className="text-gray-600 dark:text-gray-400" />
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto py-4">
@@ -433,13 +393,30 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
+  const locale = useLocale();
   const { user, setUser, setIsLoading: setUserLoading } = useUser();
   const router = useRouter();
   const { theme, toggleTheme } = useContext(ThemeContext);
   const t = useTranslations("nav");
   const tAuth = useTranslations("auth");
 
-  const navLinks: NavLink[] = [
+  const { data: navbarData } = useGetNavbarQuery();
+  const navbarConfig = navbarData?.data;
+  const showLanguageToggle = navbarConfig ? navbarConfig.showLanguageToggle : true;
+
+  const navLinks: NavLink[] = navbarConfig?.navLinks?.map(link => ({
+    name: locale === 'bn' ? link.nameBn : link.nameEn,
+    href: link.href,
+    icon: link.icon ? getIcon(link.icon) : undefined,
+    dropdown: link.dropdown?.map(sub => ({
+      name: locale === 'bn' ? sub.nameBn : sub.nameEn,
+      href: sub.href,
+      description: locale === 'bn' ? sub.descriptionBn : sub.descriptionEn,
+      icon: sub.icon ? getIcon(sub.icon, 16) : undefined,
+      badge: locale === 'bn' ? sub.badgeBn : sub.badgeEn,
+      featured: sub.featured,
+    }))
+  })) || [
     { name: t("home"), href: "/", icon: <Home size={18} /> },
     { name: t("courses"), href: "/all-courses", icon: <BookOpen size={18} /> },
     { name: t("jobs"), href: "/jobs", icon: <Briefcase size={18} /> },
@@ -505,7 +482,6 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <TopBar />
       <header
         className={`sticky top-0 z-40 transition-all duration-500 ${isScrolled ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg border-b border-gray-200/50 dark:border-gray-800/50" : "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"}`}
       >
@@ -549,6 +525,10 @@ const Navbar: React.FC = () => {
                   <Sun size={18} className="text-amber-400" />
                 )}
               </button>
+
+              {showLanguageToggle && (
+                <LanguageSwitcher className="p-2.5 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 hover:scale-105 transition-all text-slate-600 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400" />
+              )}
 
               {isAuthenticated(user) ? (
                 <div className="relative group">
@@ -625,6 +605,7 @@ const Navbar: React.FC = () => {
         isOpen={isMobileMenuOpen}
         setIsOpen={setIsMobileMenuOpen}
         navLinks={navLinks}
+        showLanguageToggle={showLanguageToggle}
       />
     </>
   );

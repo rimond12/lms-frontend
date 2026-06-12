@@ -391,6 +391,12 @@ export default function ImmigrantJobsSection() {
   const features = cms?.features && cms.features.length > 0 ? cms.features : rawFeatures;
 
   const featuredTitle = cms?.featuredTitle || t("featuredTitle");
+  const liveBadge     = cms?.liveBadge     || t("liveBadge");
+  const listingsSubtext = cms?.listingsSubtext || t("listingsSubtext");
+  const whyUsBadge    = cms?.whyUsBadge    || t("whyUsBadge");
+  const whyUsSubtext  = cms?.whyUsSubtext  || t("whyUsSubtext");
+  const browseAllText = cms?.browseAllText  || t("browseAllText");
+  const viewAllJobs   = cms?.viewAllJobs   || t("viewAllJobs");
   const moreListings  = cms?.moreListings  || t("moreListings");
   const employmentTitle = cms?.employmentTitle || t("employmentTitle");
 
@@ -469,7 +475,7 @@ export default function ImmigrantJobsSection() {
           {/* Sub-header row */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-12">
             <div>
-              <SectionBadge icon={Briefcase} text="Live Listings" />
+              <SectionBadge icon={Briefcase} text={liveBadge} />
               <h3
                 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 leading-tight"
                 style={{ letterSpacing: "-0.5px" }}
@@ -477,7 +483,7 @@ export default function ImmigrantJobsSection() {
                 {featuredTitle}
               </h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-sm leading-relaxed">
-                Hand-picked openings matched to your background. New roles added daily.
+                {listingsSubtext}
               </p>
             </div>
 
@@ -492,7 +498,7 @@ export default function ImmigrantJobsSection() {
                 }}
               >
                 <Briefcase className="w-4 h-4" />
-                View All Jobs
+                {viewAllJobs}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </span>
             </Link>
@@ -554,7 +560,7 @@ export default function ImmigrantJobsSection() {
                   className="inline-flex items-center gap-1.5 mt-4 text-sm font-extrabold transition-all duration-200 hover:underline"
                   style={{ color: "#1a4da1" }}
                 >
-                  Browse all opportunities
+                  {browseAllText}
                   <ChevronRight className="w-4 h-4" />
                 </span>
               </Link>
@@ -572,7 +578,7 @@ export default function ImmigrantJobsSection() {
 
           {/* Section header */}
           <div className="text-center mb-12">
-            <SectionBadge icon={CheckCircle} text="Why Us" />
+            <SectionBadge icon={CheckCircle} text={whyUsBadge} />
             <h3
               className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 leading-tight"
               style={{ letterSpacing: "-0.5px" }}
@@ -580,7 +586,7 @@ export default function ImmigrantJobsSection() {
               {whyChooseTitle}
             </h3>
             <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-              Everything you need to land your next global opportunity — all in one platform.
+              {whyUsSubtext}
             </p>
           </div>
 
