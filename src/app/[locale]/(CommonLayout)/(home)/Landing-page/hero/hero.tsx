@@ -21,26 +21,111 @@ function resolveImg(src: string): string {
   return `${FILE_URL}/${src}`;
 }
 
+function FeatureIcon({
+  iconKey,
+  hovered,
+  className,
+}: {
+  iconKey: string;
+  hovered?: boolean;
+  className?: string;
+}) {
+  const isImg =
+    iconKey.startsWith("uploads/") ||
+    iconKey.startsWith("http") ||
+    iconKey.startsWith("/");
+
+  if (isImg) {
+    return (
+      <img
+        src={resolveImg(iconKey)}
+        alt="icon"
+        className="w-7 h-7 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain transition-all duration-300"
+        style={{
+          filter: hovered ? "brightness(0) invert(1)" : "none",
+        }}
+      />
+    );
+  }
+
+  const IconComp = ICON_MAP[iconKey] ?? FaCheckCircle;
+  return <IconComp className={className} />;
+}
+
+// ─── Custom Vector Icons (matching the requested Flaticon designs) ──
+const CustomJobsIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={props.className} style={{ width: "1.1em", height: "1.1em" }}>
+    <rect x="2" y="7" width="20" height="14" rx="2.5" ry="2.5" />
+    <path d="M16 21V5a2.5 2.5 0 0 0-2-2.5h-4A2.5 2.5 0 0 0 8 5v16" />
+    <line x1="12" y1="12" x2="12" y2="16" />
+  </svg>
+);
+
+const CustomTechnicalTrainingIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={props.className} style={{ width: "1.1em", height: "1.1em" }}>
+    <rect x="2" y="3" width="20" height="13" rx="2.5" ry="2.5" />
+    <line x1="12" y1="16" x2="12" y2="21" />
+    <line x1="7" y1="21" x2="17" y2="21" />
+    <path d="M12 6.5l4.5 2.25-4.5 2.25-4.5-2.25z" fill="currentColor" fillOpacity="0.15" />
+    <path d="M8.5 9.5v2.5a3.5 3.5 0 0 0 7 0v-2.5" />
+  </svg>
+);
+
+const CustomCvCreationIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={props.className} style={{ width: "1.1em", height: "1.1em" }}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="currentColor" fillOpacity="0.15" />
+    <polyline points="8.5 11.5 10.5 13.5 15.5 8.5" />
+  </svg>
+);
+
+const CustomVisaVerificationIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={props.className} style={{ width: "1.1em", height: "1.1em" }}>
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="currentColor" fillOpacity="0.15" />
+    <circle cx="12.5" cy="9.5" r="3.5" />
+    <path d="M9 9.5h7" />
+    <path d="M12.5 6v7" />
+  </svg>
+);
+
+const CustomLanguageLearningIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={props.className} style={{ width: "1.1em", height: "1.1em" }}>
+    <path d="M5 8h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="currentColor" fillOpacity="0.15" />
+    <path d="M17 14h2a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2" />
+    <path d="M7 17.5l2.5-5.5 2.5 5.5" />
+    <path d="M8 15h3" />
+  </svg>
+);
+
+const CustomConsultancyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={props.className} style={{ width: "1.1em", height: "1.1em" }}>
+    <path d="M16 3h5v5" />
+    <path d="M8 21H3v-5" />
+    <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z" fill="currentColor" fillOpacity="0.15" />
+    <path d="M7.5 12a1.5 1.5 0 0 1 2.5-1.25L13 14m-3-3.25l3.25 3.25 4.75-4.75a1.5 1.5 0 0 1 2 2l-6.75 6.75a1.5 1.5 0 0 1-2 0L7.5 15a1.5 1.5 0 0 1 0-3z" />
+  </svg>
+);
+
 // ─── Full icon map — all options the admin can pick ─────────────────
 const ICON_MAP: Record<string, React.ElementType> = {
   // Legacy / original
-  FaHandshake,
-  FaCheckCircle,
-  FaTasks,
-  FaChalkboardTeacher,
-  FaGlobe,
-  FaBullseye,
+  FaHandshake: CustomConsultancyIcon,
+  FaCheckCircle: CustomCvCreationIcon,
+  FaTasks: CustomCvCreationIcon,
+  FaChalkboardTeacher: CustomTechnicalTrainingIcon,
+  FaGlobe: CustomLanguageLearningIcon,
+  FaBullseye: CustomConsultancyIcon,
   // New immigrant-jobs themed icons
-  FaBriefcase,
-  FaPassport,
-  FaPlane,
-  FaLanguage,
-  FaUserCheck,
+  FaBriefcase: CustomJobsIcon,
+  FaPassport: CustomVisaVerificationIcon,
+  FaPlane: CustomVisaVerificationIcon,
+  FaLanguage: CustomLanguageLearningIcon,
+  FaUserCheck: CustomVisaVerificationIcon,
 };
 
 // ─── Default i18n fallback items (used when CMS courses array is empty) ─
 const DEFAULT_ITEM_KEYS = ["jobs", "verified", "organized", "training", "language", "preparation"] as const;
-const DEFAULT_ICON_KEYS  = ["FaBriefcase", "FaChalkboardTeacher", "FaLanguage", "FaTasks", "FaPassport", "FaHandshake"];
+const DEFAULT_ICON_KEYS  = ["FaBriefcase", "FaChalkboardTeacher", "FaCheckCircle", "FaPassport", "FaLanguage", "FaHandshake"];
 
 const SLIDE_DURATION = 5000;
 
@@ -62,9 +147,11 @@ const FALLBACK_COUNTRIES = [
 function JobsDropdownButton({
   label,
   subLabel,
+  iconKey,
 }: {
   label: string;
   subLabel: string;
+  iconKey: string;
 }) {
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -181,7 +268,7 @@ function JobsDropdownButton({
               : "0 2px 8px rgba(26,77,161,0.08)",
           }}
         >
-          <FaBriefcase />
+          <FeatureIcon iconKey={iconKey} hovered={open} className="text-[1em]" />
         </div>
 
         {/* Label */}
@@ -319,15 +406,16 @@ function JobsDropdownButton({
 function FeatureButton({
   label,
   subLabel,
-  Icon,
+  iconKey,
   index,
 }: {
   label: string;
   subLabel: string;
-  Icon: React.ElementType;
+  iconKey: string;
   index: number;
 }) {
   const [hovered, setHovered] = useState(false);
+  const router = useRouter();
 
   const ACCENT_COLORS = [
     { from: "#0d9488", to: "#14b8a6" },
@@ -338,12 +426,26 @@ function FeatureButton({
   ];
   const color = ACCENT_COLORS[index % ACCENT_COLORS.length];
 
+  const routesMap = [
+    "/all-courses",       // 0: TECHNICAL TRAINING
+    "/contact",           // 1: CV CREATION
+    "/visa-verification", // 2: VISA VERIFICATION
+    "/all-courses",       // 3: LANGUAGE LEARNING
+    "/contact",           // 4: CONSULTANCY
+  ];
+  const targetRoute = routesMap[index] || "/";
+
+  const handleClick = () => {
+    router.push(targetRoute);
+  };
+
   return (
     <div className="flex flex-col items-center group">
       <button
         id={`hero-feature-btn-${index}`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={handleClick}
         className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center text-lg sm:text-xl lg:text-2xl border border-gray-50 transition-all duration-500 ease-out focus:outline-none"
         style={{
           background: hovered
@@ -357,7 +459,7 @@ function FeatureButton({
         }}
         aria-label={label}
       >
-        <Icon className="text-[1em]" />
+        <FeatureIcon iconKey={iconKey} hovered={hovered} className="text-[1em]" />
       </button>
 
       <div className="text-center mt-3 sm:mt-5">
@@ -529,16 +631,16 @@ export default function Hero() {
                   key="jobs"
                   label={item.name}
                   subLabel={item.sub}
+                  iconKey={item.iconKey}
                 />
               );
             }
-            const IconComp = ICON_MAP[item.iconKey] ?? FaCheckCircle;
             return (
               <FeatureButton
                 key={item.key}
                 label={item.name}
                 subLabel={item.sub}
-                Icon={IconComp}
+                iconKey={item.iconKey}
                 index={i - 1}
               />
             );

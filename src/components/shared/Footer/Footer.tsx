@@ -20,7 +20,7 @@ export const Footer = () => {
   // Fallback defaults matching original content + new requirements
   const defaultFooter = {
     hotline: "+8809606810081",
-    whatsappLink: "https://wa.me/8809606810081",
+    whatsappLink: "https://wa.me/8801843432352",
     email: "support@immigrantjobsworld.com\ninfo@immigrantjobsworld.com",
     address: "53, Beitul Abed Tower, Lift 5th Floor Purana Paltan, Dhaka, Bangladesh",
     mobile: "01843-432352 (Available during business hours)",
@@ -387,6 +387,20 @@ export const Footer = () => {
               <span className="hidden md:inline text-gray-800">|</span>
               <span>{t("allRights")}</span>
             </p>
+            <div className="text-[10px] text-gray-600 opacity-80 text-center md:text-right space-x-1.5 leading-relaxed">
+              <span>Icons by</span>
+              <a href="https://www.flaticon.com/authors/freepik" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">Freepik</a>
+              <span>,</span>
+              <a href="https://www.flaticon.com/authors/rukanicon" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">rukanicon</a>
+              <span>,</span>
+              <a href="https://www.flaticon.com/authors/justicon" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">justicon</a>
+              <span>,</span>
+              <a href="https://www.flaticon.com/authors/photo3idea-studio" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">photo3idea_studio</a>
+              <span>, and</span>
+              <a href="https://www.flaticon.com/authors/abbasi" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">Abbasi</a>
+              <span>from</span>
+              <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">Flaticon</a>
+            </div>
           </div>
         </div>
       </div>

@@ -21,6 +21,9 @@ import {
   Settings,
   ArrowRight,
   PlayCircle,
+  MapPin,
+  Calendar,
+  Phone,
 } from "lucide-react";
 import { useGetCoursesQuery } from "@/app/redux/api/CourseApi/CourseApi";
 import Link from "next/link";
@@ -241,6 +244,7 @@ const VideoCard = ({
 // Main Page
 export default function CoursesPage() {
   const t = useTranslations("courses");
+  const tModules = useTranslations("courseModules");
   const searchParams = useSearchParams();
   const [highlightIndex, setHighlightIndex] = useState(0);
 
@@ -251,10 +255,24 @@ export default function CoursesPage() {
     return () => clearInterval(interval);
   }, []);
 
+  const formatStartDate = (dateStr: any) => {
+    if (!dateStr) return "";
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return String(dateStr);
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    } catch {
+      return String(dateStr);
+    }
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>("");
-  const [selectedCourseType, setSelectedCourseType] = useState<string>("");
   const [selectedLevel, setSelectedLevel] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     searchParams.get("category") || null,
@@ -280,7 +298,6 @@ export default function CoursesPage() {
     page: currentPage,
     limit: itemsPerPage,
     ...(selectedType && { type: selectedType }),
-    ...(selectedCourseType && { courseType: selectedCourseType }),
     ...(selectedLevel && { level: selectedLevel }),
     ...(searchTerm && { searchTerm }),
     ...(selectedCategory && { category: selectedCategory }),
@@ -307,7 +324,6 @@ export default function CoursesPage() {
   }, [
     searchTerm,
     selectedType,
-    selectedCourseType,
     selectedLevel,
     selectedCategory,
     selectedSubCategory,
@@ -316,7 +332,6 @@ export default function CoursesPage() {
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedType("");
-    setSelectedCourseType("");
     setSelectedLevel("");
     setSelectedCategory(null);
     setSelectedSubCategory(null);
@@ -326,7 +341,6 @@ export default function CoursesPage() {
   const hasFilters =
     Boolean(searchTerm) ||
     Boolean(selectedType) ||
-    Boolean(selectedCourseType) ||
     Boolean(selectedLevel) ||
     Boolean(selectedCategory) ||
     Boolean(selectedSubCategory);
@@ -423,17 +437,7 @@ export default function CoursesPage() {
                 />
               </div>
 
-              {/* Course Type Filter */}
-              <FilterDropdown
-                label={t("filter.allCourseTypes")}
-                icon={<Filter size={16} />}
-                value={selectedCourseType}
-                onChange={setSelectedCourseType}
-                options={[
-                  { label: t("filter.online"), value: "online" },
-                  { label: t("filter.offline"), value: "offline" },
-                ]}
-              />
+
 
               {hasFilters && (
                 <button
@@ -496,7 +500,7 @@ export default function CoursesPage() {
             transition={{ duration: 0.2 }}
             className={`max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-4 transition-opacity duration-200 ${isFetching ? 'opacity-50' : 'opacity-100'}`}
           >
-            {displayCourses.map((course: any) => (
+            {displayCourses.map((course: any, idx: number) => (
               <CourseCard
                 key={course._id}
                 course={course}

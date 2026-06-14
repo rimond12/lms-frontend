@@ -48,16 +48,16 @@ const CourseModules: React.FC = () => {
   const titlePrefix = cms?.titlePrefix || t("titlePrefix");
   const titleHighlight = cms?.titleHighlight || t("titleHighlight");
   const subtitle = cms?.subtitle || t("subtitle");
-  const onlineTab = cms?.onlineTab || t("onlineTab");
-  const offlineTab = cms?.offlineTab || t("offlineTab");
+  const technicalTab = cms?.technicalTab || t("technicalTab");
+  const languageTab = cms?.languageTab || t("languageTab");
   const detailsLink = cms?.detailsLink || t("detailsLink");
 
-  const [activeTab, setActiveTab] = useState<"online" | "offline">("online");
+  const [activeTab, setActiveTab] = useState<"technical" | "language">("technical");
   const [highlightIndex, setHighlightIndex] = useState(0);
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true, easing: "ease-out" });
-    
+
     // Rotation interval for online course cards' highlights
     const interval = setInterval(() => {
       setHighlightIndex((prev) => prev + 1);
@@ -65,8 +65,9 @@ const CourseModules: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch 6 courses dynamically depending on active tab (online or offline)
-  const { data, isLoading, isError } = useGetCoursesQuery({ limit: 6, courseType: activeTab });
+  // Fetch 6 courses dynamically depending on active tab category
+  const categorySlug = activeTab === "technical" ? "technical-courses" : "language-courses";
+  const { data, isLoading, isError } = useGetCoursesQuery({ limit: 6, category: categorySlug });
   const courses = data?.data || [];
 
   const formatStartDate = (dateStr: any) => {
@@ -109,26 +110,24 @@ const CourseModules: React.FC = () => {
         <div className="flex justify-center mb-10 md:mb-14" data-aos="fade-up">
           <div className="bg-gray-200/80 dark:bg-gray-800/80 backdrop-blur-md p-1.5 rounded-2xl flex gap-1 w-full max-w-md shadow-inner border border-gray-300/30 dark:border-gray-700/30">
             <button
-              onClick={() => setActiveTab("online")}
-              className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
-                activeTab === "online"
-                  ? "bg-white dark:bg-gray-700 text-[#1a4da1] dark:text-white shadow-md"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
+              onClick={() => setActiveTab("technical")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === "technical"
+                ? "bg-white dark:bg-gray-700 text-[#1a4da1] dark:text-white shadow-md"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                }`}
             >
               <Video className="w-4 h-4" />
-              {onlineTab}
+              {technicalTab}
             </button>
             <button
-              onClick={() => setActiveTab("offline")}
-              className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
-                activeTab === "offline"
-                  ? "bg-white dark:bg-gray-700 text-[#1a4da1] dark:text-white shadow-md"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
+              onClick={() => setActiveTab("language")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === "language"
+                ? "bg-white dark:bg-gray-700 text-[#1a4da1] dark:text-white shadow-md"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                }`}
             >
               <BookOpen className="w-4 h-4" />
-              {offlineTab}
+              {languageTab}
             </button>
           </div>
         </div>
@@ -136,189 +135,45 @@ const CourseModules: React.FC = () => {
         {/* Courses Display Grid */}
         <div className="min-h-[400px]">
           <AnimatePresence mode="wait">
-            {activeTab === "online" ? (
-              <motion.div
-                key="online-grid"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-              >
-                {isLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden animate-pulse shadow-sm h-[480px]"
-                      >
-                        <div className="h-48 bg-gray-200 dark:bg-gray-700" />
-                        <div className="p-6 space-y-4">
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
-                        </div>
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  {[1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden animate-pulse shadow-sm h-[480px]"
+                    >
+                      <div className="h-48 bg-gray-200 dark:bg-gray-700" />
+                      <div className="p-6 space-y-4">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
                       </div>
-                    ))}
-                  </div>
-                ) : isError || courses.length === 0 ? (
-                  <div className="text-center py-16 bg-white dark:bg-gray-850 rounded-3xl border border-gray-150 dark:border-gray-800 p-8 shadow-sm">
-                    <p className="text-gray-500 dark:text-gray-400 font-semibold">{t("noCourses")}</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {courses.map((course: any) => (
-                      <CourseCard
-                        key={course._id}
-                        course={course}
-                        highlightIndex={highlightIndex}
-                      />
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            ) : (
-              <motion.div
-                key="offline-grid"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-              >
-                {isLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden animate-pulse shadow-sm h-[480px]"
-                      >
-                        <div className="h-48 bg-gray-200 dark:bg-gray-700" />
-                        <div className="p-6 space-y-4">
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : isError || courses.length === 0 ? (
-                  <div className="text-center py-16 bg-white dark:bg-gray-850 rounded-3xl border border-gray-150 dark:border-gray-800 p-8 shadow-sm">
-                    <p className="text-gray-500 dark:text-gray-400 font-semibold">{t("noCourses")}</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {courses.map((course: any, idx: number) => {
-                      const whatsAppText = encodeURIComponent(
-                        `Hello CADD CORE, I am interested in enrolling in the offline course: "${course.title}". Please send me details regarding classes, batch timing, and discount offer.`
-                      );
-                      const whatsAppLink = `https://wa.me/8801610473379?text=${whatsAppText}`;
-
-                      const displayImage = course.bannerImage || course.photoUrl || "https://images.unsplash.com/photo-1503387762-592dedb8c310?w=600&auto=format&fit=crop&q=60";
-                      const displayDesc = course.shortDescription || course.description || "";
-                      const displayLocation = course.location || course.locations || course.venueName || "Purana Paltan Branch, Dhaka";
-                      const displayTiming = course.timing || course.duration || "Fri & Sat (03:00 PM - 05:30 PM)";
-                      const displayTags = course.tags || [];
-
-                      return (
-                        <motion.div
-                          key={course._id}
-                          className="group flex flex-col h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden transition-all duration-300 hover:border-[#1a4da1] dark:hover:border-blue-500 hover:-translate-y-2 flex flex-col shadow-sm hover:shadow-xl relative"
-                          data-aos="zoom-in"
-                          data-aos-delay={idx * 100}
-                        >
-                          {/* Image section */}
-                          <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-900 flex-shrink-0">
-                            <img
-                              src={displayImage}
-                              alt={course.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-
-                            {/* Offline badge */}
-                            <div className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center shadow-md">
-                              <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse mr-1.5" />
-                              {t("offlineBadge")}
-                            </div>
-
-                            {/* Price Badge */}
-                            {course.price && course.price > 0 && (
-                              <div className="absolute top-3 left-3 bg-white text-blue-700 text-[11px] font-bold px-3 py-1 rounded-full shadow-md border border-blue-100">
-                                {t("currencySymbol")}
-                                {(course.discountedPrice ?? course.price).toLocaleString()}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Content Section */}
-                          <div className="p-5 flex flex-col flex-1">
-                            {/* Title */}
-                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 h-12 group-hover:text-[#1a4da1] dark:group-hover:text-blue-400 transition-colors duration-300">
-                              {course.title}
-                            </h3>
-
-                            {/* Short Description */}
-                            <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
-                              {displayDesc}
-                            </p>
-
-                            {/* Metadata Details */}
-                            <div className="space-y-2 mb-5 text-[12px] text-gray-600 dark:text-gray-300 border-t border-b border-gray-100 dark:border-gray-700 py-3">
-                              <div className="flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
-                                <span className="font-semibold text-gray-800 dark:text-gray-200">
-                                  {t("branchLabel")}:
-                                </span>
-                                <span className="truncate">{displayLocation}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Clock className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
-                                <span className="font-semibold text-gray-800 dark:text-gray-200">
-                                  {t("timingLabel")}:
-                                </span>
-                                <span className="truncate">{displayTiming}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4 text-[#1a4da1] dark:text-blue-400 shrink-0" />
-                                <span className="font-semibold text-gray-800 dark:text-gray-200">
-                                  {t("startDateLabel")}:
-                                </span>
-                                <span>{formatStartDate(course.startDate)}</span>
-                              </div>
-                            </div>
-
-                            {/* Tools Badge List */}
-                            <div className="mb-6">
-                              <div className="flex flex-wrap gap-1.5">
-                                {displayTags.slice(0, 3).map((tag: string, tIdx: number) => (
-                                  <span
-                                    key={tIdx}
-                                    className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-blue-100 dark:border-blue-900/30"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Footer - WhatsApp Action Button */}
-                            <div className="mt-auto pt-2">
-                              <a
-                                href={whatsAppLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 duration-200"
-                              >
-                                <Phone className="w-4 h-4" />
-                                {t("inquireWhatsApp")}
-                              </a>
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                )}
-              </motion.div>
-            )}
+                    </div>
+                  ))}
+                </div>
+              ) : isError || courses.length === 0 ? (
+                <div className="text-center py-16 bg-white dark:bg-gray-850 rounded-3xl border border-gray-150 dark:border-gray-800 p-8 shadow-sm">
+                  <p className="text-gray-500 dark:text-gray-400 font-semibold">{t("noCourses")}</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  {courses.map((course: any, idx: number) => (
+                    <CourseCard
+                      key={course._id}
+                      course={course}
+                      highlightIndex={highlightIndex}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
           </AnimatePresence>
         </div>
 

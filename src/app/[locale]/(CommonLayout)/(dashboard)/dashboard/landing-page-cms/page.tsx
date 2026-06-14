@@ -225,27 +225,27 @@ function HeroEditor({ data, onSave, saving }: { data: ILandingPageCMS["hero"]; o
 
   const ICON_OPTIONS = [
     // Immigrant Jobs theme
-    { value: "FaBriefcase",      label: "Briefcase (JOBS)" },
-    { value: "FaPassport",       label: "Passport (Visa)" },
-    { value: "FaPlane",          label: "Plane (Relocation)" },
-    { value: "FaUserCheck",      label: "User Check (Verification)" },
-    { value: "FaLanguage",       label: "Language (Training)" },
-    { value: "FaCheckCircle",    label: "Check Circle (Interview)" },
+    { value: "FaBriefcase", label: "Briefcase (JOBS)" },
+    { value: "FaPassport", label: "Passport (Visa)" },
+    { value: "FaPlane", label: "Plane (Relocation)" },
+    { value: "FaUserCheck", label: "User Check (Verification)" },
+    { value: "FaLanguage", label: "Language (Training)" },
+    { value: "FaCheckCircle", label: "Check Circle (Interview)" },
     // General purpose
-    { value: "FaHandshake",      label: "Handshake" },
-    { value: "FaTasks",          label: "Tasks" },
+    { value: "FaHandshake", label: "Handshake" },
+    { value: "FaTasks", label: "Tasks" },
     { value: "FaChalkboardTeacher", label: "Chalkboard Teacher" },
-    { value: "FaGlobe",          label: "Globe" },
-    { value: "FaBullseye",       label: "Bullseye" },
+    { value: "FaGlobe", label: "Globe" },
+    { value: "FaBullseye", label: "Bullseye" },
   ];
 
   const DEFAULT_COURSES = [
-    { name: "JOBS",        sub: "Browse by Country", iconKey: "FaBriefcase",       nameBn: "চাকরি",       subBn: "দেশ অনুযায়ী খুঁজুন" },
-    { name: "TECHNICAL",   sub: "Training",          iconKey: "FaChalkboardTeacher", nameBn: "তকনিক্যাল",     subBn: "প্রশিক্ষণ" },
-    { name: "LANGUAGE",    sub: "Training",          iconKey: "FaLanguage",         nameBn: "ভাষা",         subBn: "প্রশিক্ষণ" },
-    { name: "CV CREATION", sub: "Resume Builder",    iconKey: "FaTasks",           nameBn: "সিভি তৈরি",   subBn: "রিজিউম বিল্ডার" },
-    { name: "VISA",        sub: "Verification",      iconKey: "FaPassport",         nameBn: "ভিসা",         subBn: "যাচাইকরণ" },
-    { name: "CONSULTANCY", sub: "Expert Advice",     iconKey: "FaHandshake",        nameBn: "পরামর্শ",       subBn: "বিশেষজ্ঞ মতামত" },
+    { name: "JOBS", sub: "Find Opportunities", iconKey: "FaBriefcase", nameBn: "চাকরি", subBn: "সুযোগ খুঁজুন" },
+    { name: "TECHNICAL TRAINING", sub: "Build Skills", iconKey: "FaChalkboardTeacher", nameBn: "টেকনিক্যাল ট্রেনিং", subBn: "দক্ষতা অর্জন" },
+    { name: "CV CREATION", sub: "Professional Resume", iconKey: "FaCheckCircle", nameBn: "সিভি তৈরি", subBn: "প্রফেশনাল রিজিউম" },
+    { name: "VISA VERIFICATION", sub: "Check Status Safely", iconKey: "FaPassport", nameBn: "ভিসা যাচাইকরণ", subBn: "নিরাপদে যাচাই করুন" },
+    { name: "LANGUAGE LEARNING", sub: "Learn New Languages", iconKey: "FaLanguage", nameBn: "ভাষা শিক্ষা", subBn: "নতুন ভাষা শিখুন" },
+    { name: "CONSULTANCY", sub: "Expert Guidance", iconKey: "FaHandshake", nameBn: "পরামর্শ", subBn: "বিশেষজ্ঞ গাইডেন্স" },
   ];
 
   return (
@@ -356,15 +356,15 @@ function HeroEditor({ data, onSave, saving }: { data: ILandingPageCMS["hero"]; o
               </div>
 
               {/* Icon row */}
-              <div className="max-w-xs">
-                <Label>Icon</Label>
-                <select
-                  value={course.iconKey}
-                  onChange={(e) => updateCourse(i, "iconKey", e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#1a4da1] bg-white"
-                >
-                  {ICON_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
+              <div className="max-w-md">
+                <CmsImageUpload
+                  label="Icon (SVG or Transparent PNG Image)"
+                  value={course.iconKey || ""}
+                  onChange={(v) => updateCourse(i, "iconKey", v)}
+                />
+                <p className="text-[10px] text-slate-400 mt-1">
+                  Upload a clean SVG or transparent PNG. Or enter a react-icon key name (e.g. <code className="bg-slate-100 px-1 rounded">FaBriefcase</code>).
+                </p>
               </div>
             </div>
           ))}
@@ -959,7 +959,7 @@ function ImmigrantJobsEditor({ data, onSave, saving }: { data: ILandingPageCMS["
 
 const DEFAULT_COURSE_MODULES: ILandingPageCMS["courseModules"] = {
   titlePrefix: "", titleHighlight: "", subtitle: "",
-  onlineTab: "", offlineTab: "", detailsLink: "", offlineCourses: [],
+  technicalTab: "", languageTab: "", detailsLink: "", offlineCourses: [],
 };
 
 function CourseModulesEditor({ data, onSave, saving }: { data: ILandingPageCMS["courseModules"]; onSave: (d: ILandingPageCMS["courseModules"]) => void; saving: boolean }) {
@@ -1006,8 +1006,8 @@ function CourseModulesEditor({ data, onSave, saving }: { data: ILandingPageCMS["
           <div><Label>Title Prefix</Label><Input value={local.titlePrefix || ""} onChange={(v) => set("titlePrefix", v)} /></div>
           <div><Label>Title Highlight</Label><Input value={local.titleHighlight || ""} onChange={(v) => set("titleHighlight", v)} /></div>
           <div className="md:col-span-2"><Label>Subtitle</Label><Textarea value={local.subtitle || ""} onChange={(v) => set("subtitle", v)} rows={2} /></div>
-          <div><Label>Online Tab Label</Label><Input value={local.onlineTab || ""} onChange={(v) => set("onlineTab", v)} /></div>
-          <div><Label>Offline Tab Label</Label><Input value={local.offlineTab || ""} onChange={(v) => set("offlineTab", v)} /></div>
+          <div><Label>Technical Tab Label</Label><Input value={local.technicalTab || ""} onChange={(v) => set("technicalTab", v)} /></div>
+          <div><Label>Language Tab Label</Label><Input value={local.languageTab || ""} onChange={(v) => set("languageTab", v)} /></div>
           <div><Label>Details Link text</Label><Input value={local.detailsLink || ""} onChange={(v) => set("detailsLink", v)} /></div>
         </div>
       </SectionCard>
@@ -1194,11 +1194,10 @@ export default function LandingPageCMSPage() {
                     <li key={tab.id}>
                       <button
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-all ${
-                          isActive
-                            ? "bg-blue-50 text-[#1a4da1] border-r-2 border-[#1a4da1]"
-                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                        }`}
+                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-all ${isActive
+                          ? "bg-blue-50 text-[#1a4da1] border-r-2 border-[#1a4da1]"
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                          }`}
                       >
                         <Icon size={15} className={isActive ? "text-[#1a4da1]" : "text-slate-400"} />
                         {tab.label}
@@ -1219,11 +1218,10 @@ export default function LandingPageCMSPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                      activeTab === tab.id
-                        ? "bg-[#1a4da1] text-white shadow-sm"
-                        : "text-slate-500 hover:bg-slate-100"
-                    }`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeTab === tab.id
+                      ? "bg-[#1a4da1] text-white shadow-sm"
+                      : "text-slate-500 hover:bg-slate-100"
+                      }`}
                   >
                     <Icon size={12} />
                     <span className="hidden lg:inline">{tab.label}</span>

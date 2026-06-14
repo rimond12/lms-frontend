@@ -96,7 +96,7 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
   const dropdownRef = useRef<HTMLLIElement>(null);
 
   const handleClick = (e: React.MouseEvent) => {
-    if (link.dropdown) {
+    if (link.dropdown && link.dropdown.length > 0) {
       e.preventDefault();
       setDropdownOpen(!isDropdownOpen);
     }
@@ -138,7 +138,7 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
 
         <span className="relative z-10 flex items-center gap-1.5">
           <span>{link.name}</span>
-          {link.dropdown && (
+          {link.dropdown && link.dropdown.length > 0 && (
             <ChevronDown
               size={14}
               className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""
@@ -152,7 +152,7 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
         )}
       </Link>
 
-      {link.dropdown && isDropdownOpen && (
+      {link.dropdown && link.dropdown.length > 0 && isDropdownOpen && (
         <div className="absolute left-0 mt-3 w-72 origin-top-left">
           <div className="absolute -top-2 left-6 w-4 h-4 bg-white dark:bg-gray-900 rotate-45 border-l border-t border-gray-100 dark:border-gray-700" />
 
@@ -272,7 +272,7 @@ const MobileNav: React.FC<{
           <nav className="px-4 space-y-1">
             {navLinks.map((link) => (
               <div key={link.name}>
-                {link.dropdown ? (
+                {link.dropdown && link.dropdown.length > 0 ? (
                   <>
                     <button
                       onClick={() =>

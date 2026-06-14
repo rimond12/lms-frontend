@@ -68,6 +68,7 @@ const baseApi = createApi({
     "Country",
     "Footer",
     "Navbar",
+    "VisaVerification",
   ],
   endpoints: () => ({}),
 });

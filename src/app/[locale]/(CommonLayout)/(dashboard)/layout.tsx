@@ -39,6 +39,7 @@ import {
   Briefcase,
   Tag,
   PanelTop,
+  ShieldCheck,
 } from "lucide-react";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
 import { logout } from "@/app/[locale]/@auth/AuthService";
@@ -158,6 +159,7 @@ const navigationSections = [
         icon: Tag,
       },
       { name: "Submitted Forms", href: "/dashboard/leads", icon: FileText },
+      { name: "Visa Verifications", href: "/dashboard/visa-verification", icon: ShieldCheck },
     ],
   },
   {

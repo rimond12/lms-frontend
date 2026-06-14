@@ -35,27 +35,27 @@
     "items": {
       "jobs": {
         "name": "JOBS",
-        "sub": "Browse by Country"
+        "sub": "Find Opportunities"
       },
       "verified": {
-        "name": "TECHNICAL",
-        "sub": "Training"
+        "name": "TECHNICAL TRAINING",
+        "sub": "Build Skills"
       },
       "organized": {
-        "name": "LANGUAGE",
-        "sub": "Training"
+        "name": "CV CREATION",
+        "sub": "Professional Resume"
       },
       "training": {
-        "name": "CV CREATION",
-        "sub": "Resume Builder"
+        "name": "VISA VERIFICATION",
+        "sub": "Check Status Safely"
       },
       "language": {
-        "name": "VISA",
-        "sub": "Verification"
+        "name": "LANGUAGE LEARNING",
+        "sub": "Learn New Languages"
       },
       "preparation": {
         "name": "CONSULTANCY",
-        "sub": "Expert Advice"
+        "sub": "Expert Guidance"
       }
     }
   },
@@ -112,8 +112,8 @@
     "titlePrefix": "Explore Our",
     "titleHighlight": "Course Programs",
     "subtitle": "Choose between online flexible learning and offline in-person classroom training at our branches.",
-    "onlineTab": "Online Courses",
-    "offlineTab": "Offline Courses",
+    "technicalTab": "Technical courses",
+    "languageTab": "Language courses",
     "offlineBadge": "In-Person Class",
     "branchLabel": "Branch",
     "timingLabel": "Timing",

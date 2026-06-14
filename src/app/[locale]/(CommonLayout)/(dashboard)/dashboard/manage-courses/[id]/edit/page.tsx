@@ -225,8 +225,13 @@ export default function EditProgramPage() {
         metaKeywords: program.metaKeywords || [],
 
         // Category fields
-        categories: program.categories || [],
-        primaryCategory: program.primaryCategory || "",
+        categories: (program.categories || []).map((c: any) =>
+          typeof c === "object" && c ? c._id : c
+        ),
+        primaryCategory:
+          typeof program.primaryCategory === "object" && program.primaryCategory
+            ? program.primaryCategory._id
+            : program.primaryCategory || "",
 
         // Sponsor fields
         sponsorTitle: program.sponsorTitle || "",

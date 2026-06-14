@@ -343,8 +343,8 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
         </div>
       </div>
 
-      {/* Type, Course Type, and Level */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Type and Level */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Program Type <span className="text-red-800">*</span>
@@ -361,22 +361,6 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
             <option value="webinar">Webinar</option>
             <option value="workshop">Workshop</option>
             <option value="course">Course</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Course Delivery Type <span className="text-red-800">*</span>
-          </label>
-          <select
-            value={data.courseType || "online"}
-            onChange={(e) =>
-              handleChange("courseType", e.target.value as "online" | "offline")
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          >
-            <option value="online">Online</option>
-            <option value="offline">Offline</option>
           </select>
         </div>
 

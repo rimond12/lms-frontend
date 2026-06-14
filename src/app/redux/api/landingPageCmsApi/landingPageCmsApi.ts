@@ -165,8 +165,8 @@ export interface ILandingPageCMS {
     titlePrefix: string;
     titleHighlight: string;
     subtitle: string;
-    onlineTab: string;
-    offlineTab: string;
+    technicalTab: string;
+    languageTab: string;
     detailsLink: string;
     offlineCourses: IOfflineCourse[];
   };
