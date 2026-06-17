@@ -26,6 +26,7 @@ import {
   HelpCircle,
   ChevronRight,
   Briefcase,
+  Bell,
 } from "lucide-react";
 import { ThemeContext } from "@/lib/ThemeProvider/ThemeProvider";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
@@ -159,9 +160,9 @@ const NavItem: React.FC<{ link: NavLink; isActive: boolean }> = ({
           <div className="relative bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-blue-200/40 dark:shadow-black/40 border border-gray-100/80 dark:border-gray-700/50 py-2 overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400" />
 
-            {link.dropdown.map((item) => (
+            {link.dropdown.map((item, idx) => (
               <Link
-                key={item.name}
+                key={`${item.name}-${idx}`}
                 href={item.href}
                 className="group/item flex items-start px-4 py-3 mx-2 rounded-xl hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-200"
                 onClick={() => setDropdownOpen(false)}
@@ -270,8 +271,8 @@ const MobileNav: React.FC<{
 
         <div className="flex-1 overflow-y-auto py-4">
           <nav className="px-4 space-y-1">
-            {navLinks.map((link) => (
-              <div key={link.name}>
+            {navLinks.map((link, index) => (
+              <div key={`${link.name}-${index}`}>
                 {link.dropdown && link.dropdown.length > 0 ? (
                   <>
                     <button
@@ -295,9 +296,9 @@ const MobileNav: React.FC<{
                     </button>
                     {expandedMenu === link.name && (
                       <div className="ml-4 mt-2 space-y-1 pl-4 border-l-2 border-blue-500">
-                        {link.dropdown.map((subItem) => (
+                        {link.dropdown.map((subItem, idx) => (
                           <Link
-                            key={subItem.name}
+                            key={`${subItem.name}-${idx}`}
                             href={subItem.href}
                             onClick={() => setIsOpen(false)}
                             className="flex items-center gap-3 px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 rounded-xl transition-all"
@@ -421,17 +422,9 @@ const Navbar: React.FC = () => {
     { name: t("courses"), href: "/all-courses", icon: <BookOpen size={18} /> },
     { name: t("jobs"), href: "/jobs", icon: <Briefcase size={18} /> },
     {
-      name: t("resources"),
-      href: "#",
-      icon: <FileText size={18} />,
-      dropdown: [
-        {
-          name: t("blog"),
-          href: "/blog",
-          description: "Articles & insights",
-          icon: <FileText size={16} />,
-        },
-      ],
+      name: t("notice"),
+      href: "/notices",
+      icon: <Bell size={18} />,
     },
     {
       name: t("about"),
@@ -498,9 +491,9 @@ const Navbar: React.FC = () => {
 
             <div className="hidden lg:flex lg:items-center lg:justify-center flex-1 px-8">
               <ul className="flex items-center gap-1 px-3 py-2 bg-gray-100/80 dark:bg-gray-800/40 rounded-2xl border border-gray-100/50 dark:border-gray-700/30">
-                {navLinks.map((link) => (
+                {navLinks.map((link, index) => (
                   <NavItem
-                    key={link.name}
+                    key={`${link.name}-${index}`}
                     link={link}
                     isActive={
                       pathname === link.href ||

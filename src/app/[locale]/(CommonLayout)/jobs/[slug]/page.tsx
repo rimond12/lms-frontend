@@ -81,6 +81,7 @@ export default function JobDetailPage() {
 
   // ── Localized Helpers ──
   const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayCompanyName = locale === "bn" ? (job.companyNameBn || job.companyName) : job.companyName;
   const displayAbout = locale === "bn" ? (job.aboutBn || job.about) : job.about;
   const displayLocation = locale === "bn" ? (job.locationBn || job.location) : job.location;
   const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
@@ -123,9 +124,9 @@ export default function JobDetailPage() {
       <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700 transition-colors">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-3 pt-0 pb-3 -mt-12">
-            <div className="w-25 h-25 rounded-full bg-blue-700 dark:bg-blue-600 border-[3px] border-white dark:border-gray-900 shadow-md flex items-center justify-center text-white font-black text-2xl shrink-0 relative z-10 overflow-hidden">
+            <div className={`w-25 h-25 rounded-full border-[3px] border-white dark:border-gray-900 shadow-md flex items-center justify-center font-black text-2xl shrink-0 relative z-10 overflow-hidden ${job.image ? "bg-white p-2" : "bg-blue-700 dark:bg-blue-600 text-white"}`}>
               {job.image ? (
-                <img src={getImageUrl(job.image)} alt={displayTitle} className="w-full h-full object-cover" />
+                <img src={getImageUrl(job.image)} alt={displayTitle} className="w-full h-full object-contain" />
               ) : (
                 initial
               )}
@@ -165,9 +166,14 @@ export default function JobDetailPage() {
         {/* Title + Apply */}
         <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 leading-tight">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-1 leading-tight">
               {displayTitle}
             </h1>
+            {displayCompanyName && (
+              <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2.5">
+                {displayCompanyName}
+              </p>
+            )}
             <div className="flex gap-2 flex-wrap">
               {job.status && (
                 <span className="text-[10px] font-semibold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-full px-2.5 py-0.5 capitalize">

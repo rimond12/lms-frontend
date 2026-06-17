@@ -28,6 +28,8 @@ export interface IJob {
   qualifications?: string[];
   responsibilities?: string[];
   benefits?: string[];
+  companyName?: string;
+  companyNameBn?: string;
   
   titleBn?: string;
   locationBn?: string;

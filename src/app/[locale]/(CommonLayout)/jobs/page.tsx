@@ -142,6 +142,7 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
   const displayCountry = locale === "bn" ? (job.country || country) : country;
   const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
   const description = (locale === "bn" ? (job.aboutBn || job.about || job.desc || "") : (job.about || job.desc || "")).trim();
+  const displayCompanyName = locale === "bn" ? (job.companyNameBn || job.companyName) : job.companyName;
 
   const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
   const hasImage = !!job.image;
@@ -171,52 +172,60 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
         {/* ── Banner / Image Area ── */}
         <div className="relative h-44 flex items-center justify-center overflow-hidden shrink-0">
 
+          {/* Soft layered gradient header (always present as fallback/backdrop) */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(145deg, ${color.from}f0 0%, ${color.to} 60%, ${color.to}bb 100%)`,
+            }}
+          />
+          {/* Decorative abstract circles */}
+          <div
+            className="absolute -top-6 -right-6 w-32 h-32 rounded-full opacity-20"
+            style={{ background: "rgba(255,255,255,0.7)" }}
+          />
+          <div
+            className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full opacity-15"
+            style={{ background: "rgba(255,255,255,0.5)" }}
+          />
+          <div
+            className="absolute top-1/2 right-14 w-12 h-12 rounded-full opacity-10"
+            style={{ background: "rgba(255,255,255,0.8)" }}
+          />
+
           {hasImage ? (
             <>
-              <img src={getImageUrl(job.image)} alt={displayTitle}
-                className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            </>
-          ) : (
-            <>
-              {/* Soft layered gradient header */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(145deg, ${color.from}f0 0%, ${color.to} 60%, ${color.to}bb 100%)`,
+              {/* Dynamic Image Background (Full Banner) */}
+              <img
+                src={getImageUrl(job.image!)}
+                alt={displayTitle}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  // Hide image if it fails to load
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
                 }}
               />
-              {/* Decorative abstract circles */}
-              <div
-                className="absolute -top-6 -right-6 w-32 h-32 rounded-full opacity-20"
-                style={{ background: "rgba(255,255,255,0.7)" }}
-              />
-              <div
-                className="absolute -bottom-10 -left-6 w-36 h-36 rounded-full opacity-15"
-                style={{ background: "rgba(255,255,255,0.5)" }}
-              />
-              <div
-                className="absolute top-1/2 right-14 w-12 h-12 rounded-full opacity-10"
-                style={{ background: "rgba(255,255,255,0.8)" }}
-              />
-
-              {/* Elevated company logo/initial */}
-              {job.logo && job.logo.startsWith("http") ? (
-                <div className="relative z-10 p-2 rounded-2xl bg-white/25 backdrop-blur-sm border border-white/40 shadow-xl">
-                  <img
-                    src={job.logo}
-                    alt={displayTitle}
-                    className="w-14 h-14 rounded-xl object-cover"
-                  />
-                </div>
-              ) : (
-                <div
-                  className="relative z-10 w-16 h-16 rounded-2xl bg-white/25 border-2 border-white/40 flex items-center justify-center font-black text-3xl text-white shadow-xl backdrop-blur-sm"
-                >
-                  {initial}
-                </div>
-              )}
+              {/* Subtle dark overlay for readability */}
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]" />
             </>
+          ) : (
+            /* Elevated company logo fallback/initial */
+            <div className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <div className="w-20 h-20 rounded-2xl bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 flex items-center justify-center shadow-xl shadow-black/10 p-1">
+                <div className="w-full h-full rounded-[14px] bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center shadow-inner">
+                  {initial === "S" || initial === "C" ? (
+                    <svg className="w-10 h-10 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16.5 5.5C15.2 4.5 13.7 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C13.7 20 15.2 19.5 16.5 18.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 9.5C13.38 9.5 14.5 10.62 14.5 12C14.5 13.38 13.38 14.5 12 14.5" stroke="currentColor" strokeWidth="2.5" />
+                    </svg>
+                  ) : (
+                    <span className="font-black text-3xl text-white select-none tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                      {initial}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Country Badge — top right */}
@@ -252,6 +261,11 @@ function JobCard({ job, savedJobIds, index }: { job: any; savedJobIds: string[];
             >
               {displayTitle}
             </h3>
+            {displayCompanyName && (
+              <p className="text-[12.5px] font-semibold text-slate-500 dark:text-slate-400 mt-1">
+                {displayCompanyName}
+              </p>
+            )}
             {(job.company || job.category) && (
               <div className="flex items-center gap-1.5 mt-1.5">
                 <Building2 size={11} className="text-gray-400 shrink-0" />

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useGetAllJobsQuery } from "@/app/redux/api/jobsApi/jobsApi";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
 import { getImageUrl } from "@/utils/imageUtils";
@@ -104,14 +104,20 @@ function getCountryFromLocation(location: string | undefined, country?: string):
 
 // ─── Premium Job Card (homepage) ──────────────────────────────────
 function MiniJobCard({ job, index }: { job: any; index: number }) {
+  const locale = useLocale();
   const color = getCardColor(index);
   const country = getCountryFromLocation(job.location, job.country);
   const flag = getCountryFlag(job.location, job.country);
-  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+
+  const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayCompanyName = locale === "bn" ? (job.companyNameBn || job.companyName) : job.companyName;
+  const displayCountry = locale === "bn" ? (job.country || country) : country;
+  const description = (locale === "bn" ? (job.aboutBn || job.about || job.desc || "") : (job.about || job.desc || "")).trim();
+
+  const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
   const badge = deriveBadge(job.type, index);
   const badgeStyle = badge ? BADGE_STYLES[badge] : null;
   const BadgeIcon = badgeStyle?.icon;
-  const description = (job.about ?? job.desc ?? "").trim();
   const hasImage = !!job.image;
 
   return (
@@ -134,57 +140,77 @@ function MiniJobCard({ job, index }: { job: any; index: number }) {
         }}
       >
         {/* ── Card Header / Banner ── */}
-        <div className="relative h-32 flex items-center justify-center overflow-hidden shrink-0">
+        <div className="relative h-40 flex items-center justify-center overflow-hidden shrink-0">
+          {/* Soft gradient header */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(145deg, ${color.from}ee 0%, ${color.to} 60%, ${color.to}bb 100%)`,
+            }}
+          />
+          {/* Decorative abstract circles */}
+          <div
+            className="absolute -top-5 -right-5 w-24 h-24 rounded-full opacity-20"
+            style={{ background: "rgba(255,255,255,0.6)" }}
+          />
+          <div
+            className="absolute -bottom-8 -left-5 w-28 h-28 rounded-full opacity-15"
+            style={{ background: "rgba(255,255,255,0.4)" }}
+          />
+          <div
+            className="absolute top-4 left-10 w-8 h-8 rounded-full opacity-10"
+            style={{ background: "rgba(255,255,255,0.8)" }}
+          />
+
           {hasImage ? (
             <>
-              <img src={getImageUrl(job.image)} alt={job.title}
-                className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            </>
-          ) : (
-            <>
-              {/* Soft gradient header */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(145deg, ${color.from}ee 0%, ${color.to} 60%, ${color.to}bb 100%)`,
+              {/* Dynamic Image Background (Full Banner) */}
+              <img
+                src={getImageUrl(job.image!)}
+                alt={displayTitle}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
                 }}
               />
-              {/* Decorative abstract circles */}
-              <div
-                className="absolute -top-5 -right-5 w-24 h-24 rounded-full opacity-20"
-                style={{ background: "rgba(255,255,255,0.6)" }}
-              />
-              <div
-                className="absolute -bottom-8 -left-5 w-28 h-28 rounded-full opacity-15"
-                style={{ background: "rgba(255,255,255,0.4)" }}
-              />
-              <div
-                className="absolute top-4 left-10 w-8 h-8 rounded-full opacity-10"
-                style={{ background: "rgba(255,255,255,0.8)" }}
-              />
-              {/* Elevated logo / initial badge */}
-              {job.logo && job.logo.startsWith("http") ? (
-                <div className="relative z-10 p-1.5 rounded-2xl bg-white/25 backdrop-blur-sm border border-white/40 shadow-xl">
-                  <img src={job.logo} alt={job.title}
-                    className="w-11 h-11 rounded-xl object-cover" />
-                </div>
-              ) : (
-                <div
-                  className="relative z-10 w-12 h-12 rounded-2xl bg-white/25 border-2 border-white/40 flex items-center justify-center font-black text-2xl text-white shadow-xl backdrop-blur-sm"
-                  style={{ letterSpacing: "-0.5px" }}
-                >
-                  {initial}
-                </div>
-              )}
+              {/* Subtle dark overlay for badge readability */}
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]" />
             </>
+          ) : (
+            /* Elevated logo / initial badge fallback */
+            <div className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <div className="w-20 h-20 rounded-2xl bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 flex items-center justify-center shadow-xl shadow-black/10 p-1">
+                {job.logo && job.logo.startsWith("http") ? (
+                  <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center overflow-hidden p-1 shadow-inner">
+                    <img
+                      src={job.logo}
+                      alt={displayTitle}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-full rounded-[14px] bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center shadow-inner">
+                    {initial === "S" || initial === "C" ? (
+                      <svg className="w-10 h-10 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.5 5.5C15.2 4.5 13.7 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C13.7 20 15.2 19.5 16.5 18.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 9.5C13.38 9.5 14.5 10.62 14.5 12C14.5 13.38 13.38 14.5 12 14.5" stroke="currentColor" strokeWidth="2.5" />
+                      </svg>
+                    ) : (
+                      <span className="font-black text-3xl text-white select-none tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                        {initial}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           )}
 
           {/* Country Badge — top right */}
           <div className="absolute top-2.5 right-2.5 z-20 flex items-center gap-1 bg-white/96 dark:bg-slate-900/96 backdrop-blur-md rounded-full px-2.5 py-1 shadow-md border border-white/60">
             <span className="text-sm leading-none">{flag}</span>
             <span className="text-[10px] font-extrabold text-slate-800 dark:text-white max-w-[72px] truncate tracking-tight">
-              {country}
+              {displayCountry}
             </span>
           </div>
 
@@ -218,10 +244,15 @@ function MiniJobCard({ job, index }: { job: any; index: number }) {
               className="font-extrabold text-[14px] text-slate-900 dark:text-white leading-snug line-clamp-2 transition-colors duration-200"
               style={{ letterSpacing: "-0.1px" }}
             >
-              {job.title}
+              {displayTitle}
             </h3>
+            {displayCompanyName && (
+              <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 mt-1">
+                {displayCompanyName}
+              </p>
+            )}
             {(job.company || job.category) && (
-              <div className="flex items-center gap-1.5 mt-1">
+              <div className="flex items-center gap-1.5 mt-1.5">
                 <Building2 size={10} className="text-slate-400 shrink-0" />
                 <span className="text-[10.5px] text-slate-400 truncate font-semibold">
                   {job.company || job.category}

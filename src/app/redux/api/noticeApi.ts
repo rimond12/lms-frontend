@@ -4,30 +4,18 @@
 
 import baseApi from "./baseApi";
 
-export interface IRecipientUser {
-  userId: string;
-  name: string;
-  email: string;
-}
-
 export interface INotice {
   _id: string;
   title: string;
-  description?: string;
   content: string;
-
-  image?: string;
-  recipientType: 'ALL_USERS' | 'BATCH' | 'INDIVIDUAL';
-  targetBatches?: string[];
-  recipientUsers?: IRecipientUser[];
-  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-  sendEmail: boolean;
-  totalRecipients: number;
-  emailSentCount: number;
-  emailFailedCount: number;
+  description?: string;   // Kept for backward compatibility
+  image?: string;         // Kept for backward compatibility
+  recipientType?: string; // Kept for backward compatibility
+  attachment?: string;
+  attachments?: string[];
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  publishedAt?: string;
 }
 
 export interface INoticeResponse {
@@ -38,213 +26,145 @@ export interface INoticeResponse {
 
 export interface INoticesListResponse {
   success: boolean;
-  data: {
-    notices: INotice[];
-    total: number;
-    page: number;
-    limit: number;
-  };
-  message: string;
-}
-
-export interface IRecipientsPreviewResponse {
-  success: boolean;
-  data: IRecipientUser[];
+  data: INotice[];
   message: string;
 }
 
 export const noticeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Create a new notice (DRAFT)
+    // Get all notices (for admin, fetches active and inactive notices)
+    getAllNotices: builder.query<INoticesListResponse, void>({
+      query: () => {
+        console.log('📋 [Redux] Fetching all notices (admin view)');
+        return '/notices?role=admin';
+      },
+      providesTags: ['Notice'],
+    }),
+
+    // Get active notices (for public user view)
+    getActiveNotices: builder.query<INoticesListResponse, void>({
+      query: () => {
+        console.log('📬 [Redux] Fetching active notices');
+        return '/notices';
+      },
+      providesTags: ['Notice'],
+    }),
+
+    // Get user notices (for backward compatibility in user profiles/notifications)
+    getUserNotices: builder.query<
+      {
+        success: boolean;
+        data: {
+          notices: INotice[];
+          total: number;
+        };
+        message: string;
+      },
+      { page?: number; limit?: number } | void
+    >({
+      query: () => {
+        console.log('📬 [Redux] Fetching user notices compatibility wrapper');
+        return '/notices';
+      },
+      transformResponse: (response: INoticesListResponse) => {
+        const notices = (response?.data || []).map(notice => ({
+          ...notice,
+          recipientType: "ALL_USERS", // Default to "ALL_USERS" for UI badge compatibility
+        }));
+        return {
+          success: response?.success ?? true,
+          message: response?.message ?? "",
+          data: {
+            notices,
+            total: notices.length,
+          },
+        };
+      },
+      providesTags: ['Notice'],
+    }),
+
+    // Create a new notice (Admin Only)
     createNotice: builder.mutation<
       INoticeResponse,
       {
         title: string;
-        description?: string;
         content: string;
-        recipientType: string;
-        targetBatches?: string[];
-        recipientUsers?: IRecipientUser[];
-        sendEmail: boolean;
-        emailTemplate?: string;
-        image?: string;
+        attachment?: string;
+        attachments?: string[];
+        isActive: boolean;
       }
     >({
       query: (payload) => {
         console.log('📤 [Redux] Creating notice:', payload.title);
         return {
-          url: '/notices/create',
+          url: '/notices',
           method: 'POST',
           body: payload,
         };
       },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          console.log('✅ [Redux] Notice created:', data.data._id);
-          dispatch(baseApi.util.invalidateTags(['Notice']));
-        } catch (error) {
-          console.error('❌ [Redux] Create error:', error);
-        }
-      },
+      invalidatesTags: ['Notice'],
     }),
 
-    // Update an existing notice (only DRAFT)
+    // Update an existing notice (Admin Only)
     updateNotice: builder.mutation<
       INoticeResponse,
       {
         noticeId: string;
         payload: {
           title?: string;
-          description?: string;
           content?: string;
-          recipientType?: string;
-          targetBatches?: string[];
-          recipientUsers?: IRecipientUser[];
-          sendEmail?: boolean;
-          emailTemplate?: string;
-          image?: string;
+          attachment?: string;
+          attachments?: string[];
+          isActive?: boolean;
         };
       }
     >({
       query: ({ noticeId, payload }) => {
-        console.log('📝 [Redux] Updating notice:', noticeId);
+        console.log('📝 [Redux] Updating notice:', noticeId, payload);
         return {
-          url: `/notices/${noticeId}/update`,
+          url: `/notices/${noticeId}`,
           method: 'PUT',
           body: payload,
         };
       },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          console.log('✅ [Redux] Notice updated:', data.data._id);
-          dispatch(baseApi.util.invalidateTags(['Notice']));
-        } catch (error) {
-          console.error('❌ [Redux] Update error:', error);
-        }
-      },
+      invalidatesTags: ['Notice'],
     }),
 
-    // Publish a notice (DRAFT -> PUBLISHED)
-    publishNotice: builder.mutation<
-      INoticeResponse,
-      {
-        noticeId: string;
-        sendEmail?: boolean;
-      }
+    // Upload Notice Attachment (Admin Only)
+    uploadNoticeAttachment: builder.mutation<
+      { success: boolean; data: { attachmentPath: string }; message: string },
+      FormData
     >({
-      query: ({ noticeId, sendEmail }) => {
-        console.log('🚀 [Redux] Publishing notice:', noticeId, { sendEmail });
+      query: (formData) => {
+        console.log('📤 [Redux] Uploading notice attachment');
         return {
-          url: `/notices/${noticeId}/publish`,
+          url: '/notices/upload-attachment',
           method: 'POST',
-          body: { sendEmail },
-        };
-      },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          console.log('✅ [Redux] Notice published:', data.data._id);
-          dispatch(baseApi.util.invalidateTags(['Notice']));
-        } catch (error) {
-          console.error('❌ [Redux] Publish error:', error);
-        }
-      },
-    }),
-
-    // Get all notices (admin)
-    getAllNotices: builder.query<
-      INoticesListResponse,
-      {
-        page?: number;
-        limit?: number;
-        status?: string;
-      }
-    >({
-      query: ({ page = 1, limit = 10, status }) => {
-        console.log('📋 [Redux] Fetching all notices:', { page, limit, status });
-        let url = `/notices/admin/all?page=${page}&limit=${limit}`;
-        if (status) {
-          url += `&status=${status}`;
-        }
-        return url;
-      },
-      providesTags: ['Notice'],
-    }),
-
-    // Get single notice details
-    getNoticeById: builder.query<INoticeResponse, string>({
-      query: (noticeId) => {
-        console.log('👁️ [Redux] Fetching notice details:', noticeId);
-        return `/notices/admin/${noticeId}`;
-      },
-      providesTags: ['Notice'],
-    }),
-
-    // Get recipients preview
-    getRecipientsPreview: builder.mutation<
-      IRecipientsPreviewResponse,
-      {
-        recipientType: string;
-        targetBatches?: string[];
-        recipientUsers?: IRecipientUser[];
-      }
-    >({
-      query: (payload) => {
-        console.log('👥 [Redux] Fetching recipients preview:', payload.recipientType);
-        return {
-          url: '/notices/recipients-preview',
-          method: 'POST',
-          body: payload,
+          body: formData,
         };
       },
     }),
 
-    // Delete a notice (only DRAFT)
+    // Delete a notice (Admin Only)
     deleteNotice: builder.mutation<INoticeResponse, string>({
       query: (noticeId) => {
         console.log('🗑️ [Redux] Deleting notice:', noticeId);
         return {
-          url: `/notices/${noticeId}/delete`,
+          url: `/notices/${noticeId}`,
           method: 'DELETE',
         };
       },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          console.log('✅ [Redux] Notice deleted:', arg);
-          dispatch(baseApi.util.invalidateTags(['Notice']));
-        } catch (error) {
-          console.error('❌ [Redux] Delete error:', error);
-        }
-      },
-    }),
-
-    // Get user's notices
-    getUserNotices: builder.query<
-      INoticesListResponse,
-      {
-        page?: number;
-        limit?: number;
-      }
-    >({
-      query: ({ page = 1, limit = 10 }) => {
-        console.log('📬 [Redux] Fetching user notices:', { page, limit });
-        return `/notices/user/my-notices?page=${page}&limit=${limit}`;
-      },
-      providesTags: ['Notice'],
+      invalidatesTags: ['Notice'],
     }),
   }),
 });
 
 export const {
+  useGetAllNoticesQuery,
+  useGetActiveNoticesQuery,
+  useGetUserNoticesQuery, // Re-exported for backward compatibility
   useCreateNoticeMutation,
   useUpdateNoticeMutation,
-  usePublishNoticeMutation,
-  useGetAllNoticesQuery,
-  useGetNoticeByIdQuery,
-  useGetRecipientsPreviewMutation,
   useDeleteNoticeMutation,
-  useGetUserNoticesQuery,
+  useUploadNoticeAttachmentMutation,
 } = noticeApi;

@@ -12,6 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
 import {
   useGetSavedJobsQuery,
@@ -38,7 +39,10 @@ function JobCard({
   onUnsave: (id: string) => void;
   isRemoving: boolean;
 }) {
-  const initial = job.title?.charAt(0)?.toUpperCase() ?? "J";
+  const locale = useLocale();
+  const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayCompanyName = locale === "bn" ? (job.companyNameBn || job.companyName) : job.companyName;
+  const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
 
   return (
     <motion.div
@@ -58,9 +62,14 @@ function JobCard({
           <div className="min-w-0">
             <Link href={`/jobs/${job.slug}`}>
               <h3 className="text-sm font-bold text-gray-900 dark:text-white hover:text-blue-700 dark:hover:text-blue-400 transition-colors truncate">
-                {job.title}
+                {displayTitle}
               </h3>
             </Link>
+            {displayCompanyName && (
+              <p className="text-[11.5px] font-semibold text-gray-500 dark:text-gray-400 mt-0.5">
+                {displayCompanyName}
+              </p>
+            )}
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
               <Building2 size={11} /> {job.category}
             </p>

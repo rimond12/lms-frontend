@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { Shield, Phone, MessageSquare } from "lucide-react";
+import { Shield, Phone, MessageSquare, MapPin, Mail, Clock, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { ChangelogModal } from "../ChangelogModal";
 import { useGetFooterQuery } from "@/app/redux/api/footerApi/footerApi";
@@ -67,21 +67,31 @@ export const Footer = () => {
       style={{
         fontFamily: "banglaFont",
       }}
-      className="bg-[#0a0a0a] text-gray-300 border-t border-gray-900 font-sans"
+      className="relative overflow-hidden bg-gradient-to-br from-[#060913] via-[#090f20] to-[#04060c] text-gray-300 border-t border-blue-900/30 font-sans"
     >
+      {/* Decorative ambient glowing background blur */}
+      <div className="absolute left-1/4 top-0 -z-10 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[120px]" />
+      <div className="absolute right-1/4 bottom-0 -z-10 h-96 w-96 translate-y-1/2 rounded-full bg-blue-900/15 blur-[150px]" />
+
       <div className="max-w-7xl mx-auto px-4 p-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
+          
           {/* Contact Section - Col Span 5 */}
           <div className="lg:col-span-5 space-y-6">
             <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-              <span className="w-1.5 h-6 bg-red-600 rounded-full"></span>
+              <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
               {t("contact")}
             </h2>
 
             <div className="space-y-4">
-              {/* Address */}
-              <div className="flex items-start gap-3 group">
-                <div className="mt-1 p-2 rounded-lg bg-gray-900/50 group-hover:bg-red-900/20 text-red-500 transition-colors">
+              {/* Address (Click to open Google Maps) */}
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(footer.address)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-start gap-3 group hover:text-blue-400 transition-colors duration-200"
+              >
+                <div className="mt-1 p-2 rounded-lg bg-gray-900/50 group-hover:bg-blue-900/20 text-blue-500 transition-colors shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -101,15 +111,18 @@ export const Footer = () => {
                   <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5">
                     {t("address")}
                   </p>
-                  <p className="text-sm leading-relaxed text-gray-300">
+                  <p className="text-sm leading-relaxed text-gray-300 group-hover:text-blue-400 transition-colors">
                     {footer.address}
                   </p>
                 </div>
-              </div>
+              </a>
 
-              {/* Mobile */}
-              <div className="flex items-start gap-3 group">
-                <div className="mt-1 p-2 rounded-lg bg-gray-900/50 group-hover:bg-red-900/20 text-red-500 transition-colors">
+              {/* Mobile (Click to trigger direct phone call) */}
+              <a
+                href={`tel:${footer.mobile.split(" ")[0].replace(/[^0-9+]/g, '')}`}
+                className="flex items-start gap-3 group hover:text-blue-400 transition-colors duration-200"
+              >
+                <div className="mt-1 p-2 rounded-lg bg-gray-900/50 group-hover:bg-blue-900/20 text-blue-500 transition-colors shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -128,15 +141,15 @@ export const Footer = () => {
                   <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5">
                     {t("mobile")}
                   </p>
-                  <p className="text-sm font-medium text-white">
+                  <p className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">
                     {footer.mobile}
                   </p>
                 </div>
-              </div>
+              </a>
 
               {/* Email */}
               <div className="flex items-start gap-3 group">
-                <div className="mt-1 p-2 rounded-lg bg-gray-900/50 group-hover:bg-red-900/20 text-red-500 transition-colors">
+                <div className="mt-1 p-2 rounded-lg bg-gray-900/50 group-hover:bg-blue-900/20 text-blue-500 transition-colors shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -161,7 +174,7 @@ export const Footer = () => {
                       <a
                         key={idx}
                         href={`mailto:${email.trim()}`}
-                        className="block text-sm text-gray-300 hover:text-red-400 transition-colors"
+                        className="block text-sm text-gray-300 hover:text-blue-400 transition-colors"
                       >
                         {email.trim()}
                       </a>
@@ -174,7 +187,7 @@ export const Footer = () => {
 
           {/* Quick Links - Col Span 3 */}
           <div className="lg:col-span-3 space-y-6">
-            <h2 className="text-lg font-bold text-white tracking-tight">
+            <h2 className="text-lg font-bold text-white tracking-tight pl-3 border-l-4 border-blue-600">
               {t("quickLinks")}
             </h2>
             <ul className="space-y-3">
@@ -182,9 +195,9 @@ export const Footer = () => {
                 <li key={idx}>
                   <Link
                     href={link.url}
-                    className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group"
+                    className="text-sm text-gray-400 hover:text-blue-400 transition-colors flex items-center gap-2 group"
                   >
-                    <span className="w-1.5 h-1.5 bg-gray-600 rounded-full group-hover:bg-red-500 transition-colors"></span>
+                    <span className="w-1.5 h-1.5 bg-gray-600 group-hover:bg-blue-500 rounded-full transition-colors"></span>
                     {link.label}
                   </Link>
                 </li>
@@ -194,21 +207,26 @@ export const Footer = () => {
 
           {/* Support Center - Col Span 4 */}
           <div className="lg:col-span-4 space-y-6">
-            <h2 className="text-lg font-bold text-white tracking-tight">
+            <h2 className="text-lg font-bold text-white tracking-tight pl-3 border-l-4 border-blue-600">
               {t("support")}
             </h2>
 
-            <div className="bg-gray-900/50 p-6 rounded-2xl border border-gray-800 space-y-4">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-5 backdrop-blur-xl transition-all duration-300 hover:border-blue-500/30 hover:bg-white/[0.04] shadow-2xl">
+              <div className="absolute -right-8 -top-8 -z-10 h-20 w-20 rounded-full bg-blue-600/10 blur-xl" />
+
               {/* Hotline Row */}
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-red-950/40 text-red-500 border border-red-900/30">
+                <a
+                  href={`tel:${footer.hotline.replace(/\s+/g, '')}`}
+                  className="p-2 rounded-xl bg-blue-950/40 text-blue-500 border border-blue-900/30 hover:scale-105 hover:bg-blue-600/20 transition-all duration-200"
+                >
                   <Phone size={18} className="animate-pulse" />
-                </div>
+                </a>
                 <div>
                   <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-0.5">Hotline</p>
                   <a
                     href={`tel:${footer.hotline.replace(/\s+/g, '')}`}
-                    className="text-lg font-extrabold bg-linear-to-r from-red-500 to-orange-500 bg-clip-text text-transparent hover:opacity-95 transition-opacity"
+                    className="text-lg font-extrabold bg-gradient-to-r from-blue-500 to-indigo-400 bg-clip-text text-transparent hover:opacity-95 transition-opacity"
                   >
                     {footer.hotline}
                   </a>
@@ -216,7 +234,7 @@ export const Footer = () => {
               </div>
 
               {/* Office Hours Details */}
-              <div className="border-t border-gray-800/60 pt-3">
+              <div className="border-t border-gray-800/60 pt-3 mt-3">
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2 mb-1.5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +264,7 @@ export const Footer = () => {
                   href={footer.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#25D366] hover:bg-[#20ba5a] text-black font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#25D366]/10 text-sm"
+                  className="flex items-center justify-center gap-2 w-full mt-4 py-2.5 px-4 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#25D366]/10 text-sm"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -262,13 +280,13 @@ export const Footer = () => {
               )}
 
               {/* Social Icons */}
-              <div className="flex flex-wrap gap-2.5 pt-2 border-t border-gray-800/60">
+              <div className="flex flex-wrap gap-2.5 pt-3 mt-4 border-t border-gray-800/60 justify-between">
                 {footer.socialLinks.facebook && (
                   <a
                     href={footer.socialLinks.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -286,7 +304,7 @@ export const Footer = () => {
                     href={footer.socialLinks.youtube}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +322,7 @@ export const Footer = () => {
                     href={footer.socialLinks.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -322,7 +340,7 @@ export const Footer = () => {
                     href={footer.socialLinks.tiktok}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center text-white hover:bg-[#FE2C55] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-[#FE2C55] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -340,7 +358,7 @@ export const Footer = () => {
                     href={footer.socialLinks.x}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center text-white hover:bg-[#000000] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-[#000000] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -358,7 +376,7 @@ export const Footer = () => {
                     href={footer.whatsappLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
+                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-black/20"
                     title="WhatsApp Contact"
                   >
                     <svg
@@ -382,11 +400,17 @@ export const Footer = () => {
       <div className="border-t border-gray-900 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-medium tracking-wide">
-            <p className="flex items-center gap-2">
-              <span>© {currentYear} {footer.copyrightText}</span>
-              <span className="hidden md:inline text-gray-800">|</span>
-              <span>{t("allRights")}</span>
-            </p>
+            <div className="flex items-center gap-3">
+              {/* Small circular Branding Icon */}
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 border border-white/10">
+                <span className="text-xs font-bold text-white">N</span>
+              </div>
+              <p className="flex items-center gap-2">
+                <span>© {currentYear} {footer.copyrightText}</span>
+                <span className="hidden md:inline text-gray-800">|</span>
+                <span>{t("allRights")}</span>
+              </p>
+            </div>
             <div className="text-[10px] text-gray-600 opacity-80 text-center md:text-right space-x-1.5 leading-relaxed">
               <span>Icons by</span>
               <a href="https://www.flaticon.com/authors/freepik" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-gray-400">Freepik</a>

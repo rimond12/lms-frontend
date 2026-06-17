@@ -205,6 +205,7 @@ const JobDetailsModal = ({
   const locale = useLocale();
 
   const displayTitle = locale === "bn" ? (job.titleBn || job.title) : job.title;
+  const displayCompanyName = locale === "bn" ? (job.companyNameBn || job.companyName) : job.companyName;
   const displayAbout = locale === "bn" ? (job.aboutBn || job.about) : job.about;
   const displayLocation = locale === "bn" ? (job.locationBn || job.location) : job.location;
   const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
@@ -234,6 +235,9 @@ const JobDetailsModal = ({
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <h2 className="text-base sm:text-xl font-black text-white truncate leading-tight">{displayTitle}</h2>
+                {displayCompanyName && (
+                  <p className="text-blue-100 text-xs font-semibold mt-0.5">{displayCompanyName}</p>
+                )}
                 <p className="text-blue-200 text-sm mt-0.5">{job.category} · {job.type}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -345,6 +349,7 @@ const EMPTY_FORM: ICreateJobPayload = {
   titleBn: "", locationBn: "", salaryBn: "", durationBn: "", dutyTimeBn: "",
   experienceBn: "", aboutBn: "", qualificationsBn: [],
   responsibilitiesBn: [], benefitsBn: [],
+  companyName: "", companyNameBn: "",
 };
 
 // ─── Job Form ────────────────────────────────────────────────────────
@@ -470,13 +475,13 @@ const JobForm = ({
           {/* ── Image Upload Section ─────────────────────────────── */}
           <div className="sm:col-span-2">
             <label className="block text-xs font-bold text-[#1a4da1] mb-2 uppercase tracking-wide flex items-center gap-1.5">
-              <ImageIcon size={12} /> Job Banner Image
+              <ImageIcon size={12} /> Company Logo
             </label>
 
             {/* Preview */}
             {imagePreview && (
               <div className="relative mb-3 rounded-xl overflow-hidden h-36 w-full border border-gray-200 shadow-sm">
-                <img src={imagePreview} alt="Banner preview" className="w-full h-full object-cover" />
+                <img src={imagePreview} alt="Logo preview" className="w-full h-full object-contain bg-slate-50 p-2" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 <button type="button" onClick={clearImage}
                   className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors">
@@ -623,6 +628,7 @@ const JobForm = ({
           {activeTab === "en" ? (
             <>
               <Field label="Job Title *" name="title" placeholder="Software Engineer" form={form} onChange={handleInput} />
+              <Field label="Company Name" name="companyName" placeholder="Emaar Engineering LLC" form={form} onChange={handleInput} />
               <Field label="Location" name="location" placeholder="Dhaka, Bangladesh" form={form} onChange={handleInput} />
               <Field label="Salary" name="salary" placeholder="৳ 30,000 - 50,000" form={form} onChange={handleInput} />
               <Field label="Duration" name="duration" placeholder="6 months" form={form} onChange={handleInput} />
@@ -646,6 +652,7 @@ const JobForm = ({
           ) : (
             <>
               <Field label="Job Title (Bengali)" name="titleBn" placeholder="সফটওয়্যার ইঞ্জিনিয়ার" form={form} onChange={handleInput} />
+              <Field label="Company Name (Bengali)" name="companyNameBn" placeholder="ইমার ইঞ্জিনিয়ারিং এলএলসি" form={form} onChange={handleInput} />
               <Field label="Location (Bengali)" name="locationBn" placeholder="ঢাকা, বাংলাদেশ" form={form} onChange={handleInput} />
               <Field label="Salary (Bengali)" name="salaryBn" placeholder="৳ ৩০,০০০ - ৫০,০০০" form={form} onChange={handleInput} />
               <Field label="Duration (Bengali)" name="durationBn" placeholder="৬ মাস" form={form} onChange={handleInput} />
@@ -705,6 +712,7 @@ const AdminJobCard = ({
   const displaySalary = locale === "bn" ? (job.salaryBn || job.salary) : job.salary;
   const displayExperience = locale === "bn" ? (job.experienceBn || job.experience) : job.experience;
   const displayDutyTime = locale === "bn" ? (job.dutyTimeBn || job.dutyTime) : job.dutyTime;
+  const displayCompanyName = locale === "bn" ? (job.companyNameBn || job.companyName) : job.companyName;
 
   const initial = displayTitle?.charAt(0)?.toUpperCase() ?? "J";
   const description = (displayAbout ?? "").trim();
@@ -715,26 +723,46 @@ const AdminJobCard = ({
     <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 hover:-translate-y-1 flex flex-col">
 
       {/* ── Banner ────────────────────────────────────────────── */}
-      <div className="relative h-36 flex items-center justify-center overflow-hidden shrink-0">
+      <div className="relative h-40 flex items-center justify-center overflow-hidden shrink-0">
 
-        {/* Background: image or gradient */}
+        {/* Soft layered gradient backdrop (always present) */}
+        <div className="absolute inset-0"
+          style={{ background: `linear-gradient(135deg, ${color.from} 0%, ${color.to} 100%)` }} />
+        <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full border-[12px] border-white/10 pointer-events-none" />
+        <div className="absolute -bottom-8 -left-6 w-32 h-32 rounded-full border-[10px] border-white/10 pointer-events-none" />
+
         {hasImage ? (
           <>
-            <img src={getImageUrl(job.image!)} alt={displayTitle}
-              className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/5" />
+            {/* Dynamic Image Background (Full Banner) */}
+            <img
+              src={getImageUrl(job.image!)}
+              alt={displayTitle}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            {/* Subtle dark overlay for badge readability */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]" />
           </>
         ) : (
-          <>
-            <div className="absolute inset-0"
-              style={{ background: `linear-gradient(135deg, ${color.from} 0%, ${color.to} 100%)` }} />
-            <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full border-[12px] border-white/10 pointer-events-none" />
-            <div className="absolute -bottom-8 -left-6 w-32 h-32 rounded-full border-[10px] border-white/10 pointer-events-none" />
-            {/* Letter initial */}
-            <div className="w-14 h-14 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center font-black text-2xl text-white shadow-xl backdrop-blur-sm relative z-10">
-              {initial}
+          /* Centered fallback initial */
+          <div className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 flex items-center justify-center shadow-xl shadow-black/10 p-1">
+              <div className="w-full h-full rounded-[12px] bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center shadow-inner">
+                {initial === "S" || initial === "C" ? (
+                  <svg className="w-9 h-9 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.5 5.5C15.2 4.5 13.7 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C13.7 20 15.2 19.5 16.5 18.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 9.5C13.38 9.5 14.5 10.62 14.5 12C14.5 13.38 13.38 14.5 12 14.5" stroke="currentColor" strokeWidth="2.5" />
+                  </svg>
+                ) : (
+                  <span className="font-black text-2xl text-white select-none tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                    {initial}
+                  </span>
+                )}
+              </div>
             </div>
-          </>
+          </div>
         )}
 
         {/* Country badge — top right */}
@@ -771,6 +799,11 @@ const AdminJobCard = ({
           <h3 className="font-extrabold text-[14px] text-gray-900 leading-snug line-clamp-2 group-hover:text-blue-700 transition-colors duration-200">
             {displayTitle}
           </h3>
+          {displayCompanyName && (
+            <p className="text-[12px] font-semibold text-gray-500 mt-1">
+              {displayCompanyName}
+            </p>
+          )}
           {job.category && (
             <div className="flex items-center gap-1 mt-1">
               <Building2 size={11} className="text-gray-400 shrink-0" />
