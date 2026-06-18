@@ -52,11 +52,17 @@ function getUserFromToken(request: NextRequest) {
 }
 
 export default async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Force root "/" to redirect to "/bn"
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/bn', request.url));
+  }
+
   // 1. Run i18n middleware first to handle redirects and locale detection
   const response = i18nMiddleware(request);
 
   // 2. Auth Logic
-  const { pathname } = request.nextUrl;
   
   // Skip auth check for public assets/api if not already handled by matcher
   if (
