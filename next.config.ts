@@ -6,6 +6,16 @@ const withNextIntl = createNextIntlPlugin(
 );
  
 const nextConfig: NextConfig = {
+  output: 'standalone', // Drastically reduces Docker image size by only copying necessary files
+  typescript: {
+    // Note: It is recommended to run type checking in your CI pipeline or locally before pushing.
+    // Disabling type checking during the VPS build prevents RAM starvation and speeds up builds.
+    ignoreBuildErrors: true, 
+  },
+  eslint: {
+    // Disabling linting during the VPS build prevents RAM starvation and speeds up builds.
+    ignoreDuringBuilds: true,
+  },
   turbopack: {
     root: process.cwd(),
   },
