@@ -419,7 +419,25 @@ const Navbar: React.FC = () => {
     }))
   })) || [
     { name: t("home"), href: "/", icon: <Home size={18} /> },
-    { name: t("courses"), href: "/all-courses", icon: <BookOpen size={18} /> },
+    {
+      name: t("courses"),
+      href: "#",
+      icon: <BookOpen size={18} />,
+      dropdown: [
+        {
+          name: t("technicalTraining"),
+          href: "/all-courses?category=technical-courses",
+          description: "Build in-demand technical skills",
+          icon: <GraduationCap size={16} />,
+        },
+        {
+          name: t("languageLearning"),
+          href: "/all-courses?category=language-courses",
+          description: "Learn new languages for global opportunities",
+          icon: <BookOpen size={16} />,
+        },
+      ],
+    },
     { name: t("jobs"), href: "/jobs", icon: <Briefcase size={18} /> },
     {
       name: t("notice"),

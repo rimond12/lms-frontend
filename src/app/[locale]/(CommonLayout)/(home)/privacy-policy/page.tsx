@@ -251,7 +251,7 @@ const PrivacyPolicy: React.FC = () => {
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Everything you need to know about our terms, privacy practices,
-              and policies at CADD CORE Training Institute.
+              and policies at IMMIGRANT JOBS WORLD.
             </p>
           </div>
         </div>

@@ -206,7 +206,7 @@ export const sectionsData = [
     color: "from-gray-950 to-gray-800",
     effectiveDate: "January 1, 2024",
     introduction:
-      "CADD CORE Training Institute-এ আপনাকে স্বাগতম। আমাদের কোর্সে ভর্তি হয়ে আপনি নিচে দেওয়া শর্তাবলী মানতে সম্মত হচ্ছেন।",
+      "IMMIGRANT JOBS WORLD-এ আপনাকে স্বাগতম। আমাদের কোর্সে ভর্তি হয়ে আপনি নিচে দেওয়া শর্তাবলী মানতে সম্মত হচ্ছেন।",
     sections: [
       {
         title: "১. ভর্তি ও কোর্স অ্যাক্সেস",
@@ -264,7 +264,7 @@ export const sectionsData = [
     color: "from-green-600 to-emerald-600",
     effectiveDate: "January 1, 2024",
     introduction:
-      "CADD CORE Training Institute আপনার ব্যক্তিগত তথ্য সুরক্ষায় প্রতিশ্রুতিবদ্ধ। এই নীতিতে আমরা কিভাবে আপনার তথ্য সংগ্রহ ও ব্যবহার করি তা ব্যাখ্যা করা হয়েছে।",
+      "IMMIGRANT JOBS WORLD আপনার ব্যক্তিগত তথ্য সুরক্ষায় প্রতিশ্রুতিবদ্ধ। এই নীতিতে আমরা কিভাবে আপনার তথ্য সংগ্রহ ও ব্যবহার করি তা ব্যাখ্যা করা হয়েছে।",
     sections: [
       {
         title: "১. আমরা যে তথ্য সংগ্রহ করি",

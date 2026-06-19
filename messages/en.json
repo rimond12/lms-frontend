@@ -8,7 +8,9 @@
   },
   "nav": {
     "home": "Home",
-    "courses": "Courses",
+    "courses": "Skill Development",
+    "technicalTraining": "Technical Training",
+    "languageLearning": "Language Learning",
     "jobs": "Jobs",
     "events": "Events",
     "about": "About Us",

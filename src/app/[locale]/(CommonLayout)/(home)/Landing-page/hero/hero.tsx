@@ -486,7 +486,7 @@ export default function Hero() {
   const tHero = useTranslations("hero");
   const locale = useLocale();
   const isBn = locale === "bn";
-  const { data: cmsResponse } = useGetLandingPageCmsQuery();
+  const { data: cmsResponse, isLoading: cmsLoading } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data;
 
   const slides = cms?.hero?.bannerSlides?.length ? cms.hero.bannerSlides : [{ image: "/images/main-hero.jpeg", altText: "Hero Banner" }];
@@ -555,18 +555,27 @@ export default function Hero() {
       <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2 overflow-hidden">
         <div className="relative max-w-7xl mx-auto overflow-hidden rounded-[2rem] shadow-xl shadow-blue-900/5 bg-white">
           <div className="relative h-[40vh] sm:h-[50vh] md:h-[65vh] lg:h-[75vh]">
-            <img
-              key={current}
-              src={resolveImg(slides[current].image)}
-              alt={slides[current].altText || "Hero Banner"}
-              draggable={false}
-              className="w-full h-full object-cover select-none"
-              style={{
-                opacity: fading ? 0.4 : 1,
-                transform: fading ? "scale(1.02)" : "scale(1)",
-                transition: "opacity 500ms ease, transform 1200ms ease",
-              }}
-            />
+            {/* ── Skeleton: shown while CMS data is loading (prevents old-image flash) ── */}
+            {cmsLoading ? (
+              <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse rounded-[2rem]">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gray-300 animate-pulse" />
+                </div>
+              </div>
+            ) : (
+              <img
+                key={current}
+                src={resolveImg(slides[current].image)}
+                alt={slides[current].altText || "Hero Banner"}
+                draggable={false}
+                className="w-full h-full object-cover select-none"
+                style={{
+                  opacity: fading ? 0.4 : 1,
+                  transform: fading ? "scale(1.02)" : "scale(1)",
+                  transition: "opacity 500ms ease, transform 1200ms ease",
+                }}
+              />
+            )}
 
             {/* Modern Navigation Arrows */}
             {isMulti && (
