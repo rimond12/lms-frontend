@@ -6,12 +6,14 @@ const withNextIntl = createNextIntlPlugin(
 );
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: process.cwd(),
+  output: "standalone",
+
+  experimental: {
+    cpus: 2,
   },
+
   images: {
     unoptimized: true,
-
     remotePatterns: [
       {
         protocol: "https",
@@ -22,14 +24,6 @@ const nextConfig: NextConfig = {
         hostname: "localhost",
         port: "5000",
         pathname: "/uploads/**",
-      },
-      {
-        protocol: "https",
-        hostname: "**.vercel.app",
-      },
-      {
-        protocol: "http",
-        hostname: "**.vercel.app",
       },
     ],
   },
