@@ -6,8 +6,6 @@ const withNextIntl = createNextIntlPlugin(
 );
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-
   experimental: {
     cpus: 2,
   },
