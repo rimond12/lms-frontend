@@ -427,11 +427,11 @@ function FeatureButton({
   const color = ACCENT_COLORS[index % ACCENT_COLORS.length];
 
   const routesMap = [
-    "/all-courses",       // 0: TECHNICAL TRAINING
-    "/contact",           // 1: CV CREATION
-    "/visa-verification", // 2: VISA VERIFICATION
-    "/all-courses",       // 3: LANGUAGE LEARNING
-    "/contact",           // 4: CONSULTANCY
+    "/all-courses?category=technical-courses",       // 0: TECHNICAL TRAINING
+    "/contact",                                      // 1: CV CREATION
+    "/visa-verification",                            // 2: VISA VERIFICATION
+    "/all-courses?category=language-courses",        // 3: LANGUAGE LEARNING
+    "/contact",                                      // 4: CONSULTANCY
   ];
   const targetRoute = routesMap[index] || "/";
 
@@ -552,15 +552,18 @@ export default function Hero() {
   return (
     <section className="w-full bg-white">
       {/* ── Banner Section ──────────────────────────────────────── */}
-      <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2 overflow-hidden">
+      <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2">
         <div className="relative max-w-7xl mx-auto overflow-hidden rounded-[2rem] shadow-xl shadow-blue-900/5 bg-white">
-          <div className="relative h-[40vh] sm:h-[50vh] md:h-[65vh] lg:h-[75vh]">
-            {/* ── Skeleton: shown while CMS data is loading (prevents old-image flash) ── */}
+          {/*
+            Mobile  : fixed aspect-ratio box (16/9) — height is always width-driven,
+                      so slide transitions never cause layout shift / button jumping.
+            md+     : restored original fixed vh heights (65vh / 75vh).
+          */}
+          <div className="relative aspect-[16/9] md:aspect-auto md:h-[65vh] lg:h-[75vh]">
+            {/* ── Skeleton loader ── */}
             {cmsLoading ? (
-              <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse rounded-[2rem]">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-gray-300 animate-pulse" />
-                </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse rounded-[2rem] flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-gray-300 animate-pulse" />
               </div>
             ) : (
               <img
@@ -568,7 +571,7 @@ export default function Hero() {
                 src={resolveImg(slides[current].image)}
                 alt={slides[current].altText || "Hero Banner"}
                 draggable={false}
-                className="w-full h-full object-cover select-none"
+                className="absolute inset-0 w-full h-full object-cover object-top select-none"
                 style={{
                   opacity: fading ? 0.4 : 1,
                   transform: fading ? "scale(1.02)" : "scale(1)",
