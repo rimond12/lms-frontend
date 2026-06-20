@@ -405,19 +405,42 @@ const Navbar: React.FC = () => {
   const navbarConfig = navbarData?.data;
   const showLanguageToggle = navbarConfig ? navbarConfig.showLanguageToggle : true;
 
-  const navLinks: NavLink[] = navbarConfig?.navLinks?.map(link => ({
-    name: locale === 'bn' ? link.nameBn : link.nameEn,
-    href: link.href,
-    icon: link.icon ? getIcon(link.icon) : undefined,
-    dropdown: link.dropdown?.map(sub => ({
-      name: locale === 'bn' ? sub.nameBn : sub.nameEn,
-      href: sub.href,
-      description: locale === 'bn' ? sub.descriptionBn : sub.descriptionEn,
-      icon: sub.icon ? getIcon(sub.icon, 16) : undefined,
-      badge: locale === 'bn' ? sub.badgeBn : sub.badgeEn,
-      featured: sub.featured,
-    }))
-  })) || [
+  const navLinks: NavLink[] = navbarConfig?.navLinks?.map(link => {
+    // Map of database nameEn to next-intl translation key under "nav"
+    const keyMap: { [key: string]: string } = {
+      'home': 'home',
+      'courses': 'courses',
+      'skill development': 'courses',
+      'jobs': 'jobs',
+      'notice': 'notice',
+      'about us': 'about',
+      'about': 'about',
+      'contact': 'contact',
+      'technical training': 'technicalTraining',
+      'language learning': 'languageLearning',
+    };
+    
+    const key = keyMap[link.nameEn?.toLowerCase() || ''];
+    const name = key && t.has(key) ? t(key) : (locale === 'bn' ? link.nameBn : link.nameEn);
+    
+    return {
+      name,
+      href: link.href,
+      icon: link.icon ? getIcon(link.icon) : undefined,
+      dropdown: link.dropdown?.map(sub => {
+        const subKey = keyMap[sub.nameEn?.toLowerCase() || ''];
+        const subName = subKey && t.has(subKey) ? t(subKey) : (locale === 'bn' ? sub.nameBn : sub.nameEn);
+        return {
+          name: subName,
+          href: sub.href,
+          description: locale === 'bn' ? sub.descriptionBn : sub.descriptionEn,
+          icon: sub.icon ? getIcon(sub.icon, 16) : undefined,
+          badge: locale === 'bn' ? sub.badgeBn : sub.badgeEn,
+          featured: sub.featured,
+        };
+      })
+    };
+  }) || [
     { name: t("home"), href: "/", icon: <Home size={18} /> },
     {
       name: t("courses"),
