@@ -4,6 +4,7 @@ import React, { useState, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard,
   BookOpen,
@@ -163,6 +164,15 @@ const navigationSections = [
     ],
   },
   {
+    title: "Immigrant AI Support",
+    items: [
+      { name: "Q&A Rules", href: "/dashboard/immigrant-ai/rules", icon: Sparkles },
+      { name: "Flow Builder", href: "/dashboard/immigrant-ai/flow", icon: Settings },
+      { name: "Live Conversations", href: "/dashboard/immigrant-ai/sessions", icon: Sparkles },
+      { name: "Consultant Inquiries", href: "/dashboard/immigrant-ai/leads", icon: FileText },
+    ],
+  },
+  {
     title: "System",
     items: [
       { name: "Settings", href: "/reset-password", icon: Settings },
@@ -227,19 +237,21 @@ const Sidebar = () => {
             isExpanded ? "block" : "hidden"
           }`}
         >
-          <Link
-            href="/"
-            className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors flex-shrink-0"
-          >
-            <GraduationCap className="w-5 h-5 text-white" />
-          </Link>
           <div className="flex-1 min-w-0">
-            <h1 className="font-bold text-sm text-gray-900 leading-tight whitespace-normal break-words">
-              Immigrant Jobs World Admin
-            </h1>
             <Link
               href="/"
-              className="text-xs text-gray-600 hover:text-gray-900 hover:underline transition-colors block mt-0.5"
+              className="flex items-center gap-1.5"
+            >
+              <span className="font-black text-xl tracking-tight text-slate-800">
+                Immigrant
+              </span>
+              <span className="bg-blue-700 text-white text-[10px] font-black px-2 py-0.5 rounded shadow-sm tracking-widest uppercase">
+                AI
+              </span>
+            </Link>
+            <Link
+              href="/"
+              className="text-[10px] text-slate-400 hover:text-slate-700 transition-colors block mt-0.5"
             >
               ← Back to Home
             </Link>

@@ -127,7 +127,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 const DEFAULT_ITEM_KEYS = ["jobs", "verified", "organized", "training", "language", "preparation"] as const;
 const DEFAULT_ICON_KEYS  = ["FaBriefcase", "FaChalkboardTeacher", "FaCheckCircle", "FaPassport", "FaLanguage", "FaHandshake"];
 
-const SLIDE_DURATION = 5000;
+const SLIDE_DURATION = 8000;
 
 // ─── Flag country map (fallback if API unavailable) ──────────────────
 const FALLBACK_COUNTRIES = [
@@ -480,8 +480,9 @@ function FeatureButton({
 // ─── Main Hero Component ──────────────────────────────────────────────
 export default function Hero() {
   const [current, setCurrent] = useState(0);
-  const [fading, setFading] = useState(false);
+  const [firstImageLoaded, setFirstImageLoaded] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const tHero = useTranslations("hero");
   const locale = useLocale();
@@ -518,35 +519,38 @@ export default function Hero() {
 
   const advance = useCallback(
     (dir: "next" | "prev") => {
-      if (fading || !isMulti) return;
-      setFading(true);
-      setTimeout(() => {
-        setCurrent((p) =>
-          dir === "next"
-            ? (p + 1) % slides.length
-            : (p - 1 + slides.length) % slides.length
-        );
-        setFading(false);
-      }, 400);
+      if (!isMulti) return;
+      setCurrent((p) =>
+        dir === "next"
+          ? (p + 1) % slides.length
+          : (p - 1 + slides.length) % slides.length
+      );
     },
-    [fading, isMulti, slides.length]
+    [isMulti, slides.length]
   );
 
+  const handleImageLoad = useCallback(() => {
+    setFirstImageLoaded(true);
+  }, []);
+
+  // Check if first image is already loaded/cached on mount
   useEffect(() => {
-    if (!isMulti) return;
+    if (imageRef.current && imageRef.current.complete) {
+      setFirstImageLoaded(true);
+    }
+  }, [cmsLoading]);
+
+  useEffect(() => {
+    if (!isMulti || !firstImageLoaded) return;
     timerRef.current = setTimeout(() => advance("next"), SLIDE_DURATION);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [current, advance, isMulti]);
+  }, [current, advance, isMulti, firstImageLoaded]);
 
   const goTo = (i: number) => {
-    if (i === current || fading) return;
-    setFading(true);
-    setTimeout(() => {
-      setCurrent(i);
-      setFading(false);
-    }, 400);
+    if (i === current) return;
+    setCurrent(i);
   };
 
   return (
@@ -561,24 +565,36 @@ export default function Hero() {
           */}
           <div className="relative aspect-[16/9] md:aspect-auto md:h-[65vh] lg:h-[75vh]">
             {/* ── Skeleton loader ── */}
-            {cmsLoading ? (
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse rounded-[2rem] flex items-center justify-center">
+            {(cmsLoading || !firstImageLoaded) && (
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse rounded-[2rem] flex items-center justify-center z-20">
                 <div className="w-16 h-16 rounded-full bg-gray-300 animate-pulse" />
               </div>
-            ) : (
-              <img
-                key={current}
-                src={resolveImg(slides[current].image)}
-                alt={slides[current].altText || "Hero Banner"}
-                draggable={false}
-                className="absolute inset-0 w-full h-full object-cover object-top select-none"
-                style={{
-                  opacity: fading ? 0.4 : 1,
-                  transform: fading ? "scale(1.02)" : "scale(1)",
-                  transition: "opacity 500ms ease, transform 1200ms ease",
-                }}
-              />
             )}
+
+            {!cmsLoading &&
+              slides.map((slide, index) => {
+                const isFirst = index === 0;
+                const isCurrent = index === current;
+                return (
+                  <img
+                    key={index}
+                    ref={isFirst ? imageRef : undefined}
+                    src={resolveImg(slide.image)}
+                    alt={slide.altText || "Hero Banner"}
+                    draggable={false}
+                    onLoad={isFirst ? handleImageLoad : undefined}
+                    className="absolute inset-0 w-full h-full object-cover object-top select-none"
+                    style={{
+                      opacity: !firstImageLoaded ? 0 : isCurrent ? 1 : 0,
+                      transform: isCurrent ? "scale(1)" : "scale(1.05)",
+                      transition: firstImageLoaded
+                        ? "opacity 1500ms ease-in-out, transform 2500ms ease-out"
+                        : "none",
+                      zIndex: isCurrent ? 10 : 0,
+                    }}
+                  />
+                );
+              })}
 
             {/* Modern Navigation Arrows */}
             {isMulti && (

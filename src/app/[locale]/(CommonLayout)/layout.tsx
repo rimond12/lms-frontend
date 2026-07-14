@@ -3,6 +3,7 @@
 import { Footer } from "@/components/shared/Footer/Footer";
 import Navbar from "@/components/shared/Navbar";
 import { usePathname } from "@/i18n/routing";
+import { ImmigrantAiWidget } from "@/components/ImmigrantAiWidget";
 
 export default function CommonLayout({
   children,
@@ -22,8 +23,8 @@ export default function CommonLayout({
 
       <div className="flex flex-col min-h-screen">{children}</div>
 
-      {/* AI Chatbot Widget */}
-      {/* <ChatWidget /> */}
+      {/* Immigrant AI Chatbot Widget */}
+      <ImmigrantAiWidget />
       {!shouldHideNavbar && <Footer />}
     </main>
   );

@@ -1,0 +1,706 @@
+/*
+ * ImmigrantAiWidget.css
+ * Scoped styles for the Immigrant AI floating chat widget.
+ * Color palette matches site: primary red #dc2626 / #ef4444, font: Poppins.
+ */
+
+/* ─── CSS Variables ─────────────────────────────────────────────────── */
+.iai-widget-root {
+  --iai-primary:    #1d4ed8;
+  --iai-primary-d:  #1e40af;
+  --iai-primary-l:  #3b82f6;
+  --iai-accent:     #2563eb;
+  --iai-bg:         #ffffff;
+  --iai-bg2:        #f9fafb;
+  --iai-border:     #e5e7eb;
+  --iai-text:       #111827;
+  --iai-text-m:     #6b7280;
+  --iai-bot-bubble: #f3f4f6;
+  --iai-user-bubble:#1d4ed8;
+  --iai-agent-bubble:#fef3c7;
+  --iai-shadow:     0 20px 60px rgba(0,0,0,.18), 0 4px 16px rgba(29,78,216,.12);
+  --iai-radius:     18px;
+  font-family: var(--font-poppins, 'Poppins', sans-serif);
+  z-index: 9000;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}
+
+@media (max-width: 640px) {
+  .iai-widget-root {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+/* ─── Floating Toggle Button ─────────────────────────────────────────── */
+.iai-toggle-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--iai-primary), var(--iai-accent));
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(29,78,216,.45);
+  transition: transform .25s ease, box-shadow .25s ease;
+  position: relative;
+  color: #fff;
+  outline: none;
+}
+
+.iai-toggle-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 28px rgba(29,78,216,.55);
+}
+
+.iai-toggle-btn:active { transform: scale(0.96); }
+
+/* Pulse ring — first-load attention dot */
+.iai-pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--iai-primary-l);
+  animation: iaiPulse 2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes iaiPulse {
+  0%   { opacity: 1; transform: scale(1); }
+  70%  { opacity: 0; transform: scale(1.45); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+
+.iai-notif-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+  background: #22c55e;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* ─── Chat Panel ─────────────────────────────────────────────────────── */
+.iai-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 400px;
+  height: 600px;
+  background: var(--iai-bg);
+  border-radius: var(--iai-radius);
+  box-shadow: var(--iai-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px) scale(.97);
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+  z-index: 9001;
+}
+
+.iai-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* Full-screen on mobile */
+@media (max-width: 640px) {
+  .iai-panel {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+    z-index: 9999;
+  }
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────── */
+.iai-header {
+  background: linear-gradient(135deg, var(--iai-primary) 0%, var(--iai-accent) 100%);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.iai-header-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.iai-header-info { flex: 1; min-width: 0; }
+.iai-header-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+.iai-header-info p {
+  font-size: 11px;
+  margin: 0;
+  opacity: .85;
+}
+
+.iai-header-actions { display: flex; align-items: center; gap: 4px; }
+
+.iai-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: background .2s;
+}
+.iai-icon-btn:hover { background: rgba(255,255,255,.28); }
+
+.iai-lang-btn {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 8px;
+  height: 28px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.35);
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s;
+}
+.iai-lang-btn:hover { background: rgba(255,255,255,.32); }
+
+/* ─── Online indicator ───────────────────────────────────────────────── */
+.iai-online-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* ─── Messages Area ──────────────────────────────────────────────────── */
+.iai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--iai-bg2);
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+/* ─── Welcome Screen ─────────────────────────────────────────────────── */
+.iai-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px 8px;
+  gap: 8px;
+}
+
+.iai-welcome-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--iai-primary), var(--iai-accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(29,78,216,.3);
+  animation: iaiFloat 3s ease-in-out infinite;
+}
+
+@keyframes iaiFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.iai-welcome h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--iai-text);
+  margin: 0;
+}
+.iai-welcome p {
+  font-size: 13px;
+  color: var(--iai-text-m);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Quick-reply chips (menu) ──────────────────────────────────────── */
+.iai-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.iai-menu-chip {
+  background: #fff;
+  border: 1.5px solid var(--iai-border);
+  border-radius: 12px;
+  padding: 10px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--iai-text);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .2s, background .2s, transform .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.iai-menu-chip:hover {
+  border-color: var(--iai-primary);
+  background: #f0f5ff;
+  transform: translateY(-1px);
+}
+.iai-menu-chip:active { transform: scale(.97); }
+
+/* ─── Message Bubbles ────────────────────────────────────────────────── */
+.iai-msg {
+  display: flex;
+  gap: 8px;
+  max-width: 90%;
+}
+
+.iai-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.iai-msg.bot  { align-self: flex-start; }
+.iai-msg.agent { align-self: flex-start; }
+
+.iai-msg-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--iai-primary), var(--iai-accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.iai-msg-avatar.agent-av {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.iai-msg-body { display: flex; flex-direction: column; gap: 3px; }
+
+.iai-bubble {
+  padding: 10px 13px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.iai-msg.bot  .iai-bubble { background: var(--iai-bot-bubble); color: var(--iai-text); border-radius: 4px 16px 16px 16px; }
+.iai-msg.user .iai-bubble { background: var(--iai-user-bubble); color: #fff;            border-radius: 16px 4px 16px 16px; }
+.iai-msg.agent .iai-bubble { background: var(--iai-agent-bubble); color: #92400e;        border-radius: 4px 16px 16px 16px; }
+
+.iai-agent-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #d97706;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 1px 6px;
+  background: #fef3c7;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.iai-msg-time {
+  font-size: 10px;
+  color: var(--iai-text-m);
+  padding: 0 2px;
+}
+
+/* ─── Typing Indicator ───────────────────────────────────────────────── */
+.iai-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 13px;
+  background: var(--iai-bot-bubble);
+  border-radius: 4px 16px 16px 16px;
+}
+
+.iai-typing span {
+  width: 7px;
+  height: 7px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: iaiDot .8s ease-in-out infinite both;
+}
+.iai-typing span:nth-child(2) { animation-delay: .15s; }
+.iai-typing span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes iaiDot {
+  0%,60%,100% { transform: translateY(0); }
+  30%          { transform: translateY(-6px); }
+}
+
+/* ─── Country Cards ──────────────────────────────────────────────────── */
+.iai-countries-wrap {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--iai-border);
+  margin-top: 6px;
+}
+
+.iai-countries-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--iai-text-m);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.iai-countries-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.iai-country-card {
+  background: var(--iai-bg2);
+  border: 1.5px solid var(--iai-border);
+  border-radius: 10px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+  font-family: inherit;
+}
+
+.iai-country-card:hover {
+  border-color: var(--iai-primary);
+  box-shadow: 0 2px 8px rgba(29,78,216,.15);
+  transform: translateY(-2px);
+}
+
+.iai-country-card img {
+  width: 32px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+.iai-country-card span {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--iai-text);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.iai-pagination-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.iai-page-info { font-size: 11px; color: var(--iai-text-m); }
+
+.iai-page-btn {
+  background: var(--iai-bg2);
+  border: 1.5px solid var(--iai-border);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--iai-text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s, border-color .2s;
+}
+.iai-page-btn:hover:not(:disabled) { border-color: var(--iai-primary); background: #f0f5ff; }
+.iai-page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ─── Job List ───────────────────────────────────────────────────────── */
+.iai-job-card {
+  background: #fff;
+  border: 1.5px solid var(--iai-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.iai-job-info { flex: 1; min-width: 0; }
+.iai-job-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--iai-text);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.iai-job-meta { font-size: 11px; color: var(--iai-text-m); margin: 0; }
+
+.iai-view-btn {
+  flex-shrink: 0;
+  background: var(--iai-primary);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.iai-view-btn:hover { background: var(--iai-primary-d); color: #fff; }
+
+/* ─── Course Cards ───────────────────────────────────────────────────── */
+.iai-course-card {
+  background: #fff;
+  border: 1.5px solid var(--iai-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.iai-course-info { flex: 1; min-width: 0; }
+.iai-course-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--iai-text);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.iai-course-meta { font-size: 11px; color: var(--iai-text-m); margin: 0; }
+
+.iai-courses-footer {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.iai-all-btn {
+  display: inline-block;
+  background: transparent;
+  border: 1.5px solid var(--iai-primary);
+  color: var(--iai-primary);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  transition: background .2s, color .2s;
+}
+.iai-all-btn:hover { background: var(--iai-primary); color: #fff; }
+
+/* ─── Inline Form Card ───────────────────────────────────────────────── */
+.iai-form-card {
+  background: #fff;
+  border: 1.5px solid var(--iai-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 6px;
+}
+
+.iai-form-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--iai-text);
+  margin: 0 0 12px;
+}
+
+.iai-field {
+  margin-bottom: 10px;
+}
+
+.iai-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--iai-text-m);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.iai-input, .iai-select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--iai-border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--iai-text);
+  background: var(--iai-bg2);
+  outline: none;
+  transition: border-color .2s;
+  box-sizing: border-box;
+}
+
+.iai-input:focus, .iai-select:focus {
+  border-color: var(--iai-primary);
+  background: #fff;
+}
+
+.iai-submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--iai-primary), var(--iai-accent));
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .2s, transform .15s;
+  margin-top: 4px;
+}
+.iai-submit-btn:hover { opacity: .9; }
+.iai-submit-btn:active { transform: scale(.98); }
+.iai-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ─── Status Banner (waiting_for_agent) ──────────────────────────────── */
+.iai-status-banner {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #92400e;
+  text-align: center;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ─── Input Row ──────────────────────────────────────────────────────── */
+.iai-input-row {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-top: 1px solid var(--iai-border);
+  background: var(--iai-bg);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.iai-text-input {
+  flex: 1;
+  border: 1.5px solid var(--iai-border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--iai-text);
+  background: var(--iai-bg2);
+  outline: none;
+  transition: border-color .2s;
+  resize: none;
+  max-height: 80px;
+  min-height: 42px;
+  line-height: 1.4;
+}
+
+.iai-text-input:focus { border-color: var(--iai-primary); background: #fff; }
+.iai-text-input::placeholder { color: #9ca3af; }
+
+.iai-send-btn {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--iai-primary), var(--iai-accent));
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .15s, opacity .2s;
+  font-size: 16px;
+}
+.iai-send-btn:hover { opacity: .88; transform: scale(1.05); }
+.iai-send-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* ─── Error/Unavailable Banner ────────────────────────────────────────── */
+.iai-error-banner {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #991b1b;
+  text-align: center;
+  margin: 8px;
+}
+
+/* ─── Scrollbar (messages area) ─────────────────────────────────────── */
+.iai-messages::-webkit-scrollbar { width: 4px; }
+.iai-messages::-webkit-scrollbar-track { background: transparent; }
+.iai-messages::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
