@@ -198,7 +198,7 @@ export default function FooterManager() {
                 placeholder="https://wa.me/8809606810081"
                 className="rounded-xl"
               />
-              <p className="text-xs text-gray-400 mt-1">Full redirection URL (e.g. https://wa.me/8809606810081)</p>
+              <p className="text-xs text-gray-400 mt-1">Full redirection URL (e.g. https://wa.me/8801843432352). Controls both Footer WhatsApp button & Hero Consultancy (কনসালটেন্সি) button.</p>
             </div>
 
             <div>

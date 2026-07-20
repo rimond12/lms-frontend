@@ -9,6 +9,7 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
+import { useGetFooterQuery } from "@/app/redux/api/footerApi/footerApi";
 import { useGetCountriesQuery } from "@/app/redux/api/jobsApi/CountryApi";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "@/i18n/routing";
@@ -402,17 +403,21 @@ function JobsDropdownButton({
   );
 }
 
-// ─── Static Feature Button (no action) ──────────────────────────────
+// ─── Feature Button Component ──────────────────────────────────────────
 function FeatureButton({
   label,
   subLabel,
   iconKey,
   index,
+  itemKey,
+  whatsappLink,
 }: {
   label: string;
   subLabel: string;
   iconKey: string;
   index: number;
+  itemKey?: string;
+  whatsappLink?: string;
 }) {
   const [hovered, setHovered] = useState(false);
   const router = useRouter();
@@ -435,7 +440,19 @@ function FeatureButton({
   ];
   const targetRoute = routesMap[index] || "/";
 
+  const isConsultancy =
+    index === 4 ||
+    itemKey === "preparation" ||
+    label?.toLowerCase().includes("consultancy") ||
+    label?.includes("কনসালটেন্সি") ||
+    label?.includes("পরামর্শ");
+
   const handleClick = () => {
+    if (isConsultancy) {
+      const link = whatsappLink || "https://wa.me/8801843432352";
+      window.open(link, "_blank", "noopener,noreferrer");
+      return;
+    }
     router.push(targetRoute);
   };
 
@@ -488,7 +505,9 @@ export default function Hero() {
   const locale = useLocale();
   const isBn = locale === "bn";
   const { data: cmsResponse, isLoading: cmsLoading } = useGetLandingPageCmsQuery();
+  const { data: footerResponse } = useGetFooterQuery();
   const cms = cmsResponse?.data;
+  const whatsappLink = footerResponse?.data?.whatsappLink || "https://wa.me/8801843432352";
 
   const slides = cms?.hero?.bannerSlides?.length ? cms.hero.bannerSlides : [{ image: "/images/main-hero.jpeg", altText: "Hero Banner" }];
   const headline = (isBn ? null : cms?.hero?.headline) || tHero("headline");
@@ -666,10 +685,12 @@ export default function Hero() {
             return (
               <FeatureButton
                 key={item.key}
+                itemKey={item.key}
                 label={item.name}
                 subLabel={item.sub}
                 iconKey={item.iconKey}
                 index={i - 1}
+                whatsappLink={whatsappLink}
               />
             );
           })}
