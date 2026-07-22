@@ -433,7 +433,7 @@ function FeatureButton({
 
   const routesMap = [
     "/all-courses?category=technical-courses",       // 0: TECHNICAL TRAINING
-    "/contact",                                      // 1: CV CREATION
+    "/cv-builder",                                   // 1: CV CREATION
     "/visa-verification",                            // 2: VISA VERIFICATION
     "/all-courses?category=language-courses",        // 3: LANGUAGE LEARNING
     "/contact",                                      // 4: CONSULTANCY

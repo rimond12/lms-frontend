@@ -143,6 +143,11 @@ const navigationSections = [
         href: "/dashboard/footer-cms",
         icon: Settings,
       },
+      {
+        name: "CV Builder CMS",
+        href: "/dashboard/manage-cv-builder",
+        icon: FileText,
+      },
     ],
   },
   {

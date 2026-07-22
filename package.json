@@ -1,7 +1,7 @@
 {
   "name": "immigrant-jobs-world-client",
   "version": "0.1.0",
-   "engines": {
+  "engines": {
     "node": ">=20.9.0"
   },
   "private": true,
@@ -46,6 +46,7 @@
     "html2canvas": "^1.4.1",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
+    "jspdf": "^4.2.1",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.555.0",
