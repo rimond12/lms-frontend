@@ -600,6 +600,7 @@ export default function Hero() {
                     ref={isFirst ? imageRef : undefined}
                     src={resolveImg(slide.image)}
                     alt={slide.altText || "Hero Banner"}
+                    loading={isFirst ? "eager" : "lazy"}
                     draggable={false}
                     onLoad={isFirst ? handleImageLoad : undefined}
                     className="absolute inset-0 w-full h-full object-cover object-top select-none"
