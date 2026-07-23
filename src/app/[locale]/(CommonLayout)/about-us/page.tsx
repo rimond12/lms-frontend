@@ -138,14 +138,14 @@ export default function AboutUsPage() {
             <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl opacity-10"
               style={{ background: 'radial-gradient(circle, #6366f1, transparent)' }} />
 
-            <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
+            <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl flex flex-col items-center text-center w-full">
               {/* Pill badge */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 text-xs font-semibold tracking-widest uppercase mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
                 Who We Are
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6 tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6 tracking-tight text-center">
                 {content.title}
               </h1>
 
@@ -156,9 +156,12 @@ export default function AboutUsPage() {
                 <div className="w-16 h-0.5 rounded-full bg-blue-500" />
               </div>
 
-              <p className="text-slate-300 text-base sm:text-lg leading-[2] max-w-3xl mx-auto text-center">
-                {content.description}
-              </p>
+              {/* Intro paragraph in a styled card container */}
+              <div className="max-w-[700px] mx-auto rounded-2xl bg-white/5 border border-white/10 p-5 sm:p-6 shadow-lg flex flex-col items-center justify-center text-center w-full">
+                <p lang="en" className="text-slate-300 text-base sm:text-lg leading-relaxed text-justify hyphens-auto w-full font-normal">
+                  {content.description}
+                </p>
+              </div>
             </div>
           </section>
 
@@ -177,7 +180,7 @@ export default function AboutUsPage() {
                           </div>
                           <h3 className="text-xl font-bold text-slate-800">Our Mission</h3>
                         </div>
-                        <p className="text-slate-600 text-sm sm:text-base leading-[1.9] text-justify">
+                        <p lang="en" className="text-slate-600 text-sm sm:text-base leading-[1.9] text-justify hyphens-auto">
                           {content.mission}
                         </p>
                       </div>
@@ -193,7 +196,7 @@ export default function AboutUsPage() {
                           </div>
                           <h3 className="text-xl font-bold text-slate-800">Our Vision</h3>
                         </div>
-                        <p className="text-slate-600 text-sm sm:text-base leading-[1.9] text-justify">
+                        <p lang="en" className="text-slate-600 text-sm sm:text-base leading-[1.9] text-justify hyphens-auto">
                           {content.vision}
                         </p>
                       </div>
@@ -203,25 +206,25 @@ export default function AboutUsPage() {
 
                 {/* Core Values */}
                 {content.coreValues && content.coreValues.length > 0 && (
-                  <div className="mt-14">
-                    <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                  <div className="mt-14 flex flex-col items-center text-center w-full">
+                    <div className="text-center mb-8 max-w-2xl mx-auto">
+                      <h3 className="text-2xl font-bold text-slate-900 mb-2 text-center">
                         Our Core Values
                       </h3>
-                      <p className="text-slate-500 text-sm">
+                      <p className="text-slate-500 text-sm text-center">
                         Principles that guide everything we do
                       </p>
                     </div>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="flex flex-wrap justify-center items-center gap-4 max-w-3xl mx-auto">
                       {content.coreValues.map((value, i) => (
                         <div
                           key={i}
-                          className="flex items-start gap-3 bg-white border border-slate-100 p-4 rounded-xl hover:border-blue-200 hover:shadow-sm transition-all duration-200"
+                          className="inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white border border-slate-200/80 rounded-xl shadow-sm hover:border-blue-300 hover:shadow transition-all duration-200 text-center"
                         >
-                          <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 shrink-0" />
-                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-snug">
+                          <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                          <span className="text-slate-700 font-medium text-sm sm:text-base text-center">
                             {value}
-                          </p>
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -235,12 +238,12 @@ export default function AboutUsPage() {
                       {content.additionalSections.map((section, i) => (
                         <div
                           key={i}
-                          className="border-l-4 border-blue-500 pl-6"
+                          className="flex flex-col items-center text-center w-full border-t border-slate-200/60 pt-6"
                         >
-                          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
+                          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 text-center">
                             {section.title}
                           </h3>
-                          <p className="text-slate-600 text-sm sm:text-base leading-[1.85]">
+                          <p lang="en" className="text-slate-600 text-sm sm:text-base leading-[1.85] text-justify hyphens-auto max-w-2xl mx-auto font-normal">
                             {section.content}
                           </p>
                         </div>
