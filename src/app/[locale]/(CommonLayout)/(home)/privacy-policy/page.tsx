@@ -101,7 +101,7 @@ const PrivacyPolicy: React.FC = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "caddcorebd@gmail.com",
+      value: "info@immigrantjobsworld.com",
       type: "email",
     },
     { icon: Phone, label: "Phone", value: "+880 1611-223631", type: "phone" },

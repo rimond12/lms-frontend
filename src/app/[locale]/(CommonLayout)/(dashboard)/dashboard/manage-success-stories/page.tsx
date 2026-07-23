@@ -62,7 +62,7 @@ export default function ManageSuccessStoriesPage() {
 
     setIsUploading(true);
     try {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const token = document.cookie
         .split("; ")
         .find((row) => row.startsWith("accessToken="))
@@ -209,7 +209,7 @@ export default function ManageSuccessStoriesPage() {
                   <div className="flex items-center gap-3">
                     {story.image ? (
                       <img
-                        src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.caddcore.cloud'}${story.image}`}
+                        src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.immigrantjobsworld.com'}${story.image}`}
                         alt={story.fullName}
                         className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm"
                         onError={(e) => {
@@ -349,7 +349,7 @@ export default function ManageSuccessStoriesPage() {
               <div className="flex items-center gap-4 mt-2">
                 {formData.image ? (
                   <img
-                    src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.caddcore.cloud'}${formData.image}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.immigrantjobsworld.com'}${formData.image}`}
                     alt="Preview"
                     className="w-16 h-16 rounded-full object-cover border border-gray-200"
                     onError={(e) => {

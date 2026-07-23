@@ -9,7 +9,7 @@ import { DollarSign, FileText, Shield, Users } from "lucide-react";
 //       icon: FileText,
 //       color: 'from-gray-950 to-gray-800',
 //       effectiveDate: 'January 1, 2024',
-//       introduction: 'Welcome to CADD CORE Training Institute. By enrolling in our courses or using our services, you agree to abide by the following terms and conditions.',
+//       introduction: 'Welcome to Immigrant Jobs World Training Institute. By enrolling in our courses or using our services, you agree to abide by the following terms and conditions.',
 //       sections: [
 //         {
 //           title: "1. Enrollment and Course Access",
@@ -58,7 +58,7 @@ import { DollarSign, FileText, Shield, Users } from "lucide-react";
 //       icon: Shield,
 //       color: 'from-green-600 to-emerald-600',
 //       effectiveDate: 'January 1, 2024',
-//       introduction: 'At CADD CORE Training Institute, we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and protect your information.',
+//       introduction: 'At Immigrant Jobs World Training Institute, we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and protect your information.',
 //       sections: [
 //         {
 //           title: "1. Information We Collect",
@@ -109,7 +109,7 @@ import { DollarSign, FileText, Shield, Users } from "lucide-react";
 //             "Deletion (subject to legal limits)",
 //             "Withdrawal of consent"
 //           ],
-//           contact: "Contact: 📧 caddcorebd@gmail.com"
+//           contact: "Contact: 📧 info@immigrantjobsworld.com"
 //         }
 //       ]
 //     },
@@ -127,7 +127,7 @@ import { DollarSign, FileText, Shield, Users } from "lucide-react";
 //         },
 //         {
 //           title: "2. Batch Delayed or Cancelled",
-//           description: "If the course batch doesn't begin on the announced date or is cancelled by CADD CORE, you will receive a full refund or can transfer to another batch."
+//           description: "If the course batch doesn't begin on the announced date or is cancelled by Immigrant Jobs World, you will receive a full refund or can transfer to another batch."
 //         },
 //         {
 //           title: "3. Early Withdrawal",
@@ -143,7 +143,7 @@ import { DollarSign, FileText, Shield, Users } from "lucide-react";
 //         {
 //           title: "5. Refund Process",
 //           items: [
-//             "Refund requests must be submitted via email to caddcorebd@gmail.com",
+//             "Refund requests must be submitted via email to info@immigrantjobsworld.com",
 //             "Refunds will be processed within 7-10 business days",
 //             "Refunds will be made to the original payment method"
 //           ]
@@ -160,7 +160,7 @@ import { DollarSign, FileText, Shield, Users } from "lucide-react";
 //       icon: Users,
 //       color: 'from-purple-600 to-violet-600',
 //       effectiveDate: 'January 1, 2024',
-//       introduction: 'At CADD CORE Training Institute, we believe in creating a safe, respectful, and professional learning environment for all students, faculty, and staff.',
+//       introduction: 'At Immigrant Jobs World Training Institute, we believe in creating a safe, respectful, and professional learning environment for all students, faculty, and staff.',
 //       sections: [
 //         {
 //           title: "1. Respect and Professionalism",
@@ -324,7 +324,7 @@ export const sectionsData = [
           "ডেটা ডিলিট (আইনি সীমাবদ্ধতা অনুযায়ী)",
           "সম্মতি প্রত্যাহার"
         ],
-        contact: "যোগাযোগ: caddcorebd@gmail.com"
+        contact: "যোগাযোগ: info@immigrantjobsworld.com"
       }
     ]
   },
@@ -394,7 +394,7 @@ export const sectionsData = [
     {
       title: "৮. রিফান্ড প্রক্রিয়া",
       items: [
-        "ইমেইলে আবেদন করতে হবে: caddcorebd@gmail.com",
+        "ইমেইলে আবেদন করতে হবে: info@immigrantjobsworld.com",
         "৭–১০ কর্মদিবসের মধ্যে প্রক্রিয়াজাত হবে",
         "রিফান্ড মূল পেমেন্ট পদ্ধতিতেই প্রদান করা হবে"
       ]

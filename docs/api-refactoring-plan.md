@@ -52,7 +52,7 @@ _Current Status: Client Side_
 
 ```typescript
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api/v1";
 
 export const apiClient = {
   get: async <T>(endpoint: string, tags: string[] = []): Promise<T> => {

@@ -282,7 +282,7 @@ export default function NewsPage() {
         {item.photoUrl ? (
           <div className="relative">
             <img
-              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
+              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
               alt={item.title}
               className={`w-full object-cover group-hover:scale-110 transition-transform duration-700 ${
                 featured ? "h-56" : "h-48"
@@ -740,7 +740,7 @@ export default function NewsPage() {
                         {item.photoUrl ? (
                           <div className="relative">
                             <img
-                              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
+                              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
                               alt={item.title}
                               className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
                             />

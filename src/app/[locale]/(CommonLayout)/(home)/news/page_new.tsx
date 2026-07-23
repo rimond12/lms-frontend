@@ -179,7 +179,7 @@ export default function NewsPage() {
         <div className="relative overflow-hidden">
           {item.photoUrl ? (
             <img
-              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
+              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
               alt={item.title}
               className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
             />
@@ -304,7 +304,7 @@ export default function NewsPage() {
         >
           {item.photoUrl ? (
             <img
-              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
+              src={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}/${item.photoUrl.startsWith("/") ? item.photoUrl.slice(1) : item.photoUrl}`}
               alt={item.title}
               className={`object-cover group-hover:scale-105 transition-transform duration-500 ${
                 viewMode === "list" ? "w-full h-full" : "w-full h-48"

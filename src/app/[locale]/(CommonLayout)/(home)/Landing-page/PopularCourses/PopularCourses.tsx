@@ -44,7 +44,7 @@ const PopularCourses: React.FC = () => {
     const base =
       process.env.NEXT_PUBLIC_FILE_URL ||
       process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") ||
-      "https://api.caddcore.cloud";
+      "https://api.immigrantjobsworld.com";
     const clean = imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`;
     return `${base}${clean}`;
   };

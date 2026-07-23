@@ -147,7 +147,7 @@ export default function CvBuilderPage() {
         let modified = false;
         if (parsed.workExperience) {
           parsed.workExperience = parsed.workExperience.map((exp: any) => {
-            if (exp.company && (/CADD CORE/i.test(exp.company) || /Immigrant Jobs World/i.test(exp.company))) {
+            if (exp.company && (/CADD|CADD CORE/i.test(exp.company) || /Immigrant Jobs World/i.test(exp.company))) {
               modified = true;
               return { ...exp, company: "Structural Consultancy" };
             }

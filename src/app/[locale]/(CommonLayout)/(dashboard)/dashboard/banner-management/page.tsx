@@ -301,7 +301,7 @@ export default function BannerManagementPage() {
                     src={
                       banner.imageUrl && banner.imageUrl.startsWith("http")
                         ? banner.imageUrl
-                        : `https://api.caddcore.cloud/${banner.imageUrl || ""}`
+                        : `https://api.immigrantjobsworld.com/${banner.imageUrl || ""}`
                     }
                     alt={banner.altText || banner.title || "Banner"}
                     className="w-16 h-16 object-cover rounded"
@@ -451,7 +451,7 @@ export default function BannerManagementPage() {
                         (formData.imageUrl &&
                         formData.imageUrl.startsWith("http")
                           ? formData.imageUrl
-                          : `https://api.caddcore.cloud/${formData.imageUrl || ""}`)
+                          : `https://api.immigrantjobsworld.com/${formData.imageUrl || ""}`)
                       }
                       alt="Banner preview"
                       className="w-full h-32 object-cover"
@@ -601,7 +601,7 @@ export default function BannerManagementPage() {
                         (formData.imageUrl &&
                         formData.imageUrl.startsWith("http")
                           ? formData.imageUrl
-                          : `https://api.caddcore.cloud/${formData.imageUrl || ""}`)
+                          : `https://api.immigrantjobsworld.com/${formData.imageUrl || ""}`)
                       }
                       alt="Banner preview"
                       className="w-full h-32 object-cover"

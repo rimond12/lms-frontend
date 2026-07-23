@@ -278,7 +278,7 @@ export default function QuizResultPage() {
                           src={
                             questionResult.questionImage.startsWith("http")
                               ? questionResult.questionImage
-                              : `${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}/${questionResult.questionImage}`
+                              : `${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}/${questionResult.questionImage}`
                           }
                           alt="Question"
                           className="max-w-full h-auto rounded-lg border"
@@ -403,7 +403,7 @@ export default function QuizResultPage() {
                                               src={
                                                 option.image.startsWith("http")
                                                   ? option.image
-                                                  : `${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}/${option.image}`
+                                                  : `${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}/${option.image}`
                                               }
                                               alt={`Option ${String.fromCharCode(65 + optIndex)}`}
                                               className="max-w-32 h-auto rounded border"

@@ -789,7 +789,7 @@ export default function AllUsersPage() {
                     <div className="space-y-2">
                       {selectedUser.cvUrl && (
                         <a
-                          href={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}${selectedUser.cvUrl}`}
+                          href={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}${selectedUser.cvUrl}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100"
@@ -800,7 +800,7 @@ export default function AllUsersPage() {
                       )}
                       {selectedUser.experienceCertificateUrl && (
                         <a
-                          href={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}${selectedUser.experienceCertificateUrl}`}
+                          href={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}${selectedUser.experienceCertificateUrl}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100"
@@ -811,7 +811,7 @@ export default function AllUsersPage() {
                       )}
                       {selectedUser.universityCertificateUrl && (
                         <a
-                          href={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.caddcore.cloud"}${selectedUser.universityCertificateUrl}`}
+                          href={`${process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com"}${selectedUser.universityCertificateUrl}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100"

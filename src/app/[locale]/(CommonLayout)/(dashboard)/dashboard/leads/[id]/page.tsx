@@ -491,7 +491,7 @@ export default function LeadDetailPage() {
 
       // baseApi এর same URL use করো
       const apiBase =
-        process.env.NEXT_PUBLIC_API_URL || "https://api.caddcore.cloud/api";
+        process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const downloadUrl = `${apiBase}/leads/file/download?url=${encodeURIComponent(url)}`;
 
       const res = await fetch(downloadUrl, {
