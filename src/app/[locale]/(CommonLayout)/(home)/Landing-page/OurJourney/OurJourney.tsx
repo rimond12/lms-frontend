@@ -16,30 +16,37 @@ function resolveImg(value: string): string {
 }
 
 const DEFAULT_ROW1: Logo[] = [
-  { name: "Bangladesh Education Board", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
-  { name: "NSDA", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
-  { name: "SAIC", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
-  { name: "Banglamark", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
-  { name: "Sincos", img: "https://res.cloudinary.com/dalpf8iip/image/upload/sincos-300x169_l6btck.png" },
+  { name: "Bangladesh Education Board", img: "https://placehold.co/150x80/e2e8f0/475569?text=BD+Edu+Board" },
+  { name: "NSDA", img: "https://placehold.co/150x80/e2e8f0/475569?text=NSDA" },
+  { name: "SAIC", img: "https://placehold.co/150x80/e2e8f0/475569?text=SAIC" },
+  { name: "Banglamark", img: "https://placehold.co/150x80/e2e8f0/475569?text=Banglamark" },
+  { name: "Sincos", img: "https://placehold.co/150x80/e2e8f0/475569?text=Sincos" },
 ];
 const DEFAULT_ROW2: Logo[] = [
-  { name: "Certify Bangladesh", img: "https://res.cloudinary.com/dalpf8iip/image/upload/sincos-300x169_l6btck.png" },
-  { name: "BEC", img: "https://via.placeholder.com/150x80" },
-  { name: "Creative", img: "https://via.placeholder.com/150x80" },
-  { name: "Autodesk", img: "https://via.placeholder.com/150x80" },
-  { name: "BASIS", img: "https://via.placeholder.com/150x80" },
+  { name: "Certify Bangladesh", img: "https://placehold.co/150x80/e2e8f0/475569?text=Certify+BD" },
+  { name: "BEC", img: "https://placehold.co/150x80/e2e8f0/475569?text=BEC" },
+  { name: "Creative", img: "https://placehold.co/150x80/e2e8f0/475569?text=Creative" },
+  { name: "Autodesk", img: "https://placehold.co/150x80/e2e8f0/475569?text=Autodesk" },
+  { name: "BASIS", img: "https://placehold.co/150x80/e2e8f0/475569?text=BASIS" },
 ];
 const DEFAULT_ROW3: Logo[] = [
-  { name: "Archstone", img: "https://res.cloudinary.com/dalpf8iip/image/upload/bangla-mark-150x150_fkgguz.png" },
-  { name: "SB Consultant", img: "https://via.placeholder.com/150x80" },
-  { name: "Onestop", img: "https://via.placeholder.com/150x80" },
-  { name: "DDS", img: "https://via.placeholder.com/150x80" },
-  { name: "Compliance BD", img: "https://via.placeholder.com/150x80" },
+  { name: "Archstone", img: "https://placehold.co/150x80/e2e8f0/475569?text=Archstone" },
+  { name: "SB Consultant", img: "https://placehold.co/150x80/e2e8f0/475569?text=SB+Consultant" },
+  { name: "Onestop", img: "https://placehold.co/150x80/e2e8f0/475569?text=Onestop" },
+  { name: "DDS", img: "https://placehold.co/150x80/e2e8f0/475569?text=DDS" },
+  { name: "Compliance BD", img: "https://placehold.co/150x80/e2e8f0/475569?text=Compliance+BD" },
 ];
 
 const LogoCard = ({ logo, getLogoName }: { logo: Logo; getLogoName: (name: string) => string }) => (
   <div className="flex flex-col items-center mx-12">
-    <img src={resolveImg(logo.img)} alt={getLogoName(logo.name)} className="h-14 md:h-16 object-contain" />
+    <img
+      src={resolveImg(logo.img)}
+      alt={getLogoName(logo.name)}
+      className="h-14 md:h-16 object-contain"
+      onError={(e) => {
+        (e.currentTarget as HTMLImageElement).src = `https://placehold.co/150x80/e2e8f0/475569?text=${encodeURIComponent(logo.name || "Partner")}`;
+      }}
+    />
     <p className="text-[11px] text-gray-500 mt-4 font-semibold uppercase text-center">{getLogoName(logo.name)}</p>
   </div>
 );

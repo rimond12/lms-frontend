@@ -17,6 +17,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "IMMIGRANT JOBS WORLD",
   description: "IMMIGRANT JOBS WORLD - Your Gateway to Global Job Opportunities for Immigrants.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default async function LocaleLayout({

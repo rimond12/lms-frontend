@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import { IUserCv, ICvSectionConfig, IPersonalInfo, IWorkExperience, IEducation, ISkill, IProject, ICertification, ILanguage, ICustomSection } from "@/types/cvBuilder.types";
 import {

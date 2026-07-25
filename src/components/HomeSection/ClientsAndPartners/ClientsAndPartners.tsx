@@ -37,13 +37,13 @@ const ClientsAndPartners = () => {
       id: 6,
       title: "BANGLAMARK",
       photoUrl:
-        "https://res.cloudinary.com/dbkwiwoll/image/upload/v1744100421/bangla-mark-150x150_fkgguz.png",
+        "https://placehold.co/150x80/e2e8f0/475569?text=BANGLAMARK",
     },
     {
       id: 7,
       title: "Sincos",
       photoUrl:
-        "https://res.cloudinary.com/dbkwiwoll/image/upload/v1744103362/sincos-300x169_l6btck.png",
+        "https://placehold.co/150x80/e2e8f0/475569?text=Sincos",
     },
     {
       id: 8,
@@ -191,6 +191,9 @@ const ClientsAndPartners = () => {
                         src={item.photoUrl}
                         alt={item.title}
                         className="h-10 w-full object-contain mx-auto filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = `https://placehold.co/150x80/e2e8f0/475569?text=${encodeURIComponent(item.title || "Partner")}`;
+                        }}
                       />
                     </div>
                     <h3 className="text-xs font-medium text-gray-600 text-center mt-3 line-clamp-1 group-hover:text-gray-900 transition-colors">

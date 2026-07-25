@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { User as UserIcon } from 'lucide-react';
 import AppImage from '@/components/ui/AppImage';
