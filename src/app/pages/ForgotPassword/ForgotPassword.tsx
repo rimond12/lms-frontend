@@ -90,7 +90,7 @@ export function ForgotPassword() {
 
   return (
     <section>
-      {isPending && <LoadingSpinner />}
+      {isPending && <LoadingSpinner message="Sending reset email..." />}
 
       <div className="h-screen w-full bg-gradient-to-br from-blue-50 via-blue-50 to-blue-100 flex items-center justify-center p-4">
         <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-white/20 p-8">

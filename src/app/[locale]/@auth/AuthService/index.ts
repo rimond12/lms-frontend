@@ -211,3 +211,29 @@ export const resendVerificationEmail = async (email: string) => {
     };
   }
 };
+
+export const changePassword = async (passwordData: FieldValues) => {
+  try {
+    const accessToken = (await cookies()).get("accessToken")?.value;
+    const { data } = await axiosInstance.post(
+      "/auth/change-password",
+      passwordData,
+      {
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+      }
+    );
+    return data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      "Failed to change password. Please try again.";
+
+    return {
+      success: false,
+      error: errorMessage,
+      statusCode: error.response?.status || 500,
+    };
+  }
+};

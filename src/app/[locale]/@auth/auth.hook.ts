@@ -2,7 +2,7 @@ import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query"; 
 import { useUser } from "./user.provider";
-import { getCurrentUser, loginUser, registerUser, forgotPassword, resetPassword, verifyEmail, resendVerificationEmail } from "./AuthService";
+import { getCurrentUser, loginUser, registerUser, forgotPassword, resetPassword, verifyEmail, resendVerificationEmail, changePassword } from "./AuthService";
 
 
 
@@ -129,6 +129,24 @@ export const useResendVerificationEmail = () => {
     },
     onError: (error) => {
       const message = error.message || "Failed to resend verification email. Please try again.";
+      toast.error(message);
+    },
+  });
+};
+
+export const useChangePassword = () => {
+  return useMutation<any, Error, FieldValues>({
+    mutationKey: ["CHANGE_PASSWORD"],
+    mutationFn: async (passwordData: FieldValues) => await changePassword(passwordData),
+    onSuccess: (data) => {
+      if (data.success === false) {
+        toast.error(data.error || "Failed to change password. Please try again.");
+        return;
+      }
+      toast.success("Password updated successfully!");
+    },
+    onError: (error) => {
+      const message = error.message || "Failed to change password. Please try again.";
       toast.error(message);
     },
   });

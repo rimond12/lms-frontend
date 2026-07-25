@@ -34,32 +34,240 @@
   }
 }
 
-/* ─── Floating Toggle Button ─────────────────────────────────────────── */
-.iai-toggle-btn {
-  width: 60px;
-  height: 60px;
+/* ─── Welcome Tooltip Badge (Fancy, Fresh & Compact) ────────────────── */
+.iai-welcome-tooltip {
+  position: absolute;
+  bottom: 16px;
+  right: 76px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px) saturate(180%);
+  color: #1e40af;
+  padding: 5px 10px 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  box-shadow: 0 8px 24px rgba(29, 78, 216, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  z-index: 9002;
+  transform-origin: right center;
+  animation: iaiTooltipPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, iaiTooltipFloat 3s ease-in-out infinite 0.45s;
+}
+
+.iai-welcome-tooltip.hiding {
+  animation: iaiTooltipPopOut 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+@keyframes iaiTooltipPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateX(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+@keyframes iaiTooltipPopOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) translateX(10px);
+  }
+}
+
+@keyframes iaiTooltipFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.iai-tooltip-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Pulsing AI Live Dot */
+.iai-tooltip-dot {
+  width: 7px;
+  height: 7px;
+  background: #2563eb;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--iai-primary), var(--iai-accent));
+  position: relative;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.6);
+}
+
+.iai-tooltip-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid #3b82f6;
+  animation: iaiDotPulse 1.8s ease-out infinite;
+}
+
+@keyframes iaiDotPulse {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2.2); }
+}
+
+.iai-tooltip-text {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #1e40af;
+  font-family: var(--font-poppins, 'Poppins', sans-serif);
+}
+
+.iai-tooltip-close {
+  background: rgba(30, 64, 175, 0.08);
   border: none;
+  color: #64748b;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(29,78,216,.45);
-  transition: transform .25s ease, box-shadow .25s ease;
+  font-size: 9px;
+  transition: background 0.2s, color 0.2s;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.iai-tooltip-close:hover {
+  background: rgba(30, 64, 175, 0.2);
+  color: #1e40af;
+}
+
+/* Arrow pointing right to button */
+.iai-tooltip-arrow {
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid rgba(37, 99, 235, 0.25);
+  border-right: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+@media (max-width: 640px) {
+  .iai-welcome-tooltip {
+    bottom: 74px;
+    right: 0;
+    transform-origin: bottom right;
+  }
+  .iai-tooltip-arrow {
+    right: 24px;
+    top: 100%;
+    transform: translateX(-50%) rotate(135deg);
+    margin-top: -4px;
+  }
+}
+
+/* ─── Floating Toggle Button ─────────────────────────────────────────── */
+.iai-toggle-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(29, 78, 216, 0.3), 0 0 0 3px rgba(59, 130, 246, 0.15);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   position: relative;
-  color: #fff;
+  color: #1d4ed8;
   outline: none;
+  padding: 0;
 }
 
 .iai-toggle-btn:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 28px rgba(29,78,216,.55);
+  box-shadow: 0 12px 32px rgba(29, 78, 216, 0.45), 0 0 20px rgba(37, 99, 235, 0.4);
+  border-color: #2563eb;
 }
 
-.iai-toggle-btn:active { transform: scale(0.96); }
+.iai-toggle-btn:active {
+  transform: scale(0.95);
+}
 
-/* Pulse ring — first-load attention dot */
+.iai-btn-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.iai-btn-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));
+}
+
+/* AI Badge overlay to clearly denote AI Assistant */
+.iai-ai-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.5);
+  animation: iaiSparkleGlow 2.5s ease-in-out infinite alternate;
+}
+
+.iai-sparkle-svg {
+  width: 12px;
+  height: 12px;
+  color: #fbbf24;
+}
+
+@keyframes iaiSparkleGlow {
+  0% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+  }
+  100% {
+    transform: scale(1.15) rotate(15deg);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.7);
+  }
+}
+
+.iai-close-icon {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pulse ring — first-load attention ring */
 .iai-pulse-ring {
   position: absolute;
   inset: -6px;
@@ -71,19 +279,20 @@
 
 @keyframes iaiPulse {
   0%   { opacity: 1; transform: scale(1); }
-  70%  { opacity: 0; transform: scale(1.45); }
-  100% { opacity: 0; transform: scale(1.45); }
+  70%  { opacity: 0; transform: scale(1.4); }
+  100% { opacity: 0; transform: scale(1.4); }
 }
 
 .iai-notif-dot {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 2px;
+  right: 2px;
   width: 12px;
   height: 12px;
   background: #22c55e;
   border-radius: 50%;
   border: 2px solid #fff;
+  z-index: 10;
 }
 
 /* ─── Chat Panel ─────────────────────────────────────────────────────── */

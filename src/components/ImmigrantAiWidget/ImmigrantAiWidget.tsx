@@ -108,6 +108,8 @@ interface JobItem {
 
 export const ImmigrantAiWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
+  const [isHidingTooltip, setIsHidingTooltip] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [hasUnread, setHasUnread] = useState(false);
   const [lang, setLang] = useState<"en" | "bn">("en");
@@ -118,6 +120,22 @@ export const ImmigrantAiWidget: React.FC = () => {
   const [sessionStatus, setSessionStatus] = useState<string>("bot");
   const [isApiError, setIsApiError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Auto-close welcome tooltip after 5 seconds with smooth exit animation
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => {
+      setIsHidingTooltip(true);
+    }, 4500);
+
+    const closeTimer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(closeTimer);
+    };
+  }, []);
 
   // Widget view states
   const [activeView, setActiveView] = useState<"chat" | "countries" | "jobs" | "courses" | "consultant_form" | "cc_form">("chat");
@@ -579,36 +597,61 @@ export const ImmigrantAiWidget: React.FC = () => {
 
   return (
     <div className="iai-widget-root">
+      {/* Welcome Tooltip Badge on Page Load (Fancy, Fresh & Compact) */}
+      {showTooltip && !isOpen && (
+        <div className={`iai-welcome-tooltip ${isHidingTooltip ? "hiding" : ""}`}>
+          <div className="iai-tooltip-content">
+            <span className="iai-tooltip-dot" />
+            <span className="iai-tooltip-text">
+              {lang === "bn" ? "ইমিগ্র্যান্ট এআই" : "Immigrant AI"}
+            </span>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowTooltip(false);
+            }}
+            className="iai-tooltip-close"
+            title="Dismiss"
+            aria-label="Close tooltip"
+          >
+            ✕
+          </button>
+          <div className="iai-tooltip-arrow" />
+        </div>
+      )}
+
       {/* Floating Toggle Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="iai-toggle-btn"
-        style={isOpen ? {} : {
-          width: "auto",
-          height: "50px",
-          borderRadius: "25px",
-          padding: "0 22px",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontWeight: 700,
-          fontSize: "14px",
-          letterSpacing: "0.5px"
+        onClick={() => {
+          setIsOpen(!isOpen);
+          setShowTooltip(false);
         }}
-        aria-label="Toggle chatbot"
+        className="iai-toggle-btn"
+        aria-label="Immigrant AI Assistant"
+        title="Immigrant AI"
       >
         {isOpen ? (
-          <span style={{ fontSize: "22px" }}>✕</span>
+          <span className="iai-close-icon">✕</span>
         ) : (
-          <>
-            <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: "20px", height: "20px" }}>
-              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
-            </svg>
-            <span>Immigrant AI</span>
-          </>
+          <div className="iai-btn-image-wrapper">
+            <Image
+              src="/images/imigrant-1.png"
+              alt="Immigrant AI"
+              width={46}
+              height={46}
+              className="iai-btn-img"
+              priority
+            />
+            <div className="iai-ai-badge" title="AI Assistant">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="iai-sparkle-svg">
+                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+              </svg>
+            </div>
+          </div>
         )}
-        {isFirstLoad && !isOpen && <span className="iai-pulse-ring" style={{ borderRadius: "25px" }}></span>}
-        {hasUnread && !isOpen && <span className="iai-notif-dot" style={{ top: "0px", right: "0px" }}></span>}
+        {isFirstLoad && !isOpen && <span className="iai-pulse-ring"></span>}
+        {hasUnread && !isOpen && <span className="iai-notif-dot"></span>}
       </button>
 
       {/* Main Chat Panel */}
@@ -620,7 +663,7 @@ export const ImmigrantAiWidget: React.FC = () => {
               width={24}
               height={24}
               alt="Immigrant AI"
-              src="/images/imigrant-1.png"
+              src="/images/imigrant-2.png"
               className="w-6 h-6 object-contain"
             />
           </div>
@@ -656,7 +699,7 @@ export const ImmigrantAiWidget: React.FC = () => {
                   width={48}
                   height={48}
                   alt="Immigrant AI"
-                  src="/images/imigrant-1.png"
+                  src="/images/imigrant-2.png"
                   className="w-12 h-12 object-contain"
                 />
               </div>

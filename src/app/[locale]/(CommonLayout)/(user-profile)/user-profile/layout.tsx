@@ -102,7 +102,7 @@ const sidebarSections = [
     title: "Account",
     items: [
       { name: "My Notices", href: "/user-profile/my-notice", icon: Bell },
-      { name: "Settings", href: "/reset-password", icon: Settings },
+      { name: "Change Password", href: "/user-profile/change-password", icon: Settings },
     ],
   },
 ];

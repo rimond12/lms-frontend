@@ -41,6 +41,7 @@ import {
   Tag,
   PanelTop,
   ShieldCheck,
+  KeyRound,
 } from "lucide-react";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
 import { logout } from "@/app/[locale]/@auth/AuthService";
@@ -180,7 +181,7 @@ const navigationSections = [
   {
     title: "System",
     items: [
-      { name: "Settings", href: "/reset-password", icon: Settings },
+      { name: "Change Password", href: "/dashboard/change-password", icon: KeyRound },
       { name: "Analytics", href: "#", icon: BarChart3 },
       {
         name: "Activity Log",
@@ -249,9 +250,6 @@ const Sidebar = () => {
             >
               <span className="font-black text-xl tracking-tight text-slate-800">
                 Immigrant
-              </span>
-              <span className="bg-blue-700 text-white text-[10px] font-black px-2 py-0.5 rounded shadow-sm tracking-widest uppercase">
-                AI
               </span>
             </Link>
             <Link

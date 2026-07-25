@@ -12,6 +12,8 @@ import ImmigrantForm from "@/components/common/resubaleform/ImmigrantForm";
 import ImmigrantInput from "@/components/common/resubaleform/ImmigrantInput";
 import { Button } from "@/components/ui/Button";
 
+import LoadingSpinner from "@/components/common/LoadingSpinner/LoadingSpinner";
+
 function useHasMounted() {
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
@@ -55,23 +57,8 @@ export function LoginClient() {
 
   return (
     <>
-      {/* ✅ Fullscreen loader — isPending এ পুরো screen এ দেখাবে */}
-      {isPending && (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm">
-          <div className="relative w-14 h-14 mb-4">
-            <div className="absolute inset-0 rounded-full border-4 border-blue-100" />
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-600 animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img
-                src="/images/imigrant-2.png"
-                className="w-8 h-8 object-contain"
-              />
-            </div>
-          </div>
-          <p className="text-sm font-semibold text-gray-700">Signing in...</p>
-          <p className="text-xs text-gray-400 mt-1">Please wait</p>
-        </div>
-      )}
+      {/* Fullscreen loader */}
+      {isPending && <LoadingSpinner message="Signing in..." />}
 
       <section className="min-h-screen relative overflow-hidden flex items-center justify-center bg-gray-50">
         {/* Animated Background */}

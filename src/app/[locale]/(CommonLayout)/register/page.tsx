@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
 
 import { useUserRegistration } from "@/app/[locale]/@auth/auth.hook";
 import ImmigrantForm from "@/components/common/resubaleform/ImmigrantForm";
@@ -21,7 +21,7 @@ import LoadingSpinner from "@/components/common/LoadingSpinner/LoadingSpinner";
 
 export default function SignUpPage() {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <Suspense fallback={<LoadingSpinner message="Loading..." />}>
       <SignUpContent />
     </Suspense>
   );
@@ -93,7 +93,7 @@ function SignUpContent() {
 
   return (
     <section className="min-h-screen relative overflow-hidden flex items-center justify-center bg-gray-50 py-10">
-      {isPending && <LoadingSpinner />}
+      {isPending && <LoadingSpinner message="Creating Account..." />}
 
       {/* Animated Background */}
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
@@ -182,7 +182,7 @@ function SignUpContent() {
                   >
                     {isPending ? (
                       <span className="flex items-center gap-2">
-                        <LoadingSpinner /> Creating...
+                        <Loader2 className="w-4 h-4 animate-spin" /> Creating...
                       </span>
                     ) : (
                       <>

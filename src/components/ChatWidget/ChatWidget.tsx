@@ -7,6 +7,7 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useChatbot, ChatMessage } from "@/hooks/useChatbot";
 import "./ChatWidget.css";
 
@@ -299,9 +300,45 @@ const ChatWidget: React.FC = () => {
       <button
         onClick={toggleChat}
         className={`chat-toggle-btn ${isOpen ? "active" : ""}`}
-        aria-label={isOpen ? "Close chat" : "Open chat"}
+        aria-label={isOpen ? "Close AI chat" : "Open AI chat"}
+        title="Immigrant AI"
       >
-        {isOpen ? <CloseIcon /> : <BotIcon />}
+        {isOpen ? (
+          <CloseIcon />
+        ) : (
+          <div className="chat-btn-image-wrapper" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Image
+              src="/images/imigrant-1.png"
+              alt="Immigrant AI"
+              width={44}
+              height={44}
+              style={{ objectFit: "contain" }}
+              priority
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: "-4px",
+                right: "-4px",
+                background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+                color: "#fff",
+                borderRadius: "50%",
+                width: "20px",
+                height: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "2px solid #fff",
+                boxShadow: "0 2px 6px rgba(124, 58, 237, 0.5)",
+              }}
+              title="AI Assistant"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: "10px", height: "10px", color: "#fbbf24" }}>
+                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+              </svg>
+            </div>
+          </div>
+        )}
         {!isOpen && <span className="btn-pulse"></span>}
       </button>
     </div>
