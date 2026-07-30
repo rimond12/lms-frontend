@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { useGetEnrollableBatchesQuery, IBatch, IInstallmentPlan } from "@/app/redux/api/batchApi/batchApi";
 import { useEnrollInBatchMutation, useSubmitPaymentMutation } from "@/app/redux/api/batchApi/batchEnrollmentApi";
 import { useGetMeQuery } from "@/app/redux/api/users/userApi";
+import { useGetPaymentSettingQuery } from "@/app/redux/api/paymentSettingApi/paymentSettingApi";
 
 interface BatchEnrollmentModalProps {
   isOpen: boolean;
@@ -63,9 +64,11 @@ const BatchEnrollmentModal: React.FC<BatchEnrollmentModalProps> = ({
   const [enrollInBatch, { isLoading: isEnrolling }] = useEnrollInBatchMutation();
   const [submitPayment, { isLoading: isSubmittingPayment }] = useSubmitPaymentMutation();
   
-  // Fetch current user profile to auto-fill form
+  // Fetch current user profile & payment settings to auto-fill form
   const { data: userData } = useGetMeQuery(undefined, { skip: !isOpen });
   const currentUser = userData?.data;
+  const { data: paymentSettingData } = useGetPaymentSettingQuery(undefined, { skip: !isOpen });
+  const paymentSetting = paymentSettingData?.data;
 
   const batches = batchesData?.data || [];
 
@@ -547,10 +550,20 @@ const BatchEnrollmentModal: React.FC<BatchEnrollmentModalProps> = ({
                           <p className="text-sm text-yellow-700 mt-1">
                             Transfer <strong>{formatCurrency(selectedPlan.installments[0].amount, selectedBatch.currency)}</strong> to our account using any of the following methods:
                           </p>
+                          {paymentSetting?.paymentInstructions && (
+                            <p className="text-xs text-yellow-800 mt-1 italic">
+                              {paymentSetting.paymentInstructions}
+                            </p>
+                          )}
                           <div className="mt-2 text-sm text-yellow-700 space-y-1">
-                            <p><strong>bKash:</strong> 01712-345678</p>
-                            <p><strong>Nagad:</strong> 01712-345678</p>
-                            <p><strong>Bank:</strong> AIBL Bank, A/C: 1234567890</p>
+                            <p><strong>bKash ({paymentSetting?.bkashType || "Personal"}):</strong> {paymentSetting?.bkashNumber || "01712-345678"}</p>
+                            <p><strong>Nagad ({paymentSetting?.nagadType || "Personal"}):</strong> {paymentSetting?.nagadNumber || "01712-345678"}</p>
+                            {paymentSetting?.rocketNumber && (
+                              <p><strong>Rocket ({paymentSetting?.rocketType || "Personal"}):</strong> {paymentSetting.rocketNumber}</p>
+                            )}
+                            {paymentSetting?.bankAccountNumber && (
+                              <p><strong>Bank:</strong> {paymentSetting.bankName || "Bank"} (A/C: {paymentSetting.bankAccountNumber} - {paymentSetting.bankAccountName})</p>
+                            )}
                           </div>
                         </div>
                       </div>

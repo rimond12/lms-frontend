@@ -42,6 +42,7 @@ import {
   PanelTop,
   ShieldCheck,
   KeyRound,
+  CreditCard,
 } from "lucide-react";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
 import { logout } from "@/app/[locale]/@auth/AuthService";
@@ -148,6 +149,11 @@ const navigationSections = [
         name: "CV Builder CMS",
         href: "/dashboard/manage-cv-builder",
         icon: FileText,
+      },
+      {
+        name: "Payment Settings",
+        href: "/dashboard/payment-settings",
+        icon: CreditCard,
       },
     ],
   },

@@ -112,8 +112,18 @@ export const MaterialsStep: React.FC<MaterialsStepProps> = ({
       // Use correct backend URL
       const baseUrl =
         process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
+
+      const token =
+        typeof window !== "undefined"
+          ? document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("accessToken="))
+              ?.split("=")[1]
+          : undefined;
+
       const response = await fetch(`${baseUrl}/programs/upload-image`, {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
       });
 

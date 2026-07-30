@@ -71,6 +71,7 @@ const baseApi = createApi({
     "VisaVerification",
     "CvBuilder",
     "CvBuilderCMS",
+    "PaymentSetting",
   ],
   endpoints: () => ({}),
 });

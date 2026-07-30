@@ -145,9 +145,18 @@ export const ExpertsStep: React.FC<ExpertsStepProps> = ({ data, onUpdate }) => {
       const apiUrl =
         process.env.NEXT_PUBLIC_FILE_URL || "https://api.immigrantjobsworld.com";
 
+      const token =
+        typeof window !== "undefined"
+          ? document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("accessToken="))
+              ?.split("=")[1]
+          : undefined;
+
       // Upload to backend (note: /api prefix required for all API routes)
       const response = await fetch(`${apiUrl}/api/programs/upload-image`, {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
       });
 

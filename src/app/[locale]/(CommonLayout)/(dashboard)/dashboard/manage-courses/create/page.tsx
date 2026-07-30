@@ -578,25 +578,49 @@ export default function CreateProgramWizard() {
         return;
       }
 
-      // Process modules to create quizzes AND assignments first
-      const processedModules = [];
+      // Step 1: Save modules first so backend generates real Mongo ObjectIds for each module
+      const initialModules = modules.map((m: any) => {
+        const modCopy = { ...m };
+        delete modCopy.quiz;
+        delete modCopy.assignment;
+        return modCopy;
+      });
+
+      const updatedCourseRes = await updateProgram({
+        id: courseId,
+        modules: initialModules,
+      }).unwrap();
+
+      const savedModules =
+        (updatedCourseRes as any)?.data?.modules ||
+        (updatedCourseRes as any)?.modules ||
+        [];
+
+      // Step 2: Process embedded quizzes and assignments using confirmed module _ids
+      const finalModules = [];
       let quizzesCreated = 0;
       let assignmentsCreated = 0;
 
-      for (const module of modules) {
-        const processedModule = { ...module };
+      for (let i = 0; i < modules.length; i++) {
+        const module = modules[i];
+        const savedModule = savedModules[i];
+        const confirmedModuleId = savedModule?._id || module._id;
+
+        const processedModule = {
+          ...savedModule,
+          ...module,
+          _id: confirmedModuleId,
+        };
 
         // ==================== QUIZ CREATION ====================
-        // If module has quiz data (embedded quiz object), create quiz first
         if (
           module.quiz &&
           module.quiz.title &&
           module.quiz.questions?.length > 0
         ) {
           try {
-            // Transform quiz questions to match backend format
             const transformedQuestions = module.quiz.questions.map((q: any) => {
-              const validOptions = q.options
+              const validOptions = (q.options || [])
                 .filter((opt: any) => opt.text && opt.text.trim())
                 .map((opt: any, idx: number) => ({
                   id: `option_${idx + 1}`,
@@ -609,7 +633,7 @@ export default function CreateProgramWizard() {
                 correctOption?.id || validOptions[0]?.id || "option_1";
 
               return {
-                questionText: q.questionText?.trim() || q.text?.trim() || "",
+                questionText: q.questionText?.trim() || q.text?.trim() || "Question",
                 marks: q.marks || 1,
                 options: validOptions.map(({ id, text }: any) => ({
                   id,
@@ -620,12 +644,14 @@ export default function CreateProgramWizard() {
               };
             });
 
-            // Create quiz payload
             const quizPayload = {
               title: module.quiz.title.trim(),
-              description: module.quiz.description?.trim() || "",
+              description:
+                module.quiz.description?.trim() ||
+                module.quiz.title.trim() ||
+                "Module Quiz",
               courseId: courseId,
-              moduleId: module._id,
+              moduleId: confirmedModuleId,
               quizType: "module" as const,
               questions: transformedQuestions,
               passingScore: module.quiz.passingScore || 60,
@@ -638,8 +664,6 @@ export default function CreateProgramWizard() {
             };
 
             const quizResponse = await createQuiz(quizPayload).unwrap();
-
-            // Extract quiz ID from response
             const quizAny = quizResponse as any;
             const quizId =
               quizAny?.quiz?._id || quizAny?.data?.quiz?._id || quizAny?._id;
@@ -655,15 +679,15 @@ export default function CreateProgramWizard() {
               `❌ Error creating quiz for module ${module.title}:`,
               quizError,
             );
-            toast.error(`Quiz creation failed for module "${module.title}"`);
+            toast.error(
+              `Quiz creation failed for module "${module.title}": ${quizError?.data?.message || quizError?.message || "Invalid payload"}`,
+            );
           }
         }
 
         // ==================== ASSIGNMENT CREATION ====================
-        // If module has assignment data, create assignment first
         if (module.assignment && module.assignment.title) {
           try {
-            // Validate required fields explicitly
             if (
               module.assignment.totalPoints < module.assignment.passingPoints
             ) {
@@ -675,17 +699,17 @@ export default function CreateProgramWizard() {
               );
             }
 
-            // Create assignment payload
             const assignmentPayload = {
-              courseId: courseId, // Required
-              moduleId: module._id, // Link to this module
+              courseId: courseId,
+              moduleId: confirmedModuleId,
               title: module.assignment.title.trim(),
-              description: module.assignment.description?.trim() || "",
+              description:
+                module.assignment.description?.trim() ||
+                module.assignment.title.trim() ||
+                "Module Assignment",
               instructions:
                 module.assignment.instructions?.trim() ||
                 "Complete the assignment.",
-
-              // Submission Settings
               submissionTypes:
                 module.assignment.submissionTypes &&
                 module.assignment.submissionTypes.length > 0
@@ -694,37 +718,28 @@ export default function CreateProgramWizard() {
               allowedFileTypes: module.assignment.allowedFileTypes || [],
               maxFileSize: module.assignment.maxFileSize || 50,
               maxFilesCount: module.assignment.maxFilesCount || 3,
-
-              // Timing
               startDate: module.assignment.startDate || null,
               dueDate: module.assignment.dueDate || null,
               lateDueDate: module.assignment.lateDueDate || null,
-
-              // Grading
               totalPoints: module.assignment.totalPoints || 100,
               passingPoints: module.assignment.passingPoints || 60,
               lateSubmissionPenalty:
                 module.assignment.lateSubmissionPenalty || 0,
               allowResubmission: module.assignment.allowResubmission || false,
               maxAttempts: module.assignment.maxAttempts || 1,
-
-              // Rubric
               rubric:
                 module.assignment.rubric?.map((r: any) => ({
                   criteria: r.criteria,
                   maxPoints: r.maxPoints,
                   description: r.description || "",
                 })) || [],
-
               isPublished: module.assignment.isPublished || false,
             };
 
-            // Cast to any to bypass strict type checking if frontend interface mismatches slightly
             const assignmentResponse = await createAssignment(
               assignmentPayload as any,
             ).unwrap();
 
-            // Extract assignment ID
             const assignAny = assignmentResponse as any;
             const assignmentId =
               assignAny?.assignment?._id ||
@@ -734,20 +749,11 @@ export default function CreateProgramWizard() {
             if (assignmentId) {
               processedModule.assignmentId = assignmentId;
               assignmentsCreated++;
-            } else {
-              console.warn(
-                "⚠️ Assignment created but no ID returned",
-                assignAny,
-              );
             }
           } catch (assignError: any) {
             console.error(
               `❌ Error creating assignment for module ${module.title}:`,
               assignError,
-            );
-            console.error(
-              "Error Details:",
-              assignError?.data || assignError?.message,
             );
             toast.error(
               `Assignment creation failed: ${assignError?.data?.message || assignError?.message || "Unknown error"}`,
@@ -755,19 +761,18 @@ export default function CreateProgramWizard() {
           }
         }
 
-        // Remove embedded objects before saving (backend only wants IDs)
         delete processedModule.quiz;
         delete processedModule.assignment;
-
-        processedModules.push(processedModule);
+        finalModules.push(processedModule);
       }
 
-      // Update course with processed modules
-
-      await updateProgram({
-        id: courseId,
-        modules: processedModules,
-      }).unwrap();
+      // Step 3: Final update to program to link quizId & assignmentId to modules if any were created
+      if (quizzesCreated > 0 || assignmentsCreated > 0) {
+        await updateProgram({
+          id: courseId,
+          modules: finalModules,
+        }).unwrap();
+      }
 
       const newCompleted = new Set(completedSteps);
       newCompleted.add(5);

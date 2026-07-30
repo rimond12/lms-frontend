@@ -45,11 +45,20 @@ export const CertificateStep: React.FC<CertificateStepProps> = ({
       const baseUrl =
         process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
 
+      const token =
+        typeof window !== "undefined"
+          ? document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("accessToken="))
+              ?.split("=")[1]
+          : undefined;
+
       console.log("📤 Uploading certificate image...");
       console.log("🔗 Upload URL:", `${baseUrl}/programs/upload-image`);
 
       const response = await fetch(`${baseUrl}/programs/upload-image`, {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
       });
 

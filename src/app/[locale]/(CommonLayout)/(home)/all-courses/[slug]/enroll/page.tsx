@@ -36,6 +36,7 @@ import {
   useSubmitPaymentMutation,
 } from "@/app/redux/api/batchApi/batchEnrollmentApi";
 import { useGetMeQuery } from "@/app/redux/api/users/userApi";
+import { useGetPaymentSettingQuery } from "@/app/redux/api/paymentSettingApi/paymentSettingApi";
 import { useUser } from "@/app/[locale]/@auth/user.provider";
 import { isAuthenticated } from "@/utils/auth";
 import Link from "next/link";
@@ -83,9 +84,11 @@ export default function EnrollmentPage() {
   const [submitPayment, { isLoading: isSubmittingPayment }] =
     useSubmitPaymentMutation();
 
-  // Fetch current user profile
+  // Fetch current user profile & payment settings
   const { data: userData } = useGetMeQuery(undefined);
   const currentUser = userData?.data;
+  const { data: paymentSettingData } = useGetPaymentSettingQuery();
+  const paymentSetting = paymentSettingData?.data;
 
   // Filter batches with open enrollment and get the latest one
   // Filter batches with open enrollment
@@ -675,9 +678,14 @@ export default function EnrollmentPage() {
                       <Wallet className="w-5 h-5 text-emerald-600" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-900 mb-2">
-                        পেমেন্ট পাঠান
+                      <p className="font-semibold text-gray-900 mb-1">
+                        পেমেন্ট পাঠান / Payment Instructions
                       </p>
+                      {paymentSetting?.paymentInstructions && (
+                        <p className="text-xs text-gray-600 mb-3">
+                          {paymentSetting.paymentInstructions}
+                        </p>
+                      )}
                       <div className="grid sm:grid-cols-2 gap-3">
                         <div className="bg-white/80 rounded-lg p-3 border border-emerald-100">
                           <div className="flex items-center gap-2 mb-1">
@@ -690,10 +698,12 @@ export default function EnrollmentPage() {
                               bKash
                             </span>
                           </div>
-                          <p className="text-lg font-bold text-gray-900">
-                            01712-345678
+                          <p className="text-base font-bold text-gray-900">
+                            {paymentSetting?.bkashNumber || "01712-345678"}
                           </p>
-                          <p className="text-xs text-gray-500">Personal</p>
+                          <p className="text-xs text-gray-500">
+                            {paymentSetting?.bkashType || "Personal"}
+                          </p>
                         </div>
                         <div className="bg-white/80 rounded-lg p-3 border border-emerald-100">
                           <div className="flex items-center gap-2 mb-1">
@@ -706,11 +716,48 @@ export default function EnrollmentPage() {
                               Nagad
                             </span>
                           </div>
-                          <p className="text-lg font-bold text-gray-900">
-                            01712-345678
+                          <p className="text-base font-bold text-gray-900">
+                            {paymentSetting?.nagadNumber || "01712-345678"}
                           </p>
-                          <p className="text-xs text-gray-500">Personal</p>
+                          <p className="text-xs text-gray-500">
+                            {paymentSetting?.nagadType || "Personal"}
+                          </p>
                         </div>
+                        {paymentSetting?.rocketNumber && (
+                          <div className="bg-white/80 rounded-lg p-3 border border-emerald-100">
+                            <div className="flex items-center gap-2 mb-1">
+                              <div className="w-6 h-6 bg-purple-600 rounded flex items-center justify-center">
+                                <span className="text-white text-xs font-bold">
+                                  R
+                                </span>
+                              </div>
+                              <span className="font-medium text-gray-700">
+                                Rocket
+                              </span>
+                            </div>
+                            <p className="text-base font-bold text-gray-900">
+                              {paymentSetting.rocketNumber}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {paymentSetting.rocketType || "Personal"}
+                            </p>
+                          </div>
+                        )}
+                        {paymentSetting?.bankAccountNumber && (
+                          <div className="bg-white/80 rounded-lg p-3 border border-emerald-100">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-medium text-gray-700">
+                                🏦 {paymentSetting.bankName || "Bank"}
+                              </span>
+                            </div>
+                            <p className="text-sm font-bold text-gray-900">
+                              A/C: {paymentSetting.bankAccountNumber}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {paymentSetting.bankAccountName}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
