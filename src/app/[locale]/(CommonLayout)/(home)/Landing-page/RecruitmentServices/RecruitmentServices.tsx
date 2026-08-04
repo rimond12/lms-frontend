@@ -14,11 +14,16 @@ const ModernRecruitment = () => {
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.services;
 
-  const badge    = (isBn ? null : cms?.badge)    || t("badge");
-  const heading1 = (isBn ? null : cms?.heading1) || t("heading1");
-  const heading2 = (isBn ? null : cms?.heading2) || t("heading2");
+  const badge    = (isBn ? cms?.badgeBn    : cms?.badge)    || t("badge");
+  const heading1 = (isBn ? cms?.heading1Bn : cms?.heading1) || t("heading1");
+  const heading2 = (isBn ? cms?.heading2Bn : cms?.heading2) || t("heading2");
   const tItems   = t.raw("items") as { title: string; description: string }[];
-  const items    = (!isBn && cms?.items?.length) ? cms.items : tItems;
+  const items    = (cms?.items?.length)
+    ? cms.items.map(item => ({
+        title: (isBn ? item.titleBn : undefined) || item.title,
+        description: (isBn ? item.descriptionBn : undefined) || item.description,
+      }))
+    : tItems;
 
   return (
     <section className="py-12 md:py-24 bg-slate-50 overflow-hidden">

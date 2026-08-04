@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import {
   FaRegClock,
@@ -26,10 +26,12 @@ const PopularCourses: React.FC = () => {
   const t = useTranslations("popularCourses");
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.popularCourses;
+  const locale = useLocale();
+  const isBn = locale === "bn";
 
-  const headingPrefix = cms?.headingPrefix || t("headingPrefix");
-  const headingHighlight = cms?.headingHighlight || t("headingHighlight");
-  const seeAllText = cms?.seeAllText || t("seeAllButton");
+  const headingPrefix    = (isBn ? cms?.headingPrefixBn    : cms?.headingPrefix)    || t("headingPrefix");
+  const headingHighlight = (isBn ? cms?.headingHighlightBn : cms?.headingHighlight) || t("headingHighlight");
+  const seeAllText       = (isBn ? cms?.seeAllTextBn       : cms?.seeAllText)       || t("seeAllButton");
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true, easing: "ease-out" });

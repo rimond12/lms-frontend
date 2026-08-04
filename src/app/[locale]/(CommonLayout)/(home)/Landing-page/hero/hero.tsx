@@ -510,8 +510,8 @@ export default function Hero() {
   const whatsappLink = footerResponse?.data?.whatsappLink || "https://wa.me/8801843432352";
 
   const slides = cms?.hero?.bannerSlides?.length ? cms.hero.bannerSlides : [{ image: "/images/main-hero.jpeg", altText: "Hero Banner" }];
-  const headline = (isBn ? null : cms?.hero?.headline) || tHero("headline");
-  const sub      = (isBn ? null : cms?.hero?.sub)      || tHero("sub");
+  const headline = (isBn ? cms?.hero?.headlineBn : cms?.hero?.headline) || tHero("headline");
+  const sub      = (isBn ? cms?.hero?.subBn      : cms?.hero?.sub)      || tHero("sub");
 
   // ── Build feature items: prefer CMS courses array, fall back to i18n ──
   // CMS stores each item as { name, sub, iconKey, nameBn?, subBn? }.

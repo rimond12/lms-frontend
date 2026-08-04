@@ -17,22 +17,29 @@ export interface IStatItem {
   end: number;
   suffix: string;
   label: string;
+  labelBn?: string;
   icon: string;
 }
 
 export interface IServiceItem {
   title: string;
   description: string;
+  titleBn?: string;
+  descriptionBn?: string;
 }
 
 export interface IOurServiceItem {
   title: string;
   desc: string;
+  titleBn?: string;
+  descBn?: string;
 }
 
 export interface ITrainingPoint {
   title: string;
   description: string;
+  titleBn?: string;
+  descriptionBn?: string;
 }
 
 export interface IPartnerLogo {
@@ -43,12 +50,16 @@ export interface IPartnerLogo {
 export interface IImmigrantJobFeature {
   title: string;
   description: string;
+  titleBn?: string;
+  descriptionBn?: string;
 }
 
 export interface IImmigrantJobType {
   type: string;
   count: string;
   description: string;
+  typeBn?: string;
+  descriptionBn?: string;
 }
 
 export interface IOfflineCourse {
@@ -73,7 +84,9 @@ export interface ILandingPageCMS {
   hero: {
     bannerSlides: IHeroSlide[];
     headline: string;
+    headlineBn?: string;
     sub: string;
+    subBn?: string;
     courses: IHeroCourseItem[];
   };
   stats: {
@@ -81,27 +94,38 @@ export interface ILandingPageCMS {
   };
   services: {
     badge: string;
+    badgeBn?: string;
     heading1: string;
+    heading1Bn?: string;
     heading2: string;
+    heading2Bn?: string;
     items: IServiceItem[];
   };
   ourServices: {
     headingPrefix: string;
+    headingPrefixBn?: string;
     headingHighlight: string;
+    headingHighlightBn?: string;
     items: IOurServiceItem[];
   };
   trainingSection: {
     badge: string;
+    badgeBn?: string;
     heading1: string;
+    heading1Bn?: string;
     heading2: string;
+    heading2Bn?: string;
     subheading: string;
+    subheadingBn?: string;
     points: ITrainingPoint[];
-    mainCard: { title: string; description: string; button: string };
-    cards: { title: string; description: string }[];
+    mainCard: { title: string; description: string; button: string; titleBn?: string; descriptionBn?: string; buttonBn?: string };
+    cards: { title: string; description: string; titleBn?: string; descriptionBn?: string }[];
   };
   ourJourney: {
     title: string;
+    titleBn?: string;
     subtitle: string;
+    subtitleBn?: string;
     row1: IPartnerLogo[];
     row2: IPartnerLogo[];
     row3: IPartnerLogo[];
@@ -120,54 +144,92 @@ export interface ILandingPageCMS {
   };
   applySection: {
     badge: string;
+    badgeBn?: string;
     heading: string;
+    headingBn?: string;
     headingHighlight: string;
+    headingHighlightBn?: string;
     subheading: string;
-    features: { title: string; desc: string }[];
+    subheadingBn?: string;
+    features: { title: string; desc: string; titleBn?: string; descBn?: string }[];
   };
   successStories: {
     heading: string;
+    headingBn?: string;
     headingHighlight: string;
+    headingHighlightBn?: string;
     subheading: string;
+    subheadingBn?: string;
     shareHeading: string;
+    shareHeadingBn?: string;
     shareSubheading: string;
+    shareSubheadingBn?: string;
     shareSubmitBtn: string;
+    shareSubmitBtnBn?: string;
     shareNominateBtn: string;
+    shareNominateBtnBn?: string;
     shareProcessBtn: string;
+    shareProcessBtnBn?: string;
   };
   immigrantJobsSection: {
     badge: string;
+    badgeBn?: string;
     heading: string;
+    headingBn?: string;
     subheading: string;
+    subheadingBn?: string;
     whyChooseTitle: string;
+    whyChooseTitleBn?: string;
     features: IImmigrantJobFeature[];
     featuredTitle: string;
+    featuredTitleBn?: string;
     liveBadge: string;
+    liveBadgeBn?: string;
     listingsSubtext: string;
+    listingsSubtextBn?: string;
     whyUsBadge: string;
+    whyUsBadgeBn?: string;
     whyUsSubtext: string;
+    whyUsSubtextBn?: string;
     browseAllText: string;
+    browseAllTextBn?: string;
     viewAllJobs: string;
+    viewAllJobsBn?: string;
     moreListings: string;
+    moreListingsBn?: string;
     employmentTitle: string;
+    employmentTitleBn?: string;
     jobTypes: IImmigrantJobType[];
     ctaBadge: string;
+    ctaBadgeBn?: string;
     ctaHeading: string;
+    ctaHeadingBn?: string;
     ctaSubheading: string;
+    ctaSubheadingBn?: string;
     ctaButton: string;
+    ctaButtonBn?: string;
   };
   popularCourses: {
     headingPrefix: string;
+    headingPrefixBn?: string;
     headingHighlight: string;
+    headingHighlightBn?: string;
     seeAllText: string;
+    seeAllTextBn?: string;
   };
   courseModules: {
     titlePrefix: string;
+    titlePrefixBn?: string;
     titleHighlight: string;
+    titleHighlightBn?: string;
     subtitle: string;
+    subtitleBn?: string;
     technicalTab: string;
+    technicalTabBn?: string;
     languageTab: string;
+    languageTabBn?: string;
     detailsLink: string;
+    detailsLinkBn?: string;
     offlineCourses: IOfflineCourse[];
   };
   isActive: boolean;

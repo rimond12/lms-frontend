@@ -28,10 +28,15 @@ const OurServices: React.FC = () => {
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.ourServices;
 
-  const headingPrefix    = (isBn ? null : cms?.headingPrefix)    || t("headingPrefix");
-  const headingHighlight = (isBn ? null : cms?.headingHighlight) || t("headingHighlight");
+  const headingPrefix    = (isBn ? cms?.headingPrefixBn    : cms?.headingPrefix)    || t("headingPrefix");
+  const headingHighlight = (isBn ? cms?.headingHighlightBn : cms?.headingHighlight) || t("headingHighlight");
   const tItems           = t.raw("items") as { title: string; desc: string }[];
-  const items            = (!isBn && cms?.items?.length) ? cms.items : tItems;
+  const items            = (cms?.items?.length)
+    ? cms.items.map(item => ({
+        title: (isBn ? item.titleBn : undefined) || item.title,
+        desc:  (isBn ? item.descBn  : undefined) || item.desc,
+      }))
+    : tItems;
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true, easing: "ease-out" });

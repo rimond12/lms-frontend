@@ -18,13 +18,31 @@ const TrainingSection = () => {
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.trainingSection;
 
-  const badge      = (isBn ? null : cms?.badge)      || tr("badge");
-  const heading1   = (isBn ? null : cms?.heading1)   || tr("heading1");
-  const heading2   = (isBn ? null : cms?.heading2)   || tr("heading2");
-  const subheading = (isBn ? null : cms?.subheading) || tr("subheading");
-  const points     = (!isBn && cms?.points?.length) ? cms.points   : tr.raw("points")   as { title: string; description: string }[];
-  const mainCard   = (!isBn && cms?.mainCard)        ? cms.mainCard : { title: tr("mainCard.title"), description: tr("mainCard.description"), button: tr("mainCard.button") };
-  const cards      = (!isBn && cms?.cards?.length)   ? cms.cards    : tr.raw("cards")    as { title: string; description: string }[];
+  const badge      = (isBn ? cms?.badgeBn      : cms?.badge)      || tr("badge");
+  const heading1   = (isBn ? cms?.heading1Bn   : cms?.heading1)   || tr("heading1");
+  const heading2   = (isBn ? cms?.heading2Bn   : cms?.heading2)   || tr("heading2");
+  const subheading = (isBn ? cms?.subheadingBn : cms?.subheading) || tr("subheading");
+  const rawPoints  = tr.raw("points") as { title: string; description: string }[];
+  const points     = (cms?.points?.length)
+    ? cms.points.map(p => ({
+        title: (isBn ? p.titleBn : undefined) || p.title,
+        description: (isBn ? p.descriptionBn : undefined) || p.description,
+      }))
+    : rawPoints;
+  const mainCard   = cms?.mainCard
+    ? {
+        title: (isBn ? cms.mainCard.titleBn : undefined) || cms.mainCard.title || tr("mainCard.title"),
+        description: (isBn ? cms.mainCard.descriptionBn : undefined) || cms.mainCard.description || tr("mainCard.description"),
+        button: (isBn ? cms.mainCard.buttonBn : undefined) || cms.mainCard.button || tr("mainCard.button"),
+      }
+    : { title: tr("mainCard.title"), description: tr("mainCard.description"), button: tr("mainCard.button") };
+  const rawCards   = tr.raw("cards") as { title: string; description: string }[];
+  const cards      = (cms?.cards?.length)
+    ? cms.cards.map(c => ({
+        title: (isBn ? c.titleBn : undefined) || c.title,
+        description: (isBn ? c.descriptionBn : undefined) || c.description,
+      }))
+    : rawCards;
 
   return (
     <section className="relative py-12 md:py-20 lg:py-28 bg-white overflow-hidden text-slate-900">

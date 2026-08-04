@@ -58,8 +58,8 @@ const OurJourney: React.FC = () => {
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const j = cmsResponse?.data?.ourJourney;
 
-  const title    = (isBn ? null : j?.title)    || t("title");
-  const subtitle = (isBn ? null : j?.subtitle) || t("subtitle");
+  const title    = (isBn ? j?.titleBn    : j?.title)    || t("title");
+  const subtitle = (isBn ? j?.subtitleBn : j?.subtitle) || t("subtitle");
   const row1 = j?.row1?.length ? j.row1 : DEFAULT_ROW1;
   const row2 = j?.row2?.length ? j.row2 : DEFAULT_ROW2;
   const row3 = j?.row3?.length ? j.row3 : DEFAULT_ROW3;

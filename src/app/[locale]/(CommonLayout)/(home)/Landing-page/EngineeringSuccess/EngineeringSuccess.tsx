@@ -30,15 +30,15 @@ const ImmigrantSuccess: React.FC = () => {
   const locale = useLocale();
   const isBn = locale === "bn";
 
-  const heading = (isBn ? null : cms?.heading) || tStories("heading");
-  const headingHighlight = (isBn ? null : cms?.headingHighlight) || tStories("headingHighlight");
-  const subheading = (isBn ? null : cms?.subheading) || tStories("subheading");
+  const heading = (isBn ? cms?.headingBn : cms?.heading) || tStories("heading");
+  const headingHighlight = (isBn ? cms?.headingHighlightBn : cms?.headingHighlight) || tStories("headingHighlight");
+  const subheading = (isBn ? cms?.subheadingBn : cms?.subheading) || tStories("subheading");
 
-  const shareHeading = cms?.shareHeading || t("share.heading");
-  const shareSubheading = cms?.shareSubheading || t("share.subheading");
-  const shareSubmitBtn = cms?.shareSubmitBtn || t("share.submitBtn");
-  const shareNominateBtn = cms?.shareNominateBtn || t("share.nominateBtn");
-  const shareProcessBtn = cms?.shareProcessBtn || t("share.processBtn");
+  const shareHeading    = (isBn ? cms?.shareHeadingBn    : cms?.shareHeading)    || t("share.heading");
+  const shareSubheading = (isBn ? cms?.shareSubheadingBn : cms?.shareSubheading) || t("share.subheading");
+  const shareSubmitBtn  = (isBn ? cms?.shareSubmitBtnBn  : cms?.shareSubmitBtn)  || t("share.submitBtn");
+  const shareNominateBtn = (isBn ? cms?.shareNominateBtnBn : cms?.shareNominateBtn) || t("share.nominateBtn");
+  const shareProcessBtn = (isBn ? cms?.shareProcessBtnBn : cms?.shareProcessBtn) || t("share.processBtn");
 
   const { data: response, isLoading: isStoriesLoading } = useGetApprovedSuccessStoriesQuery();
   const [submitStory, { isLoading: isSubmitting }] = useSubmitSuccessStoryMutation();

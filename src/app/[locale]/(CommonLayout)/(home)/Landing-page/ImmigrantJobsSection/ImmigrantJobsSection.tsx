@@ -410,34 +410,49 @@ export default function ImmigrantJobsSection() {
   const t = useTranslations("immigrantJobs");
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.immigrantJobsSection;
+  const locale = useLocale();
+  const isBn = locale === "bn";
 
   const stats = t.raw("stats") as { value: string; label: string }[];
 
-  const badge         = cms?.badge        || t("badge");
-  const heading       = cms?.heading      || t("heading");
-  const subheading    = cms?.subheading   || t("subheading");
-  const whyChooseTitle = cms?.whyChooseTitle || t("whyChooseTitle");
+  // ─── All scalar fields use isBn guard: prefer CMS Bn → CMS En → i18n fallback ───
+  const badge         = (isBn ? cms?.badgeBn         : cms?.badge)         || t("badge");
+  const heading       = (isBn ? cms?.headingBn        : cms?.heading)       || t("heading");
+  const subheading    = (isBn ? cms?.subheadingBn     : cms?.subheading)    || t("subheading");
+  const whyChooseTitle = (isBn ? cms?.whyChooseTitleBn : cms?.whyChooseTitle) || t("whyChooseTitle");
 
   const rawFeatures = t.raw("features") as { title: string; description: string }[];
-  const features = cms?.features && cms.features.length > 0 ? cms.features : rawFeatures;
+  // For arrays: use CMS (with Bn field priority) if available; else fall back to i18n
+  const features = (cms?.features && cms.features.length > 0)
+    ? cms.features.map(f => ({
+        title: (isBn ? f.titleBn : undefined) || f.title,
+        description: (isBn ? f.descriptionBn : undefined) || f.description,
+      }))
+    : rawFeatures;
 
-  const featuredTitle = cms?.featuredTitle || t("featuredTitle");
-  const liveBadge     = cms?.liveBadge     || t("liveBadge");
-  const listingsSubtext = cms?.listingsSubtext || t("listingsSubtext");
-  const whyUsBadge    = cms?.whyUsBadge    || t("whyUsBadge");
-  const whyUsSubtext  = cms?.whyUsSubtext  || t("whyUsSubtext");
-  const browseAllText = cms?.browseAllText  || t("browseAllText");
-  const viewAllJobs   = cms?.viewAllJobs   || t("viewAllJobs");
-  const moreListings  = cms?.moreListings  || t("moreListings");
-  const employmentTitle = cms?.employmentTitle || t("employmentTitle");
+  const featuredTitle   = (isBn ? cms?.featuredTitleBn   : cms?.featuredTitle)   || t("featuredTitle");
+  const liveBadge       = (isBn ? cms?.liveBadgeBn       : cms?.liveBadge)       || t("liveBadge");
+  const listingsSubtext = (isBn ? cms?.listingsSubtextBn : cms?.listingsSubtext) || t("listingsSubtext");
+  const whyUsBadge      = (isBn ? cms?.whyUsBadgeBn      : cms?.whyUsBadge)      || t("whyUsBadge");
+  const whyUsSubtext    = (isBn ? cms?.whyUsSubtextBn    : cms?.whyUsSubtext)    || t("whyUsSubtext");
+  const browseAllText   = (isBn ? cms?.browseAllTextBn   : cms?.browseAllText)   || t("browseAllText");
+  const viewAllJobs     = (isBn ? cms?.viewAllJobsBn     : cms?.viewAllJobs)     || t("viewAllJobs");
+  const moreListings    = (isBn ? cms?.moreListingsBn    : cms?.moreListings)    || t("moreListings");
+  const employmentTitle = (isBn ? cms?.employmentTitleBn : cms?.employmentTitle) || t("employmentTitle");
 
   const rawJobTypes = t.raw("jobTypes") as { type: string; count: string; description: string }[];
-  const jobTypes = cms?.jobTypes && cms.jobTypes.length > 0 ? cms.jobTypes : rawJobTypes;
+  const jobTypes = (cms?.jobTypes && cms.jobTypes.length > 0)
+    ? cms.jobTypes.map(jt => ({
+        type: (isBn ? jt.typeBn : undefined) || jt.type,
+        count: jt.count,
+        description: (isBn ? jt.descriptionBn : undefined) || jt.description,
+      }))
+    : rawJobTypes;
 
-  const ctaBadge      = cms?.ctaBadge      || t("ctaBadge");
-  const ctaHeading    = cms?.ctaHeading    || t("ctaHeading");
-  const ctaSubheading = cms?.ctaSubheading || t("ctaSubheading");
-  const ctaButton     = cms?.ctaButton     || t("ctaButton");
+  const ctaBadge      = (isBn ? cms?.ctaBadgeBn      : cms?.ctaBadge)      || t("ctaBadge");
+  const ctaHeading    = (isBn ? cms?.ctaHeadingBn    : cms?.ctaHeading)    || t("ctaHeading");
+  const ctaSubheading = (isBn ? cms?.ctaSubheadingBn : cms?.ctaSubheading) || t("ctaSubheading");
+  const ctaButton     = (isBn ? cms?.ctaButtonBn     : cms?.ctaButton)     || t("ctaButton");
 
   const { data: apiJobs = [], isLoading: jobsLoading } = useGetAllJobsQuery({
     status: "published",

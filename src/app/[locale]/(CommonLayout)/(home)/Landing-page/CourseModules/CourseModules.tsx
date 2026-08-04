@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -44,13 +44,16 @@ const CourseModules: React.FC = () => {
   const t = useTranslations("courseModules");
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.courseModules;
+  const locale = useLocale();
+  const isBn = locale === "bn";
 
-  const titlePrefix = cms?.titlePrefix || t("titlePrefix");
-  const titleHighlight = cms?.titleHighlight || t("titleHighlight");
-  const subtitle = cms?.subtitle || t("subtitle");
-  const technicalTab = cms?.technicalTab || t("technicalTab");
-  const languageTab = cms?.languageTab || t("languageTab");
-  const detailsLink = cms?.detailsLink || t("detailsLink");
+  // Prefer CMS Bn field when locale is bn, then CMS En field, then i18n fallback
+  const titlePrefix    = (isBn ? cms?.titlePrefixBn    : cms?.titlePrefix)    || t("titlePrefix");
+  const titleHighlight = (isBn ? cms?.titleHighlightBn : cms?.titleHighlight) || t("titleHighlight");
+  const subtitle       = (isBn ? cms?.subtitleBn       : cms?.subtitle)       || t("subtitle");
+  const technicalTab   = (isBn ? cms?.technicalTabBn   : cms?.technicalTab)   || t("technicalTab");
+  const languageTab    = (isBn ? cms?.languageTabBn    : cms?.languageTab)    || t("languageTab");
+  const detailsLink    = (isBn ? cms?.detailsLinkBn    : cms?.detailsLink)    || t("detailsLink");
 
   const [activeTab, setActiveTab] = useState<"technical" | "language">("technical");
   const [highlightIndex, setHighlightIndex] = useState(0);

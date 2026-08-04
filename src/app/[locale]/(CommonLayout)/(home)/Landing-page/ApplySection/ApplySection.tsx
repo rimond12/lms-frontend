@@ -304,12 +304,15 @@ export default function ApplySection() {
   const { data: cmsResponse } = useGetLandingPageCmsQuery();
   const cms = cmsResponse?.data?.applySection;
 
-  const badge = (isBn ? null : cms?.badge) || t("badge");
-  const heading = (isBn ? null : cms?.heading) || t("heading");
-  const headingHighlight = (isBn ? null : cms?.headingHighlight) || t("headingHighlight");
-  const subheading = (isBn ? null : cms?.subheading) || t("subheading");
-  const features = (!isBn && cms?.features?.length)
-    ? cms.features
+  const badge = (isBn ? cms?.badgeBn : cms?.badge) || t("badge");
+  const heading = (isBn ? cms?.headingBn : cms?.heading) || t("heading");
+  const headingHighlight = (isBn ? cms?.headingHighlightBn : cms?.headingHighlight) || t("headingHighlight");
+  const subheading = (isBn ? cms?.subheadingBn : cms?.subheading) || t("subheading");
+  const features = (cms?.features?.length)
+    ? cms.features.map(f => ({
+        title: (isBn ? f.titleBn : undefined) || f.title,
+        desc:  (isBn ? f.descBn  : undefined) || f.desc,
+      }))
     : [
         { title: t("features.globalNetwork.title"), desc: t("features.globalNetwork.desc") },
         { title: t("features.dataSecurity.title"), desc: t("features.dataSecurity.desc") },
