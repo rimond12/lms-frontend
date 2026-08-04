@@ -8,6 +8,7 @@ export interface TSuccessStory {
   profession: string;
   story: string;
   rating?: number;
+  videoUrl?: string;
   date?: string;
   isApproved: boolean;
   order: number;

@@ -79,6 +79,11 @@ export interface IOfflineCourse {
   tools: string[];
 }
 
+export interface ICountryItem {
+  name: string;
+  nameBn?: string;
+}
+
 export interface ILandingPageCMS {
   _id: string;
   hero: {
@@ -152,6 +157,61 @@ export interface ILandingPageCMS {
     subheading: string;
     subheadingBn?: string;
     features: { title: string; desc: string; titleBn?: string; descBn?: string }[];
+    countries?: ICountryItem[];
+    fullnameLabel?: string;
+    fullnameLabelBn?: string;
+    fullnamePlaceholder?: string;
+    fullnamePlaceholderBn?: string;
+    phoneLabel?: string;
+    phoneLabelBn?: string;
+    phonePlaceholder?: string;
+    phonePlaceholderBn?: string;
+    dobLabel?: string;
+    dobLabelBn?: string;
+    addressLabel?: string;
+    addressLabelBn?: string;
+    addressPlaceholder?: string;
+    addressPlaceholderBn?: string;
+    countryLabel?: string;
+    countryLabelBn?: string;
+    countryDefaultText?: string;
+    countryDefaultTextBn?: string;
+    jobTypeLabel?: string;
+    jobTypeLabelBn?: string;
+    jobTypePlaceholder?: string;
+    jobTypePlaceholderBn?: string;
+    educationLabel?: string;
+    educationLabelBn?: string;
+    educationPlaceholder?: string;
+    educationPlaceholderBn?: string;
+    experienceLabel?: string;
+    experienceLabelBn?: string;
+    experiencePlaceholder?: string;
+    experiencePlaceholderBn?: string;
+    documentsLabel?: string;
+    documentsLabelBn?: string;
+    documentsOptionalText?: string;
+    documentsOptionalTextBn?: string;
+    passportLabel?: string;
+    passportLabelBn?: string;
+    photoLabel?: string;
+    photoLabelBn?: string;
+    nidLabel?: string;
+    nidLabelBn?: string;
+    cvLabel?: string;
+    cvLabelBn?: string;
+    privacyNotice1?: string;
+    privacyNotice1Bn?: string;
+    privacyNoticeBold?: string;
+    privacyNoticeBoldBn?: string;
+    privacyNotice2?: string;
+    privacyNotice2Bn?: string;
+    submitBtnText?: string;
+    submitBtnTextBn?: string;
+    submittingText?: string;
+    submittingTextBn?: string;
+    whatsappShareMessage?: string;
+    whatsappShareMessageBn?: string;
   };
   successStories: {
     heading: string;

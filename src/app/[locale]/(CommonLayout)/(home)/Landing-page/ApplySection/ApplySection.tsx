@@ -20,6 +20,9 @@ import {
   ShieldCheck,
   Maximize2,
   Minimize2,
+  Share2,
+  Copy,
+  MessageCircle,
 } from "lucide-react";
 import { useSubmitLeadMutation } from "@/app/redux/api/LeadApi/LeadApi";
 import { useGetLandingPageCmsQuery } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
@@ -319,6 +322,51 @@ export default function ApplySection() {
         { title: t("features.fastResponse.title"), desc: t("features.fastResponse.desc") },
       ];
 
+  const countriesList = (cms?.countries?.length)
+    ? cms.countries.map((c) => ({
+        name: c.name,
+        displayName: (isBn ? c.nameBn : undefined) || c.name,
+      }))
+    : COUNTRIES.map((c) => ({ name: c, displayName: c }));
+
+  const fullnameLabel = (isBn ? cms?.fullnameLabelBn : cms?.fullnameLabel) || t("form.fullname");
+  const fullnamePlaceholder = (isBn ? cms?.fullnamePlaceholderBn : cms?.fullnamePlaceholder) || t("form.fullnamePlaceholder");
+
+  const phoneLabel = (isBn ? cms?.phoneLabelBn : cms?.phoneLabel) || t("form.phone");
+  const phonePlaceholder = (isBn ? cms?.phonePlaceholderBn : cms?.phonePlaceholder) || t("form.phonePlaceholder");
+
+  const dobLabel = (isBn ? cms?.dobLabelBn : cms?.dobLabel) || t("form.dob");
+
+  const addressLabel = (isBn ? cms?.addressLabelBn : cms?.addressLabel) || t("form.address");
+  const addressPlaceholder = (isBn ? cms?.addressPlaceholderBn : cms?.addressPlaceholder) || t("form.addressPlaceholder");
+
+  const countryLabel = (isBn ? cms?.countryLabelBn : cms?.countryLabel) || t("form.country");
+  const countryDefaultText = (isBn ? cms?.countryDefaultTextBn : cms?.countryDefaultText) || t("form.countryDefault");
+
+  const jobTypeLabel = (isBn ? cms?.jobTypeLabelBn : cms?.jobTypeLabel) || t("form.jobType");
+  const jobTypePlaceholder = (isBn ? cms?.jobTypePlaceholderBn : cms?.jobTypePlaceholder) || t("form.jobTypePlaceholder");
+
+  const educationLabel = (isBn ? cms?.educationLabelBn : cms?.educationLabel) || t("form.education");
+  const educationPlaceholder = (isBn ? cms?.educationPlaceholderBn : cms?.educationPlaceholder) || t("form.educationPlaceholder");
+
+  const experienceLabel = (isBn ? cms?.experienceLabelBn : cms?.experienceLabel) || t("form.experience");
+  const experiencePlaceholder = (isBn ? cms?.experiencePlaceholderBn : cms?.experiencePlaceholder) || t("form.experiencePlaceholder");
+
+  const documentsLabel = (isBn ? cms?.documentsLabelBn : cms?.documentsLabel) || t("form.documentsLabel");
+  const documentsOptionalText = (isBn ? cms?.documentsOptionalTextBn : cms?.documentsOptionalText) || t("form.documentsOptional");
+
+  const passportLabel = (isBn ? cms?.passportLabelBn : cms?.passportLabel) || t("form.passport");
+  const photoLabel = (isBn ? cms?.photoLabelBn : cms?.photoLabel) || t("form.photo");
+  const nidLabel = (isBn ? cms?.nidLabelBn : cms?.nidLabel) || t("form.nid");
+  const cvLabel = (isBn ? cms?.cvLabelBn : cms?.cvLabel) || t("form.cv");
+
+  const privacyNotice1 = (isBn ? cms?.privacyNotice1Bn : cms?.privacyNotice1) || t("form.privacyNotice1");
+  const privacyNoticeBold = (isBn ? cms?.privacyNoticeBoldBn : cms?.privacyNoticeBold) || t("form.privacyNoticeBold");
+  const privacyNotice2 = (isBn ? cms?.privacyNotice2Bn : cms?.privacyNotice2) || t("form.privacyNotice2");
+
+  const submitBtnText = (isBn ? cms?.submitBtnTextBn : cms?.submitBtnText) || t("form.submit");
+  const submittingText = (isBn ? cms?.submittingTextBn : cms?.submittingText) || t("form.submitting");
+
   const [form, setForm] = useState<LeadFormData>(INITIAL);
   const [files, setFiles] = useState<UploadedFiles>(INITIAL_FILES);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -433,6 +481,31 @@ export default function ApplySection() {
     }
   };
 
+  const rawShareMsg = (isBn ? cms?.whatsappShareMessageBn : cms?.whatsappShareMessage) ||
+    "Apply directly for international job opportunities with verified employers:";
+
+  const getShareableUrl = () => {
+    if (typeof window === "undefined") return "";
+    return `${window.location.origin}/${locale}/apply`;
+  };
+
+  const handleCopyLink = () => {
+    const url = getShareableUrl();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      toast.success("Application form link copied to clipboard!");
+    } else {
+      toast.error("Unable to copy link.");
+    }
+  };
+
+  const handleShareWhatsApp = () => {
+    const url = getShareableUrl();
+    const fullMsg = `${rawShareMsg}\n\n${url}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMsg)}`;
+    window.open(waUrl, "_blank");
+  };
+
   const featureIcons = [Globe, ShieldCheck, CheckCircle];
 
   return (
@@ -499,6 +572,37 @@ export default function ApplySection() {
                   );
                 })}
               </div>
+
+              {/* Share Box */}
+              <div className="mt-8 p-4.5 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 rounded-2xl text-white shadow-xl space-y-3 border border-blue-800/40">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                    <Share2 size={15} className="text-blue-300" />
+                  </div>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-100">
+                    Share Application Link
+                  </span>
+                </div>
+                <p className="text-xs text-blue-100/80 leading-relaxed">
+                  Send this application form directly to job seekers on WhatsApp or copy the link to share anywhere.
+                </p>
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleShareWhatsApp}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all shadow-md active:scale-95"
+                  >
+                    <MessageCircle size={15} /> Share on WhatsApp
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyLink}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 bg-white/15 hover:bg-white/25 text-white border border-white/20 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95"
+                  >
+                    <Copy size={15} /> Copy Link
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -508,28 +612,28 @@ export default function ApplySection() {
               <form onSubmit={handleSubmit} className="space-y-7 sm:space-y-10">
                 {/* ── Personal Info ── */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8">
-                  <Field label={t("form.fullname")} icon={User} required>
+                  <Field label={fullnameLabel} icon={User} required>
                     <input
                       value={form.fullname}
                       onChange={(e) => set("fullname", e.target.value)}
-                      placeholder={t("form.fullnamePlaceholder")}
+                      placeholder={fullnamePlaceholder}
                       className={inputCls}
                       required
                     />
                   </Field>
 
-                  <Field label={t("form.phone")} icon={PhoneCall} required>
+                  <Field label={phoneLabel} icon={PhoneCall} required>
                     <input
                       type="tel"
                       value={form.phone}
                       onChange={(e) => set("phone", e.target.value)}
-                      placeholder={t("form.phonePlaceholder")}
+                      placeholder={phonePlaceholder}
                       className={inputCls}
                       required
                     />
                   </Field>
 
-                  <Field label={t("form.dob")} icon={Calendar} required>
+                  <Field label={dobLabel} icon={Calendar} required>
                     <input
                       type="date"
                       value={form.dob}
@@ -546,13 +650,13 @@ export default function ApplySection() {
                         size={13}
                         className="text-blue-600 sm:w-3.5 sm:h-3.5"
                       />
-                      {t("form.address")}{" "}
+                      {addressLabel}{" "}
                       <span className="text-red-500">*</span>
                     </label>
                     <input
                       value={form.address}
                       onChange={(e) => handleAddressChange(e.target.value)}
-                      placeholder={t("form.addressPlaceholder")}
+                      placeholder={addressPlaceholder}
                       className={inputCls}
                       required
                     />
@@ -586,7 +690,7 @@ export default function ApplySection() {
 
                 {/* ── Job Preferences ── */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8">
-                  <Field label={t("form.country")} icon={Globe} required>
+                  <Field label={countryLabel} icon={Globe} required>
                     <select
                       value={form.country}
                       onChange={(e) => set("country", e.target.value)}
@@ -594,39 +698,39 @@ export default function ApplySection() {
                       required
                     >
                       <option value="" disabled>
-                        {t("form.countryDefault")}
+                        {countryDefaultText}
                       </option>
-                      {COUNTRIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
+                      {countriesList.map((c, i) => (
+                        <option key={i} value={c.name}>
+                          {c.displayName}
                         </option>
                       ))}
                     </select>
                   </Field>
 
-                  <Field label={t("form.jobType")} icon={Briefcase}>
+                  <Field label={jobTypeLabel} icon={Briefcase}>
                     <input
                       value={form.job_type}
                       onChange={(e) => set("job_type", e.target.value)}
-                      placeholder={t("form.jobTypePlaceholder")}
+                      placeholder={jobTypePlaceholder}
                       className={inputCls}
                     />
                   </Field>
 
-                  <Field label={t("form.education")} icon={GraduationCap}>
+                  <Field label={educationLabel} icon={GraduationCap}>
                     <input
                       value={form.education}
                       onChange={(e) => set("education", e.target.value)}
-                      placeholder={t("form.educationPlaceholder")}
+                      placeholder={educationPlaceholder}
                       className={inputCls}
                     />
                   </Field>
 
-                  <Field label={t("form.experience")} icon={CheckCircle}>
+                  <Field label={experienceLabel} icon={CheckCircle}>
                     <input
                       value={form.experience}
                       onChange={(e) => set("experience", e.target.value)}
-                      placeholder={t("form.experiencePlaceholder")}
+                      placeholder={experiencePlaceholder}
                       className={inputCls}
                     />
                   </Field>
@@ -635,32 +739,32 @@ export default function ApplySection() {
                 {/* ── Document Upload ── */}
                 <div>
                   <label className="text-[12px] sm:text-[13px] font-bold text-slate-600 mb-3 sm:mb-4 block ml-1">
-                    {t("form.documentsLabel")}{" "}
+                    {documentsLabel}{" "}
                     <span className="text-slate-400 font-normal">
-                      {t("form.documentsOptional")}
+                      {documentsOptionalText}
                     </span>
                   </label>
                   <div className="grid grid-cols-2 xs:grid-cols-4 sm:grid-cols-4 gap-2.5 sm:gap-4">
                     <FileBox
-                      label={t("form.passport")}
+                      label={passportLabel}
                       accept=".pdf,.jpg,.jpeg,.png"
                       file={files.passport_copy}
                       onChange={(f) => setFile("passport_copy", f)}
                     />
                     <FileBox
-                      label={t("form.photo")}
+                      label={photoLabel}
                       accept=".jpg,.jpeg,.png"
                       file={files.photo}
                       onChange={(f) => setFile("photo", f)}
                     />
                     <FileBox
-                      label={t("form.nid")}
+                      label={nidLabel}
                       accept=".pdf,.jpg,.jpeg,.png"
                       file={files.nid_copy}
                       onChange={(f) => setFile("nid_copy", f)}
                     />
                     <FileBox
-                      label={t("form.cv")}
+                      label={cvLabel}
                       accept=".pdf,.doc,.docx"
                       file={files.cv_file}
                       onChange={(f) => setFile("cv_file", f)}
@@ -675,9 +779,9 @@ export default function ApplySection() {
                     className="text-blue-600 shrink-0 mt-0.5 sm:w-5 sm:h-5"
                   />
                   <p className="text-[11px] sm:text-xs text-blue-800 leading-relaxed">
-                    {t("form.privacyNotice1")}{" "}
-                    <strong>{t("form.privacyNoticeBold")}</strong>{" "}
-                    {t("form.privacyNotice2")}
+                    {privacyNotice1}{" "}
+                    <strong>{privacyNoticeBold}</strong>{" "}
+                    {privacyNotice2}
                   </p>
                 </div>
 
@@ -690,12 +794,12 @@ export default function ApplySection() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin w-4 h-4 sm:w-5 sm:h-5" />
-                      {t("form.submitting")}
+                      {submittingText}
                     </>
                   ) : (
                     <>
                       <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
-                      {t("form.submit")}
+                      {submitBtnText}
                     </>
                   )}
                 </button>

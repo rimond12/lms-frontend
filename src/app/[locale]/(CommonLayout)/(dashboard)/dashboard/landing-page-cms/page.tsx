@@ -14,6 +14,7 @@ import {
   IImmigrantJobFeature,
   IImmigrantJobType,
   IOfflineCourse,
+  ICountryItem,
 } from "@/app/redux/api/landingPageCmsApi/landingPageCmsApi";
 import { toast } from "react-hot-toast";
 import {
@@ -1144,6 +1145,15 @@ function PartnersEditor({ data, onSave, saving }: { data: ILandingPageCMS["ourJo
 }
 
 
+const DEFAULT_COUNTRIES: ICountryItem[] = [
+  { name: "Saudi Arabia", nameBn: "সৌদি আরব" },
+  { name: "Dubai", nameBn: "দুবাই" },
+  { name: "Qatar", nameBn: "কাতার" },
+  { name: "Singapore", nameBn: "সিঙ্গাপুর" },
+  { name: "Laos", nameBn: "লাওস" },
+  { name: "Maldives", nameBn: "মালদ্বীপ" },
+];
+
 const DEFAULT_APPLY: ILandingPageCMS["applySection"] = {
   badge: "Apply Directly",
   badgeBn: "সরাসরি আবেদন করুন",
@@ -1158,6 +1168,61 @@ const DEFAULT_APPLY: ILandingPageCMS["applySection"] = {
     { title: "Data Security", titleBn: "ডেটা সুরক্ষা", desc: "Your documents are encrypted and completely safe.", descBn: "আপনার নথিপত্র এনক্রিপ্টেড এবং সম্পূর্ণ নিরাপদ।" },
     { title: "Fast Response", titleBn: "দ্রুত সাড়া", desc: "Get feedback within 24 working hours.", descBn: "২৪ কার্যঘণ্টার মধ্যে প্রতিক্রিয়া পান।" },
   ],
+  countries: DEFAULT_COUNTRIES,
+  fullnameLabel: "Full Name",
+  fullnameLabelBn: "পূর্ণ নাম",
+  fullnamePlaceholder: "Enter your full name",
+  fullnamePlaceholderBn: "আপনার সম্পূর্ণ নাম লিখুন",
+  phoneLabel: "Mobile Number",
+  phoneLabelBn: "মোবাইল নম্বর",
+  phonePlaceholder: "+8801XXXXXXXXX",
+  phonePlaceholderBn: "+৮৮০১XXXXXXXXX",
+  dobLabel: "Date of Birth",
+  dobLabelBn: "জন্ম তারিখ",
+  addressLabel: "Current Address",
+  addressLabelBn: "বর্তমান ঠিকানা",
+  addressPlaceholder: "Village, Upazila, District — map will auto-detect",
+  addressPlaceholderBn: "গ্রাম, উপজেলা, জেলা — ম্যাপ স্বয়ংস্ক্রিয় সনাক্ত করবে",
+  countryLabel: "Destination Country",
+  countryLabelBn: "গন্তব্য দেশ",
+  countryDefaultText: "Select a country",
+  countryDefaultTextBn: "একটি দেশ নির্বাচন করুন",
+  jobTypeLabel: "Preferred Profession",
+  jobTypeLabelBn: "পছন্দের পেশা",
+  jobTypePlaceholder: "e.g. Driver, Technician",
+  jobTypePlaceholderBn: "যেমন: ড্রাইভার, টেকনিশিয়ান",
+  educationLabel: "Educational Qualification",
+  educationLabelBn: "শিক্ষাগত যোগ্যতা",
+  educationPlaceholder: "SSC, HSC, Diploma",
+  educationPlaceholderBn: "এসএসসি, এইচএসসি, ডিপ্লোমা",
+  experienceLabel: "Work Experience",
+  experienceLabelBn: "কাজের অভিজ্ঞতা",
+  experiencePlaceholder: "e.g. 2 years in Qatar",
+  experiencePlaceholderBn: "যেমন: কাতারে ২ বছর",
+  documentsLabel: "Required Documents",
+  documentsLabelBn: "প্রয়োজনীয় নথিপত্র",
+  documentsOptionalText: "(Optional)",
+  documentsOptionalTextBn: "(ঐচ্ছিক)",
+  passportLabel: "Passport Copy",
+  passportLabelBn: "পাসপোর্টের কপি",
+  photoLabel: "Photo (Passport Size)",
+  photoLabelBn: "ছবি (পাসপোর্ট সাইজ)",
+  nidLabel: "NID / Smart Card",
+  nidLabelBn: "এনআইডি / স্মার্ট কার্ড",
+  cvLabel: "CV / Resume",
+  cvLabelBn: "সিভি / রিজিউম",
+  privacyNotice1: "Your personal data will be kept strictly confidential under our",
+  privacyNotice1Bn: "আপনার ব্যক্তিগত ডেটা সম্পূর্ণ গোপন রাখা হবে আমাদের",
+  privacyNoticeBold: "Immigrant Privacy Policy.",
+  privacyNoticeBoldBn: "ইমিগ্র্যান্ট গোপনীয়তা নীতির",
+  privacyNotice2: "We never share your information with unverified third parties.",
+  privacyNotice2Bn: "অধীনে। আমরা কখনোই অযাচাইকৃত তৃতীয় পক্ষের সাথে শেয়ার করি না।",
+  submitBtnText: "Submit Application",
+  submitBtnTextBn: "আবেদন জমা দিন",
+  submittingText: "Submitting...",
+  submittingTextBn: "জমা হচ্ছে...",
+  whatsappShareMessage: "Apply directly for international job opportunities with verified employers:",
+  whatsappShareMessageBn: "বিদেশে চাকরির জন্য সরাসরি আবেদন করুন:",
 };
 
 function ApplyEditor({ data, onSave, saving }: { data: ILandingPageCMS["applySection"]; onSave: (d: ILandingPageCMS["applySection"]) => void; saving: boolean }) {
@@ -1178,6 +1243,64 @@ function ApplyEditor({ data, onSave, saving }: { data: ILandingPageCMS["applySec
       desc: feat.desc || DEFAULT_APPLY.features[i]?.desc || "",
       descBn: (feat as any).descBn || DEFAULT_APPLY.features[i]?.descBn || "",
     })),
+    countries: (d?.countries?.length ? d.countries : DEFAULT_COUNTRIES).map((c, i) => ({
+      name: c.name || DEFAULT_COUNTRIES[i]?.name || "",
+      nameBn: c.nameBn || DEFAULT_COUNTRIES[i]?.nameBn || "",
+    })),
+    fullnameLabel: d?.fullnameLabel || DEFAULT_APPLY.fullnameLabel,
+    fullnameLabelBn: d?.fullnameLabelBn || DEFAULT_APPLY.fullnameLabelBn,
+    fullnamePlaceholder: d?.fullnamePlaceholder || DEFAULT_APPLY.fullnamePlaceholder,
+    fullnamePlaceholderBn: d?.fullnamePlaceholderBn || DEFAULT_APPLY.fullnamePlaceholderBn,
+    phoneLabel: d?.phoneLabel || DEFAULT_APPLY.phoneLabel,
+    phoneLabelBn: d?.phoneLabelBn || DEFAULT_APPLY.phoneLabelBn,
+    phonePlaceholder: d?.phonePlaceholder || DEFAULT_APPLY.phonePlaceholder,
+    phonePlaceholderBn: d?.phonePlaceholderBn || DEFAULT_APPLY.phonePlaceholderBn,
+    dobLabel: d?.dobLabel || DEFAULT_APPLY.dobLabel,
+    dobLabelBn: d?.dobLabelBn || DEFAULT_APPLY.dobLabelBn,
+    addressLabel: d?.addressLabel || DEFAULT_APPLY.addressLabel,
+    addressLabelBn: d?.addressLabelBn || DEFAULT_APPLY.addressLabelBn,
+    addressPlaceholder: d?.addressPlaceholder || DEFAULT_APPLY.addressPlaceholder,
+    addressPlaceholderBn: d?.addressPlaceholderBn || DEFAULT_APPLY.addressPlaceholderBn,
+    countryLabel: d?.countryLabel || DEFAULT_APPLY.countryLabel,
+    countryLabelBn: d?.countryLabelBn || DEFAULT_APPLY.countryLabelBn,
+    countryDefaultText: d?.countryDefaultText || DEFAULT_APPLY.countryDefaultText,
+    countryDefaultTextBn: d?.countryDefaultTextBn || DEFAULT_APPLY.countryDefaultTextBn,
+    jobTypeLabel: d?.jobTypeLabel || DEFAULT_APPLY.jobTypeLabel,
+    jobTypeLabelBn: d?.jobTypeLabelBn || DEFAULT_APPLY.jobTypeLabelBn,
+    jobTypePlaceholder: d?.jobTypePlaceholder || DEFAULT_APPLY.jobTypePlaceholder,
+    jobTypePlaceholderBn: d?.jobTypePlaceholderBn || DEFAULT_APPLY.jobTypePlaceholderBn,
+    educationLabel: d?.educationLabel || DEFAULT_APPLY.educationLabel,
+    educationLabelBn: d?.educationLabelBn || DEFAULT_APPLY.educationLabelBn,
+    educationPlaceholder: d?.educationPlaceholder || DEFAULT_APPLY.educationPlaceholder,
+    educationPlaceholderBn: d?.educationPlaceholderBn || DEFAULT_APPLY.educationPlaceholderBn,
+    experienceLabel: d?.experienceLabel || DEFAULT_APPLY.experienceLabel,
+    experienceLabelBn: d?.experienceLabelBn || DEFAULT_APPLY.experienceLabelBn,
+    experiencePlaceholder: d?.experiencePlaceholder || DEFAULT_APPLY.experiencePlaceholder,
+    experiencePlaceholderBn: d?.experiencePlaceholderBn || DEFAULT_APPLY.experiencePlaceholderBn,
+    documentsLabel: d?.documentsLabel || DEFAULT_APPLY.documentsLabel,
+    documentsLabelBn: d?.documentsLabelBn || DEFAULT_APPLY.documentsLabelBn,
+    documentsOptionalText: d?.documentsOptionalText || DEFAULT_APPLY.documentsOptionalText,
+    documentsOptionalTextBn: d?.documentsOptionalTextBn || DEFAULT_APPLY.documentsOptionalTextBn,
+    passportLabel: d?.passportLabel || DEFAULT_APPLY.passportLabel,
+    passportLabelBn: d?.passportLabelBn || DEFAULT_APPLY.passportLabelBn,
+    photoLabel: d?.photoLabel || DEFAULT_APPLY.photoLabel,
+    photoLabelBn: d?.photoLabelBn || DEFAULT_APPLY.photoLabelBn,
+    nidLabel: d?.nidLabel || DEFAULT_APPLY.nidLabel,
+    nidLabelBn: d?.nidLabelBn || DEFAULT_APPLY.nidLabelBn,
+    cvLabel: d?.cvLabel || DEFAULT_APPLY.cvLabel,
+    cvLabelBn: d?.cvLabelBn || DEFAULT_APPLY.cvLabelBn,
+    privacyNotice1: d?.privacyNotice1 || DEFAULT_APPLY.privacyNotice1,
+    privacyNotice1Bn: d?.privacyNotice1Bn || DEFAULT_APPLY.privacyNotice1Bn,
+    privacyNoticeBold: d?.privacyNoticeBold || DEFAULT_APPLY.privacyNoticeBold,
+    privacyNoticeBoldBn: d?.privacyNoticeBoldBn || DEFAULT_APPLY.privacyNoticeBoldBn,
+    privacyNotice2: d?.privacyNotice2 || DEFAULT_APPLY.privacyNotice2,
+    privacyNotice2Bn: d?.privacyNotice2Bn || DEFAULT_APPLY.privacyNotice2Bn,
+    submitBtnText: d?.submitBtnText || DEFAULT_APPLY.submitBtnText,
+    submitBtnTextBn: d?.submitBtnTextBn || DEFAULT_APPLY.submitBtnTextBn,
+    submittingText: d?.submittingText || DEFAULT_APPLY.submittingText,
+    submittingTextBn: d?.submittingTextBn || DEFAULT_APPLY.submittingTextBn,
+    whatsappShareMessage: d?.whatsappShareMessage || DEFAULT_APPLY.whatsappShareMessage,
+    whatsappShareMessageBn: d?.whatsappShareMessageBn || DEFAULT_APPLY.whatsappShareMessageBn,
   });
 
   const [local, setLocal] = useState(() => buildSafeData(data));
@@ -1188,6 +1311,24 @@ function ApplyEditor({ data, onSave, saving }: { data: ILandingPageCMS["applySec
     toast.success("Loaded default values into Apply Form!");
   };
 
+  const updateCountry = (i: number, key: keyof ICountryItem, val: string) => {
+    const countries = [...(local.countries || [])];
+    countries[i] = { ...countries[i], [key]: val };
+    setLocal((p) => ({ ...p, countries }));
+  };
+
+  const removeCountry = (i: number) => {
+    const countries = (local.countries || []).filter((_, j) => j !== i);
+    setLocal((p) => ({ ...p, countries }));
+  };
+
+  const addCountry = () => {
+    setLocal((p) => ({
+      ...p,
+      countries: [...(p.countries || []), { name: "", nameBn: "" }],
+    }));
+  };
+
   return (
     <div className="space-y-6">
       <SectionHeader
@@ -1195,7 +1336,7 @@ function ApplyEditor({ data, onSave, saving }: { data: ILandingPageCMS["applySec
         title="Direct Lead Application Form"
         subLabel="Candidate Lead Form & Map"
         locationHint="8th Section on Landing Page"
-        description="Controls the 'Apply Directly' headline, subtitle, global network feature highlights (Global Network, Data Security, Fast Response), and map header text."
+        description="Controls the 'Apply Directly' headline, subtitle, global network feature highlights, Destination Country dropdown options, and form labels/placeholders."
         icon={Star}
         onLoadDefaults={fillDefaults}
       />
@@ -1225,7 +1366,7 @@ function ApplyEditor({ data, onSave, saving }: { data: ILandingPageCMS["applySec
         </div>
       </SectionCard>
 
-      <SectionCard title="Feature Points" icon={Settings}>
+      <SectionCard title="Feature Points (Left side highlights)" icon={Settings}>
         <div className="space-y-3">
           {local.features.map((feat, i) => (
             <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
@@ -1249,6 +1390,231 @@ function ApplyEditor({ data, onSave, saving }: { data: ILandingPageCMS["applySec
           <AddRowBtn onClick={() => setLocal((p) => ({ ...p, features: [...p.features, { title: "", desc: "" }] }))} label="Add Feature" />
         </div>
       </SectionCard>
+
+      {/* ── Destination Country Select Dropdown Options ── */}
+      <SectionCard title="Destination Countries (Form Select Options)" icon={Globe}>
+        <div className="mb-3 p-3 rounded-xl bg-blue-50 border border-blue-100 flex items-start gap-2">
+          <Globe size={16} className="text-blue-600 mt-0.5 shrink-0" />
+          <p className="text-xs text-blue-700 leading-relaxed">
+            Configure the list of countries shown in the <strong>Destination Country</strong> dropdown on the application form. Admin can add, edit, or remove countries dynamically.
+          </p>
+        </div>
+        <div className="space-y-3">
+          {(local.countries || []).map((country, i) => (
+            <div key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+              <span className="text-[10px] font-bold text-slate-400 w-6">#{i + 1}</span>
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <Label>Country Name (EN)</Label>
+                  <Input value={country.name} onChange={(v) => updateCountry(i, "name", v)} placeholder="e.g. Saudi Arabia" />
+                </div>
+                <div>
+                  <Label>Country Name (BN - বাংলা)</Label>
+                  <Input value={country.nameBn || ""} onChange={(v) => updateCountry(i, "nameBn", v)} placeholder="e.g. সৌদি আরব" />
+                </div>
+              </div>
+              <RemoveBtn onClick={() => removeCountry(i)} />
+            </div>
+          ))}
+          <AddRowBtn onClick={addCountry} label="Add Country" />
+        </div>
+      </SectionCard>
+
+      {/* ── Form Field Labels & Placeholders Controls ── */}
+      <SectionCard title="Form Input Labels & Placeholders" icon={Settings}>
+        <div className="space-y-4">
+          <BilingualField
+            label="Full Name Label"
+            enValue={local.fullnameLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, fullnameLabel: v }))} enPlaceholder="Full Name"
+            bnValue={local.fullnameLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, fullnameLabelBn: v }))} bnPlaceholder="পূর্ণ নাম"
+          />
+          <BilingualField
+            label="Full Name Placeholder"
+            enValue={local.fullnamePlaceholder || ""} onEnChange={(v) => setLocal((p) => ({ ...p, fullnamePlaceholder: v }))} enPlaceholder="Enter your full name"
+            bnValue={local.fullnamePlaceholderBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, fullnamePlaceholderBn: v }))} bnPlaceholder="আপনার সম্পূর্ণ নাম লিখুন"
+          />
+          <BilingualField
+            label="Mobile Number Label"
+            enValue={local.phoneLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, phoneLabel: v }))} enPlaceholder="Mobile Number"
+            bnValue={local.phoneLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, phoneLabelBn: v }))} bnPlaceholder="মোবাইল নম্বর"
+          />
+          <BilingualField
+            label="Mobile Number Placeholder"
+            enValue={local.phonePlaceholder || ""} onEnChange={(v) => setLocal((p) => ({ ...p, phonePlaceholder: v }))} enPlaceholder="+8801XXXXXXXXX"
+            bnValue={local.phonePlaceholderBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, phonePlaceholderBn: v }))} bnPlaceholder="+৮৮০১XXXXXXXXX"
+          />
+          <BilingualField
+            label="Date of Birth Label"
+            enValue={local.dobLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, dobLabel: v }))} enPlaceholder="Date of Birth"
+            bnValue={local.dobLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, dobLabelBn: v }))} bnPlaceholder="জন্ম তারিখ"
+          />
+          <BilingualField
+            label="Current Address Label"
+            enValue={local.addressLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, addressLabel: v }))} enPlaceholder="Current Address"
+            bnValue={local.addressLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, addressLabelBn: v }))} bnPlaceholder="বর্তমান ঠিকানা"
+          />
+          <BilingualField
+            label="Current Address Placeholder"
+            enValue={local.addressPlaceholder || ""} onEnChange={(v) => setLocal((p) => ({ ...p, addressPlaceholder: v }))} enPlaceholder="Village, Upazila, District — map will auto-detect"
+            bnValue={local.addressPlaceholderBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, addressPlaceholderBn: v }))} bnPlaceholder="গ্রাম, উপজেলা, জেলা..."
+          />
+          <BilingualField
+            label="Destination Country Field Label"
+            enValue={local.countryLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, countryLabel: v }))} enPlaceholder="Destination Country"
+            bnValue={local.countryLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, countryLabelBn: v }))} bnPlaceholder="গন্তব্য দেশ"
+          />
+          <BilingualField
+            label="Country Dropdown Default Select Option"
+            enValue={local.countryDefaultText || ""} onEnChange={(v) => setLocal((p) => ({ ...p, countryDefaultText: v }))} enPlaceholder="Select a country"
+            bnValue={local.countryDefaultTextBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, countryDefaultTextBn: v }))} bnPlaceholder="একটি দেশ নির্বাচন করুন"
+          />
+          <BilingualField
+            label="Preferred Profession Label"
+            enValue={local.jobTypeLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, jobTypeLabel: v }))} enPlaceholder="Preferred Profession"
+            bnValue={local.jobTypeLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, jobTypeLabelBn: v }))} bnPlaceholder="পছন্দের পেশা"
+          />
+          <BilingualField
+            label="Preferred Profession Placeholder"
+            enValue={local.jobTypePlaceholder || ""} onEnChange={(v) => setLocal((p) => ({ ...p, jobTypePlaceholder: v }))} enPlaceholder="e.g. Driver, Technician"
+            bnValue={local.jobTypePlaceholderBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, jobTypePlaceholderBn: v }))} bnPlaceholder="যেমন: ড্রাইভার, টেকনিশিয়ান"
+          />
+          <BilingualField
+            label="Educational Qualification Label"
+            enValue={local.educationLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, educationLabel: v }))} enPlaceholder="Educational Qualification"
+            bnValue={local.educationLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, educationLabelBn: v }))} bnPlaceholder="শিক্ষাগত যোগ্যতা"
+          />
+          <BilingualField
+            label="Educational Qualification Placeholder"
+            enValue={local.educationPlaceholder || ""} onEnChange={(v) => setLocal((p) => ({ ...p, educationPlaceholder: v }))} enPlaceholder="SSC, HSC, Diploma"
+            bnValue={local.educationPlaceholderBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, educationPlaceholderBn: v }))} bnPlaceholder="এসএসসি, এইচএসসি..."
+          />
+          <BilingualField
+            label="Work Experience Label"
+            enValue={local.experienceLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, experienceLabel: v }))} enPlaceholder="Work Experience"
+            bnValue={local.experienceLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, experienceLabelBn: v }))} bnPlaceholder="কাজের অভিজ্ঞতা"
+          />
+          <BilingualField
+            label="Work Experience Placeholder"
+            enValue={local.experiencePlaceholder || ""} onEnChange={(v) => setLocal((p) => ({ ...p, experiencePlaceholder: v }))} enPlaceholder="e.g. 2 years in Qatar"
+            bnValue={local.experiencePlaceholderBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, experiencePlaceholderBn: v }))} bnPlaceholder="যেমন: কাতারে ২ বছর"
+          />
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Required Documents & Privacy Notice Labels" icon={Settings}>
+        <div className="space-y-4">
+          <BilingualField
+            label="Documents Header Text"
+            enValue={local.documentsLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, documentsLabel: v }))} enPlaceholder="Required Documents"
+            bnValue={local.documentsLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, documentsLabelBn: v }))} bnPlaceholder="প্রয়োজনীয় নথিপত্র"
+          />
+          <BilingualField
+            label="Documents Optional Badge Text"
+            enValue={local.documentsOptionalText || ""} onEnChange={(v) => setLocal((p) => ({ ...p, documentsOptionalText: v }))} enPlaceholder="(Optional)"
+            bnValue={local.documentsOptionalTextBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, documentsOptionalTextBn: v }))} bnPlaceholder="(ঐচ্ছিক)"
+          />
+          <BilingualField
+            label="Passport Box Label"
+            enValue={local.passportLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, passportLabel: v }))} enPlaceholder="Passport Copy"
+            bnValue={local.passportLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, passportLabelBn: v }))} bnPlaceholder="পাসপোর্টের কপি"
+          />
+          <BilingualField
+            label="Photo Box Label"
+            enValue={local.photoLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, photoLabel: v }))} enPlaceholder="Photo (Passport Size)"
+            bnValue={local.photoLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, photoLabelBn: v }))} bnPlaceholder="ছবি (পাসপোর্ট সাইজ)"
+          />
+          <BilingualField
+            label="NID Box Label"
+            enValue={local.nidLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, nidLabel: v }))} enPlaceholder="NID / Smart Card"
+            bnValue={local.nidLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, nidLabelBn: v }))} bnPlaceholder="এনআইডি / স্মার্ট কার্ড"
+          />
+          <BilingualField
+            label="CV Box Label"
+            enValue={local.cvLabel || ""} onEnChange={(v) => setLocal((p) => ({ ...p, cvLabel: v }))} enPlaceholder="CV / Resume"
+            bnValue={local.cvLabelBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, cvLabelBn: v }))} bnPlaceholder="সিভি / রিজিউম"
+          />
+          <BilingualField
+            label="Privacy Notice Part 1"
+            enValue={local.privacyNotice1 || ""} onEnChange={(v) => setLocal((p) => ({ ...p, privacyNotice1: v }))} enPlaceholder="Your personal data will be kept..."
+            bnValue={local.privacyNotice1Bn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, privacyNotice1Bn: v }))} bnPlaceholder="আপনার ব্যক্তিগত ডেটা..."
+            multiline
+          />
+          <BilingualField
+            label="Privacy Notice Highlighted Bold Text"
+            enValue={local.privacyNoticeBold || ""} onEnChange={(v) => setLocal((p) => ({ ...p, privacyNoticeBold: v }))} enPlaceholder="Immigrant Privacy Policy."
+            bnValue={local.privacyNoticeBoldBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, privacyNoticeBoldBn: v }))} bnPlaceholder="ইমিগ্র্যান্ট গোপনীয়তা নীতি..."
+          />
+          <BilingualField
+            label="Privacy Notice Part 2"
+            enValue={local.privacyNotice2 || ""} onEnChange={(v) => setLocal((p) => ({ ...p, privacyNotice2: v }))} enPlaceholder="We never share your info..."
+            bnValue={local.privacyNotice2Bn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, privacyNotice2Bn: v }))} bnPlaceholder="আমরা কখনোই অযাচাইকৃত..."
+            multiline
+          />
+          <BilingualField
+            label="Submit Button Text"
+            enValue={local.submitBtnText || ""} onEnChange={(v) => setLocal((p) => ({ ...p, submitBtnText: v }))} enPlaceholder="Submit Application"
+            bnValue={local.submitBtnTextBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, submitBtnTextBn: v }))} bnPlaceholder="আবেদন জমা দিন"
+          />
+          <BilingualField
+            label="Submitting Button Text (Loading state)"
+            enValue={local.submittingText || ""} onEnChange={(v) => setLocal((p) => ({ ...p, submittingText: v }))} enPlaceholder="Submitting..."
+            bnValue={local.submittingTextBn || ""} onBnChange={(v) => setLocal((p) => ({ ...p, submittingTextBn: v }))} bnPlaceholder="জমা হচ্ছে..."
+          />
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Direct WhatsApp & Social Share Link" icon={Globe}>
+        <div className="space-y-4">
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2.5">
+            <h4 className="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+              <span>🚀 Direct Shareable Application Link</span>
+            </h4>
+            <p className="text-xs text-emerald-700 leading-relaxed">
+              Recruiters and admins can share this link directly with job seekers on WhatsApp, Facebook, or SMS so applicants can open and fill out the form easily on mobile or desktop.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const url = `${window.location.origin}/en/apply`;
+                  if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url);
+                    toast.success("English form link copied! (/en/apply)");
+                  }
+                }}
+                className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
+              >
+                📋 Copy English Link (/en/apply)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const url = `${window.location.origin}/bn/apply`;
+                  if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url);
+                    toast.success("Bengali form link copied! (/bn/apply)");
+                  }
+                }}
+                className="px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
+              >
+                📋 Copy Bengali Link (/bn/apply)
+              </button>
+            </div>
+          </div>
+
+          <BilingualField
+            label="WhatsApp Share Invitation Text"
+            enValue={local.whatsappShareMessage || ""}
+            onEnChange={(v) => setLocal((p) => ({ ...p, whatsappShareMessage: v }))}
+            enPlaceholder="Apply directly for international job opportunities with verified employers:"
+            bnValue={local.whatsappShareMessageBn || ""}
+            onBnChange={(v) => setLocal((p) => ({ ...p, whatsappShareMessageBn: v }))}
+            bnPlaceholder="বিদেশে চাকরির জন্য সরাসরি আবেদন করুন:"
+            multiline
+          />
+        </div>
+      </SectionCard>
+
       <div className="flex justify-end">
         <SaveButton loading={saving} onClick={() => onSave(local)} />
       </div>

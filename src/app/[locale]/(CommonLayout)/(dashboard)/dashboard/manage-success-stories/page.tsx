@@ -26,7 +26,11 @@ import {
   Briefcase,
   FileText,
   Upload,
+  Video,
+  Play,
+  Film,
 } from 'lucide-react';
+import { SuccessStoryVideoModal } from '@/app/[locale]/(CommonLayout)/(home)/Landing-page/SuccessStories/SuccessStories';
 
 export default function ManageSuccessStoriesPage() {
   const { data: storiesResponse, isLoading, error, refetch } = useGetAllSuccessStoriesQuery();
@@ -38,6 +42,7 @@ export default function ManageSuccessStoriesPage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedStory, setSelectedStory] = useState<TSuccessStory | null>(null);
+  const [previewVideoUrl, setPreviewVideoUrl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -46,12 +51,15 @@ export default function ManageSuccessStoriesPage() {
     profession: '',
     story: '',
     rating: 5,
+    videoUrl: '',
     date: '',
     isApproved: false,
     order: 0,
   });
 
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [videoInputMode, setVideoInputMode] = useState<'file' | 'url'>('file');
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,7 +68,7 @@ export default function ManageSuccessStoriesPage() {
     const formDataObj = new FormData();
     formDataObj.append('image', file);
 
-    setIsUploading(true);
+    setIsUploadingPhoto(true);
     try {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const token = document.cookie
@@ -85,7 +93,48 @@ export default function ManageSuccessStoriesPage() {
       toast.error("Image upload failed");
       console.error(err);
     } finally {
-      setIsUploading(false);
+      setIsUploadingPhoto(false);
+    }
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 100 * 1024 * 1024) {
+      toast.error("Video file must be less than 100MB");
+      return;
+    }
+
+    const formDataObj = new FormData();
+    formDataObj.append('video', file);
+
+    setIsUploadingVideo(true);
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        ?.split("=")[1];
+
+      const response = await fetch(`${apiBaseUrl}/success-stories/upload-video`, {
+        method: "POST",
+        body: formDataObj,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      if (!response.ok) throw new Error("Video upload failed");
+
+      const responseData = await response.json();
+      const videoUrl = responseData?.data?.videoUrl;
+
+      setFormData((prev) => ({ ...prev, videoUrl }));
+      toast.success("Video uploaded successfully");
+    } catch (err) {
+      toast.error("Video upload failed");
+      console.error(err);
+    } finally {
+      setIsUploadingVideo(false);
     }
   };
 
@@ -151,6 +200,7 @@ export default function ManageSuccessStoriesPage() {
       profession: story.profession || '',
       story: story.story || '',
       rating: story.rating ?? 5,
+      videoUrl: story.videoUrl || '',
       date: story.date || '',
       isApproved: story.isApproved ?? false,
       order: story.order ?? 0,
@@ -183,8 +233,8 @@ export default function ManageSuccessStoriesPage() {
     <div className="container mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Manage Success Stories</h1>
-          <p className="text-gray-600 mt-1">Review, approve, reject, edit, or delete candidate success stories submitted from the landing page.</p>
+          <h1 className="text-3xl font-bold text-gray-900">Manage Success Stories & Video Reviews</h1>
+          <p className="text-gray-600 mt-1">Review, approve, edit, watch videos, or delete candidate success stories submitted from the landing page.</p>
         </div>
       </div>
 
@@ -195,6 +245,7 @@ export default function ManageSuccessStoriesPage() {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Candidate</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Details</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Video Review</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Story Text</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Rating</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
@@ -232,6 +283,20 @@ export default function ManageSuccessStoriesPage() {
                     <span className="flex items-center gap-1"><Globe className="w-3.5 h-3.5 text-blue-500" /> {story.country}</span>
                     <span className="text-gray-400">Order: {story.order}</span>
                   </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {story.videoUrl ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setPreviewVideoUrl(story.videoUrl!)}
+                      className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 flex items-center gap-1.5 font-semibold text-xs rounded-lg"
+                    >
+                      <Play className="w-3.5 h-3.5 fill-blue-700" /> Watch Video
+                    </Button>
+                  ) : (
+                    <span className="text-xs text-gray-400 italic">No video</span>
+                  )}
                 </td>
                 <td className="px-6 py-4">
                   <p className="text-sm text-gray-600 line-clamp-2 max-w-sm italic">
@@ -298,7 +363,7 @@ export default function ManageSuccessStoriesPage() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Success Story</DialogTitle>
+            <DialogTitle>Edit Success Story & Video</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
@@ -370,10 +435,71 @@ export default function ManageSuccessStoriesPage() {
                     className="hidden"
                   />
                   <Label htmlFor="imageFile" className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-slate-50 cursor-pointer text-sm font-medium text-slate-700 transition-colors">
-                    <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Image'}
+                    <Upload className="w-4 h-4" /> {isUploadingPhoto ? 'Uploading...' : 'Upload Image'}
                   </Label>
                 </div>
               </div>
+            </div>
+
+            {/* Video Review Input */}
+            <div className="space-y-2 border-t border-gray-100 pt-3">
+              <div className="flex items-center justify-between">
+                <Label className="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Video className="w-4 h-4 text-blue-600" /> Video Review File or YouTube Link
+                </Label>
+                <div className="flex gap-1 text-xs bg-slate-100 p-1 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setVideoInputMode("file")}
+                    className={`px-2 py-0.5 rounded transition-colors ${videoInputMode === "file" ? "bg-white text-blue-700 font-bold shadow-xs" : "text-slate-500"}`}
+                  >
+                    File
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVideoInputMode("url")}
+                    className={`px-2 py-0.5 rounded transition-colors ${videoInputMode === "url" ? "bg-white text-blue-700 font-bold shadow-xs" : "text-slate-500"}`}
+                  >
+                    URL
+                  </button>
+                </div>
+              </div>
+
+              {videoInputMode === "file" ? (
+                <div className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg bg-slate-50">
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    <Film className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="file"
+                      id="adminVideoFile"
+                      accept="video/*"
+                      onChange={handleVideoUpload}
+                      className="hidden"
+                    />
+                    <Label htmlFor="adminVideoFile" className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-300 hover:bg-slate-50 cursor-pointer rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-sm">
+                      <Upload className="w-3.5 h-3.5 text-blue-600" />
+                      {isUploadingVideo ? "Uploading Video..." : "Upload Video File"}
+                    </Label>
+                    {formData.videoUrl && (
+                      <p className="text-xs text-emerald-600 font-semibold truncate mt-1">
+                        Video Path: {formData.videoUrl}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <Input
+                    type="url"
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="h-10 text-sm border-gray-300 rounded-md"
+                  />
+                </div>
+              )}
             </div>
 
             <div>
@@ -431,7 +557,7 @@ export default function ManageSuccessStoriesPage() {
             <Button onClick={() => setIsEditDialogOpen(false)} variant="outline">
               Cancel
             </Button>
-            <Button onClick={handleEditSave} disabled={isUploading}>
+            <Button onClick={handleEditSave} disabled={isUploadingPhoto || isUploadingVideo}>
               <Save className="w-4 h-4 mr-2" />
               Save Changes
             </Button>
@@ -459,6 +585,14 @@ export default function ManageSuccessStoriesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Video Preview Modal for Admin */}
+      <SuccessStoryVideoModal
+        isOpen={!!previewVideoUrl}
+        onClose={() => setPreviewVideoUrl(null)}
+        videoUrl={previewVideoUrl || ""}
+      />
     </div>
   );
 }
+

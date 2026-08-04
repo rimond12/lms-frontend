@@ -718,6 +718,7 @@ export default function JobsPage() {
                   ))
                 : countries.map((country) => {
                     const isActive = selectedCountry === country.name;
+                    const isImageFlag = country.flagIcon?.startsWith("http") || country.flagIcon?.startsWith("/");
                     return (
                       <button
                         key={country._id}
@@ -725,18 +726,25 @@ export default function JobsPage() {
                         className="flex flex-col items-center gap-2 shrink-0 cursor-pointer focus:outline-none group transition-transform active:scale-95"
                       >
                         <div
-                          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 transition-all duration-300 p-0.5 bg-white dark:bg-gray-950 ${
+                          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 transition-all duration-300 p-0.5 bg-white dark:bg-gray-950 flex items-center justify-center ${
                             isActive
                               ? "border-[#1a4da1] ring-4 ring-blue-100 dark:ring-blue-900/30 scale-105 shadow-md"
                               : "border-gray-200 dark:border-gray-800 group-hover:scale-105 group-hover:border-blue-400 group-hover:shadow-sm"
                           }`}
                         >
-                          <img
-                            src={country.flagIcon}
-                            alt={country.name}
-                            className="w-full h-full object-cover rounded-full"
-                            loading="lazy"
-                          />
+                          {isImageFlag ? (
+                            <img
+                              src={getImageUrl(country.flagIcon)}
+                              alt={country.name}
+                              className="w-full h-full object-cover rounded-full"
+                              loading="lazy"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).src = "https://flagcdn.com/w160/un.png";
+                              }}
+                            />
+                          ) : (
+                            <span className="text-2xl">{country.flagIcon || "🌐"}</span>
+                          )}
                         </div>
                         <div className="text-center min-w-[70px]">
                           <p className={`text-[11px] font-extrabold leading-tight ${isActive ? "text-[#1a4da1] dark:text-blue-400" : "text-gray-700 dark:text-gray-300"}`}>

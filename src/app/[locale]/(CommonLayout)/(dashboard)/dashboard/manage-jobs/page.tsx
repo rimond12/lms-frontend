@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Link from "next/link";
 import { toast } from "react-hot-toast";
 import {
   Briefcase,
@@ -1018,10 +1019,18 @@ export default function ManageJobsPage() {
                 Jobs post, edit এবং publish করুন — ছবি ও দেশ সহ
               </p>
             </div>
-            <button onClick={() => setShowCreateForm(true)}
-              className="flex items-center justify-center gap-2 bg-white text-[#1a4da1] hover:bg-blue-50 px-5 py-3 rounded-xl font-extrabold text-sm shadow-xl transition-all active:scale-95 border border-white/20 shrink-0">
-              <Plus size={16} /> নতুন Job Post করুন
-            </button>
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <Link
+                href="/dashboard/manage-countries"
+                className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md transition-all border border-white/20"
+              >
+                <Globe size={16} /> দেশ ব্যবস্থাপনা (Manage Countries)
+              </Link>
+              <button onClick={() => setShowCreateForm(true)}
+                className="flex items-center justify-center gap-2 bg-white text-[#1a4da1] hover:bg-blue-50 px-5 py-3 rounded-xl font-extrabold text-sm shadow-xl transition-all active:scale-95 border border-white/20">
+                <Plus size={16} /> নতুন Job Post করুন
+              </button>
+            </div>
           </div>
 
           {/* Stats */}

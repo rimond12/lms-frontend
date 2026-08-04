@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowLeft, Award, Star, Upload, User, Globe, Briefcase, Calendar, MessageSquare } from "lucide-react";
+import { ArrowRight, ArrowLeft, Award, Star, Upload, User, Globe, Briefcase, Calendar, MessageSquare, Video, Film } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -17,7 +17,10 @@ import {
   useSubmitSuccessStoryMutation,
   TSuccessStory,
 } from "@/app/redux/api/successStoryApi/successStoryApi";
-import { TestimonialCard } from "@/app/[locale]/(CommonLayout)/(home)/Landing-page/SuccessStories/SuccessStories";
+import {
+  TestimonialCard,
+  SuccessStoryVideoModal,
+} from "@/app/[locale]/(CommonLayout)/(home)/Landing-page/SuccessStories/SuccessStories";
 
 export default function SuccessStoriesFullPage() {
   const t = useTranslations("successStories");
@@ -31,7 +34,10 @@ export default function SuccessStoriesFullPage() {
   const itemsPerPage = 6;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [videoInputMode, setVideoInputMode] = useState<"file" | "url">("file");
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -40,6 +46,7 @@ export default function SuccessStoriesFullPage() {
     profession: "",
     story: "",
     rating: 5,
+    videoUrl: "",
     date: new Date().getFullYear() + " " + (tImm("testimonial.company")?.includes("সফল প্রার্থী") ? "সফল প্রার্থী" : "Successful Candidate"),
   });
 
@@ -91,7 +98,7 @@ export default function SuccessStoriesFullPage() {
     const formDataObj = new FormData();
     formDataObj.append("image", file);
 
-    setIsUploading(true);
+    setIsUploadingPhoto(true);
     try {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
       const responseUpload = await fetch(`${apiBaseUrl}/success-stories/upload-image`, {
@@ -110,7 +117,46 @@ export default function SuccessStoriesFullPage() {
       toast.error("Photo upload failed");
       console.error(err);
     } finally {
-      setIsUploading(false);
+      setIsUploadingPhoto(false);
+    }
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 100 * 1024 * 1024) {
+      toast.error("Video file must be less than 100MB");
+      return;
+    }
+    if (!file.type.startsWith("video/")) {
+      toast.error("Only video files are allowed");
+      return;
+    }
+
+    const formDataObj = new FormData();
+    formDataObj.append("video", file);
+
+    setIsUploadingVideo(true);
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com/api";
+      const responseUpload = await fetch(`${apiBaseUrl}/success-stories/upload-video`, {
+        method: "POST",
+        body: formDataObj,
+      });
+
+      if (!responseUpload.ok) throw new Error("Video upload failed");
+
+      const responseData = await responseUpload.json();
+      const videoUrl = responseData?.data?.videoUrl;
+
+      setFormData((prev) => ({ ...prev, videoUrl }));
+      toast.success("Review video uploaded successfully!");
+    } catch (err) {
+      toast.error("Video upload failed. Please try again or use a YouTube link.");
+      console.error(err);
+    } finally {
+      setIsUploadingVideo(false);
     }
   };
 
@@ -132,6 +178,7 @@ export default function SuccessStoriesFullPage() {
         profession: "",
         story: "",
         rating: 5,
+        videoUrl: "",
         date: new Date().getFullYear() + " " + (tImm("testimonial.company")?.includes("সফল প্রার্থী") ? "সফল প্রার্থী" : "Successful Candidate"),
       });
     } catch (err) {
@@ -254,7 +301,10 @@ export default function SuccessStoriesFullPage() {
                     whileHover={{ y: -5, transition: { duration: 0.2 } }}
                     className="rounded-lg overflow-hidden"
                   >
-                    <TestimonialCard story={story} />
+                    <TestimonialCard
+                      story={story}
+                      onPlayVideo={(url) => setActiveVideoUrl(url)}
+                    />
                   </motion.div>
                 ))}
               </div>
@@ -394,7 +444,7 @@ export default function SuccessStoriesFullPage() {
 
             <div className="space-y-1.5">
               <Label className="text-sm font-semibold text-slate-700">আপনার ছবি / প্রোফাইল ফটো</Label>
-              <div className="flex items-center gap-4 p-3 border border-slate-200 rounded-lg bg-slate-55">
+              <div className="flex items-center gap-4 p-3 border border-slate-200 rounded-lg bg-slate-50">
                 {formData.image ? (
                   <img
                     src={getImageUrl(formData.image) || ""}
@@ -419,11 +469,76 @@ export default function SuccessStoriesFullPage() {
                   />
                   <Label htmlFor="fullpage-ImageFile" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 cursor-pointer rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-sm">
                     <Upload className="w-3.5 h-3.5 text-blue-700" />
-                    {isUploading ? "আপলোড হচ্ছে..." : "ছবি নির্বাচন করুন"}
+                    {isUploadingPhoto ? "আপলোড হচ্ছে..." : "ছবি নির্বাচন করুন"}
                   </Label>
                   <p className="text-[10px] text-slate-400 mt-1">সর্বোচ্চ ২ মেগাবাইট (JPEG, PNG, WebP)</p>
                 </div>
               </div>
+            </div>
+
+            {/* Video Review Field */}
+            <div className="space-y-2 border-t border-slate-100 pt-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Video className="w-4 h-4 text-blue-700" />
+                  আপনার অভিজ্ঞতার ভিডিও (Video Review) - অপশনাল
+                </Label>
+                <div className="flex gap-1 text-[11px] font-semibold bg-slate-100 p-1 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setVideoInputMode("file")}
+                    className={`px-2.5 py-0.5 rounded-md transition-colors ${videoInputMode === "file" ? "bg-white text-blue-700 shadow-xs" : "text-slate-500"}`}
+                  >
+                    ভিডিও ফাইল
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVideoInputMode("url")}
+                    className={`px-2.5 py-0.5 rounded-md transition-colors ${videoInputMode === "url" ? "bg-white text-blue-700 shadow-xs" : "text-slate-500"}`}
+                  >
+                    ইউটিউব লিঙ্ক
+                  </button>
+                </div>
+              </div>
+
+              {videoInputMode === "file" ? (
+                <div className="flex items-center gap-4 p-3 border border-slate-200 rounded-lg bg-slate-50">
+                  <div className="w-12 h-12 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    <Film className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="file"
+                      id="fullpageVideoFile"
+                      accept="video/*"
+                      onChange={handleVideoUpload}
+                      className="hidden"
+                    />
+                    <Label htmlFor="fullpageVideoFile" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 cursor-pointer rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-sm">
+                      <Upload className="w-3.5 h-3.5 text-blue-700" />
+                      {isUploadingVideo ? "ভিডিও আপলোড হচ্ছে..." : "ভিডিও ফাইল সিলেক্ট করুন"}
+                    </Label>
+                    {formData.videoUrl ? (
+                      <p className="text-xs font-semibold text-emerald-600 truncate mt-1 flex items-center gap-1">
+                        ✓ ভিডিও ফাইল সফলভাবে আপলোড হয়েছে
+                      </p>
+                    ) : (
+                      <p className="text-[10px] text-slate-400 mt-1">সর্বোচ্চ ১০০ মেগাবাইট (MP4, WebM, MOV)</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-1.5">
+                  <Input
+                    type="url"
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="h-11 border-slate-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-sm"
+                  />
+                  <p className="text-[10px] text-slate-400">আপনার ইউটিউব ভিডিও লিঙ্কটি এখানে পেস্ট করুন</p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -473,7 +588,7 @@ export default function SuccessStoriesFullPage() {
               </Button>
               <Button
                 type="submit"
-                disabled={isSubmitting || isUploading}
+                disabled={isSubmitting || isUploadingPhoto || isUploadingVideo}
                 className="h-11 rounded-lg text-sm bg-blue-700 hover:bg-blue-900 text-white font-semibold px-6 shadow-md shadow-blue-100"
               >
                 {isSubmitting ? "জমা হচ্ছে..." : "গল্প জমা দিন"}
@@ -482,6 +597,14 @@ export default function SuccessStoriesFullPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Video Player Modal */}
+      <SuccessStoryVideoModal
+        isOpen={!!activeVideoUrl}
+        onClose={() => setActiveVideoUrl(null)}
+        videoUrl={activeVideoUrl || ""}
+      />
     </div>
   );
 }
+

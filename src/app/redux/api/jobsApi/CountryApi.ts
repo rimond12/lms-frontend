@@ -17,8 +17,45 @@ const CountryApi = baseApi.injectEndpoints({
       transformResponse: (res: any) => res.data,
       providesTags: ["Country"],
     }),
+    createCountry: builder.mutation<ICountry, Partial<ICountry>>({
+      query: (data) => ({
+        url: "/countries",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Country"],
+    }),
+    updateCountry: builder.mutation<ICountry, { id: string; data: Partial<ICountry> }>({
+      query: ({ id, data }) => ({
+        url: `/countries/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Country"],
+    }),
+    deleteCountry: builder.mutation<{ success: boolean }, string>({
+      query: (id) => ({
+        url: `/countries/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Country"],
+    }),
+    uploadCountryFlag: builder.mutation<string, FormData>({
+      query: (formData) => ({
+        url: "/countries/upload-flag",
+        method: "POST",
+        body: formData,
+      }),
+      transformResponse: (res: any) => res.data,
+    }),
   }),
 });
 
-export const { useGetCountriesQuery } = CountryApi;
+export const {
+  useGetCountriesQuery,
+  useCreateCountryMutation,
+  useUpdateCountryMutation,
+  useDeleteCountryMutation,
+  useUploadCountryFlagMutation,
+} = CountryApi;
 export default CountryApi;
