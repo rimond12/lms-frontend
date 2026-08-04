@@ -23,6 +23,88 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { SuccessStoryVideoModal } from "@/app/[locale]/(CommonLayout)/(home)/Landing-page/SuccessStories/SuccessStories";
 
+export const getImageUrl = (imagePath?: string): string | null => {
+  if (!imagePath || typeof imagePath !== "string" || !imagePath.trim()) return null;
+  const path = imagePath.trim();
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:") || path.startsWith("blob:")) {
+    return path;
+  }
+  const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com";
+  const baseUrl = rawApiUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${baseUrl}${cleanPath}`;
+};
+
+const SuccessStoryAvatar = ({
+  story,
+  getImageUrl,
+  hasVideo,
+  onPlay,
+}: {
+  story: TSuccessStory;
+  getImageUrl: (path?: string) => string | null;
+  hasVideo: boolean;
+  onPlay?: () => void;
+}) => {
+  const [imageError, setImageError] = useState(false);
+  const imageUrl = story.image ? getImageUrl(story.image) : null;
+
+  return (
+    <div className="relative flex-shrink-0">
+      <div
+        className={`w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full border-4 ${
+          hasVideo ? "border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] cursor-pointer group/photo" : "border-white/20"
+        } p-1 relative transition-transform duration-300 hover:scale-105`}
+        onClick={() => hasVideo && onPlay && onPlay()}
+      >
+        <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden relative">
+          {imageUrl && !imageError ? (
+            <img
+              src={imageUrl}
+              alt=""
+              onError={() => setImageError(true)}
+              className={`w-full h-full object-cover ${hasVideo ? "group-hover/photo:scale-110 transition-transform duration-500 opacity-90" : ""}`}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-slate-400 bg-slate-800">
+              <User className="w-14 h-14" />
+            </div>
+          )}
+
+          {/* If video exists, show play overlay on photo with animated radar waves */}
+          {hasVideo && (
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center group-hover/photo:bg-black/30 transition-colors">
+              <div className="relative">
+                <span className="absolute -inset-2 rounded-full bg-blue-500/50 animate-ping opacity-75" />
+                <span className="absolute -inset-4 rounded-full bg-amber-400/40 animate-pulse opacity-50" />
+                <motion.div
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="relative w-12 h-12 rounded-full bg-white text-blue-700 flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.8)] ring-4 ring-white/40"
+                >
+                  <Play className="w-6 h-6 ml-0.5 fill-blue-700" />
+                </motion.div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Award or Video Badge */}
+        {hasVideo ? (
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-950 font-extrabold text-[10px] sm:text-[11px] px-3 py-0.5 rounded-full border-2 border-blue-900 shadow-lg flex items-center gap-1 whitespace-nowrap animate-pulse">
+            <Play className="w-3 h-3 fill-current" />
+            <span>ভিডিও প্লে করুন</span>
+          </div>
+        ) : (
+          <div className="absolute -top-2 -right-2 bg-blue-400 p-1.5 sm:p-2 rounded-full border-2 border-blue-700">
+            <Award className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ImmigrantSuccess: React.FC = () => {
   const t = useTranslations("immigrantSuccess");
   const tStories = useTranslations("successStories");
@@ -63,15 +145,6 @@ const ImmigrantSuccess: React.FC = () => {
     videoUrl: "",
     date: new Date().toISOString().split("T")[0],
   });
-
-  const getImageUrl = (imagePath?: string) => {
-    if (!imagePath) return null;
-    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-      return imagePath;
-    }
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "https://api.immigrantjobsworld.com";
-    return `${apiBaseUrl}${imagePath}`;
-  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -189,57 +262,12 @@ const ImmigrantSuccess: React.FC = () => {
 
         <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-8 relative z-10 w-full">
           {/* Profile Image & Video Trigger */}
-          <div className="relative flex-shrink-0">
-            <div
-              className={`w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full border-4 ${
-                hasVideo ? "border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] cursor-pointer group/photo" : "border-white/20"
-              } p-1 relative transition-transform duration-300 hover:scale-105`}
-              onClick={() => hasVideo && setActiveVideoUrl(story.videoUrl!)}
-            >
-              <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden relative">
-                {story.image ? (
-                  <img
-                    src={getImageUrl(story.image) || ""}
-                    alt={story.fullName}
-                    className={`w-full h-full object-cover ${hasVideo ? "group-hover/photo:scale-110 transition-transform duration-500 opacity-90" : ""}`}
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-slate-400 bg-slate-800">
-                    <User className="w-14 h-14" />
-                  </div>
-                )}
-
-                {/* If video exists, show play overlay on photo with animated radar waves */}
-                {hasVideo && (
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center group-hover/photo:bg-black/30 transition-colors">
-                    <div className="relative">
-                      <span className="absolute -inset-2 rounded-full bg-blue-500/50 animate-ping opacity-75" />
-                      <span className="absolute -inset-4 rounded-full bg-amber-400/40 animate-pulse opacity-50" />
-                      <motion.div
-                        whileHover={{ scale: 1.15 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="relative w-12 h-12 rounded-full bg-white text-blue-700 flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.8)] ring-4 ring-white/40"
-                      >
-                        <Play className="w-6 h-6 ml-0.5 fill-blue-700" />
-                      </motion.div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Award or Video Badge */}
-              {hasVideo ? (
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-950 font-extrabold text-[10px] sm:text-[11px] px-3 py-0.5 rounded-full border-2 border-blue-900 shadow-lg flex items-center gap-1 whitespace-nowrap animate-pulse">
-                  <Play className="w-3 h-3 fill-current" />
-                  <span>ভিডিও প্লে করুন</span>
-                </div>
-              ) : (
-                <div className="absolute -top-2 -right-2 bg-blue-400 p-1.5 sm:p-2 rounded-full border-2 border-blue-700">
-                  <Award className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                </div>
-              )}
-            </div>
-          </div>
+          <SuccessStoryAvatar
+            story={story}
+            getImageUrl={getImageUrl}
+            hasVideo={hasVideo}
+            onPlay={() => setActiveVideoUrl(story.videoUrl!)}
+          />
 
           {/* Content */}
           <div className="flex-1 text-center md:text-left">

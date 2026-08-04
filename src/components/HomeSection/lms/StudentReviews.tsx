@@ -75,6 +75,40 @@ const VideoModal = ({
   );
 };
 
+const getImageUrl = (imagePath?: string): string | null => {
+  if (!imagePath || typeof imagePath !== "string" || !imagePath.trim()) return null;
+  const path = imagePath.trim();
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:") || path.startsWith("blob:")) {
+    return path;
+  }
+  const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com";
+  const baseUrl = rawApiUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${baseUrl}${cleanPath}`;
+};
+
+const StudentAvatar = ({ photo, name }: { photo?: string; name?: string }) => {
+  const [imgError, setImgError] = useState(false);
+  const imageUrl = photo ? getImageUrl(photo) : null;
+
+  if (imageUrl && !imgError) {
+    return (
+      <img
+        src={imageUrl}
+        alt=""
+        onError={() => setImgError(true)}
+        className="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 group-hover:ring-red-50 transition-all"
+      />
+    );
+  }
+
+  return (
+    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+      <User className="w-5 h-5 text-slate-400" />
+    </div>
+  );
+};
+
 // Review Card
 const ReviewCard = ({
   review,
@@ -162,17 +196,7 @@ const ReviewCard = ({
             {/* User Info */}
             {hasUser && (
               <div className="flex items-center gap-3 pt-4 border-t border-gray-50">
-                {review.studentPhoto ? (
-                  <img
-                    src={review.studentPhoto}
-                    alt={review.studentName || "Student"}
-                    className="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 group-hover:ring-red-50 transition-all"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-                    <User className="w-5 h-5 text-slate-400" />
-                  </div>
-                )}
+                <StudentAvatar photo={review.studentPhoto} name={review.studentName} />
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-gray-900 truncate">
                     {review.studentName || "Student"}

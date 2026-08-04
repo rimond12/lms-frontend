@@ -118,13 +118,19 @@ export const TestimonialCard = ({
   story: TSuccessStory;
   onPlayVideo?: (videoUrl: string) => void;
 }) => {
-  const getImageUrl = (imagePath?: string) => {
-    if (!imagePath) return null;
-    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-      return imagePath;
+  const [avatarError, setAvatarError] = useState(false);
+  const [thumbError, setThumbError] = useState(false);
+
+  const getImageUrl = (imagePath?: string): string | null => {
+    if (!imagePath || typeof imagePath !== "string" || !imagePath.trim()) return null;
+    const path = imagePath.trim();
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:") || path.startsWith("blob:")) {
+      return path;
     }
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "https://api.immigrantjobsworld.com";
-    return `${apiBaseUrl}${imagePath}`;
+    const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.immigrantjobsworld.com";
+    const baseUrl = rawApiUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
+    const cleanPath = path.startsWith("/") ? path : `/${path}`;
+    return `${baseUrl}${cleanPath}`;
   };
 
   const hasVideo = !!story.videoUrl;
@@ -135,6 +141,8 @@ export const TestimonialCard = ({
     ? getImageUrl(story.image)
     : null;
 
+  const candidateImageUrl = story.image ? getImageUrl(story.image) : null;
+
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full min-h-[340px] overflow-hidden group">
       <div>
@@ -144,10 +152,11 @@ export const TestimonialCard = ({
             className="relative aspect-video bg-slate-900 cursor-pointer overflow-hidden group/video"
             onClick={() => onPlayVideo && onPlayVideo(story.videoUrl!)}
           >
-            {videoThumbnail ? (
+            {videoThumbnail && !thumbError ? (
               <img
                 src={videoThumbnail}
-                alt={story.fullName}
+                alt=""
+                onError={() => setThumbError(true)}
                 className="w-full h-full object-cover group-hover/video:scale-105 transition-transform duration-500"
               />
             ) : (
@@ -206,10 +215,11 @@ export const TestimonialCard = ({
       <div className="p-6 pt-0">
         <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
           <div className="relative w-11 h-11 rounded-full overflow-hidden bg-slate-100 flex-shrink-0 border-2 border-blue-50">
-            {story.image ? (
+            {candidateImageUrl && !avatarError ? (
               <img
-                src={getImageUrl(story.image) || ""}
-                alt={story.fullName}
+                src={candidateImageUrl}
+                alt=""
+                onError={() => setAvatarError(true)}
                 className="w-full h-full object-cover"
               />
             ) : (
